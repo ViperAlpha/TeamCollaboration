@@ -1,0 +1,41 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+    <head>
+        <div th:replace="fragment/dependency" th:remove="tag"></div>
+        <!--/*@thymesVar id="user" type="com.uww.messaging.model.User"*/-->
+        <title th:text="'Hi ' + ${user.firstName}"></title>
+    </head>
+    <body>
+    <nav class="navbar navbar-default" role="navigation" xmlns="http://www.w3.org/1999/xhtml">
+        <div class="navbar-header">
+
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                    class="icon-bar"></span><span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand">Messaging System Website</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Actions<strong
+                            class="caret"></strong></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a data-toggle="modal" data-target="#createTeamModal">Create Team</a>
+                        </li>
+                        <li>
+                            <a data-toggle="modal" data-target="#invitePersonModal">Invite Person To Team</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+</div>

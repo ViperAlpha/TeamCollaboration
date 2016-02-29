@@ -1,0 +1,2 @@
+DELETE FROM Team;
+DELETE FROM TeamMember;

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<th:block th:replace="fragment/User/top">
+
+</th:block>
+<!--/*@thymesVar id="team" type="com.uww.messaging.model.Team"*/-->
+<div th:each="team : ${teams}" th:text="${team.getTeamName()}">
+</div>
+
+<!-- Add Team Modal -->
+<div id="createTeamModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <form th:action="@{user/team/create}" th:method="PUT" enctype="multipart/form-data">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Create Team</h4>
+                </div>
+                <div class="modal-body">
+                    <label class="control-label">Enter Team Name</label>
+                    <input type="text" class="form-control" id="teamName" name="teamName">
+                    <label class="control-label">Enter Team Description</label>
+                    <input type="text" class="form-control" id="teamDescription" name="teamDescription">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default">Create Team:</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Invite Modal -->
+<div id="invitePersonModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <form th:action="@{user/team/addUser}" th:method="PUT" enctype="multipart/form-data">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add User To Team</h4>
+                </div>
+                <div class="modal-body">
+
+                    <label class="control-label">Enter User Name:</label>
+                    <select class="form-control" id="teamToAddTo">
+                        <option th:each="team : ${teams}" th:text="${team.getTeamName()}"
+                                th:value="${team.getTeamName()}">
+                        </option>
+                    </select>
+                    <label class="control-label">Enter User Name:</label>
+                    <input type="text" class="form-control" id="userName" name="userName">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default">Invite!</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<th:block th:replace="fragment/User/bottom">
+
+</th:block>

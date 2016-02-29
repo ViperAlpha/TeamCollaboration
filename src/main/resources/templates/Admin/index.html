@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <div th:replace="fragment/dependency" th:remove="tag"></div>
+    <title th:text="'Hi ' + ${user.firstName} + '!'"></title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div th:replace="fragment/Admin/header" th:remove="tag"></div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="fragment/dependencyBottom"></th:block>
+<th:block th:replace="fragment/footer" th:remove="tag"></th:block>
+
+</body>
+</html>
