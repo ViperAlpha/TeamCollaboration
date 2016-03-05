@@ -8,9 +8,12 @@ import com.uww.messaging.repository.UserMessageChatRepository;
 import com.uww.messaging.repository.UserMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,9 +31,30 @@ public class MessageServiceImpl implements MessageService {
     public List<UserMessage> findMessagesBetweenUsers(int userId, int secondUserId) {
         List<UserMessageChat> chatsByUserId = userMessageChatRepository.findChatsByUserId(userId, secondUserId);
         sizeGreaterThanOneThrowException(chatsByUserId, userId, secondUserId);
-        if(chatsByUserId.size() == 0)
-            return  new ArrayList<UserMessage>();
-        return userMessageRepository.findByUserMessageChatId(chatsByUserId.get(0).getUserMessageChatId());
+        if (chatsByUserId.size() == 0)
+            return new ArrayList<>();
+        return userMessageRepository.findByUserMessageChatIdOrderByMessageTime(chatsByUserId.get(0).getUserMessageChatId());
+    }
+
+    @Transactional
+    @Override
+    public void haveIndividualConversation(int currentUserId, int toUserId, String message) {
+        List<UserMessageChat> chatsByUserId = userMessageChatRepository.findChatsByUserId(currentUserId, toUserId);
+        Timestamp currentTimestamp = new Timestamp(new Date().getTime());
+        if (chatsByUserId.size() == 0) {
+            UserMessageChat userMessageChat = new UserMessageChat(
+                    currentUserId,
+                    toUserId,
+                    currentTimestamp);
+            userMessageChatRepository.save(userMessageChat);
+            UserMessage userMessage = new UserMessage(currentUserId, toUserId, message, userMessageChat.getUserMessageChatId(),
+                    currentTimestamp);
+            userMessageRepository.save(userMessage);
+        }
+        UserMessage userMessage = new UserMessage(currentUserId, toUserId, message, chatsByUserId.get(0).getUserMessageChatId(),
+                currentTimestamp);
+        userMessageRepository.save(userMessage);
+
     }
 
     private static void sizeGreaterThanOneThrowException(List<UserMessageChat> userMessageChats, int userId, int secondUserId) {

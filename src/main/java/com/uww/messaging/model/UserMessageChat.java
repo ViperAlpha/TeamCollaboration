@@ -4,6 +4,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.sql.Timestamp;
 
 /**
  * Created by horvste on 3/5/16.
@@ -13,6 +14,16 @@ public class UserMessageChat {
     private int userMessageChatId;
     private Integer fromUserId;
     private Integer toUserId;
+    private Timestamp chatTime;
+
+    public UserMessageChat() {
+    }
+
+    public UserMessageChat(Integer fromUserId, Integer toUserId, Timestamp chatTime) {
+        this.fromUserId = fromUserId;
+        this.toUserId = toUserId;
+        this.chatTime = chatTime;
+    }
 
     @Id
     @Column(name = "userMessageChatId", nullable = false)
@@ -44,6 +55,16 @@ public class UserMessageChat {
         this.toUserId = toUserId;
     }
 
+    @Basic
+    @Column(name = "chatTime", nullable = true)
+    public Timestamp getChatTime() {
+        return chatTime;
+    }
+
+    public void setChatTime(Timestamp chatTime) {
+        this.chatTime = chatTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,6 +75,7 @@ public class UserMessageChat {
         if (userMessageChatId != that.userMessageChatId) return false;
         if (fromUserId != null ? !fromUserId.equals(that.fromUserId) : that.fromUserId != null) return false;
         if (toUserId != null ? !toUserId.equals(that.toUserId) : that.toUserId != null) return false;
+        if (chatTime != null ? !chatTime.equals(that.chatTime) : that.chatTime != null) return false;
 
         return true;
     }
@@ -63,6 +85,7 @@ public class UserMessageChat {
         int result = userMessageChatId;
         result = 31 * result + (fromUserId != null ? fromUserId.hashCode() : 0);
         result = 31 * result + (toUserId != null ? toUserId.hashCode() : 0);
+        result = 31 * result + (chatTime != null ? chatTime.hashCode() : 0);
         return result;
     }
 }

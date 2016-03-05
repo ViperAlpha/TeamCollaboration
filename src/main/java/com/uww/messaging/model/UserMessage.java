@@ -4,6 +4,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.sql.Timestamp;
 
 /**
  * Created by horvste on 3/5/16.
@@ -15,6 +16,18 @@ public class UserMessage {
     private Integer toUserId;
     private String message;
     private Integer userMessageChatId;
+    private Timestamp messageTime;
+
+    public UserMessage() {
+    }
+
+    public UserMessage(Integer fromUserId, Integer toUserId, String message, Integer userMessageChatId, Timestamp messageTime) {
+        this.fromUserId = fromUserId;
+        this.toUserId = toUserId;
+        this.message = message;
+        this.userMessageChatId = userMessageChatId;
+        this.messageTime = messageTime;
+    }
 
     @Id
     @Column(name = "userMessageId", nullable = false)
@@ -66,6 +79,16 @@ public class UserMessage {
         this.userMessageChatId = userMessageChatId;
     }
 
+    @Basic
+    @Column(name = "messageTime", nullable = true)
+    public Timestamp getMessageTime() {
+        return messageTime;
+    }
+
+    public void setMessageTime(Timestamp messageTime) {
+        this.messageTime = messageTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,6 +102,7 @@ public class UserMessage {
         if (message != null ? !message.equals(that.message) : that.message != null) return false;
         if (userMessageChatId != null ? !userMessageChatId.equals(that.userMessageChatId) : that.userMessageChatId != null)
             return false;
+        if (messageTime != null ? !messageTime.equals(that.messageTime) : that.messageTime != null) return false;
 
         return true;
     }
@@ -90,6 +114,7 @@ public class UserMessage {
         result = 31 * result + (toUserId != null ? toUserId.hashCode() : 0);
         result = 31 * result + (message != null ? message.hashCode() : 0);
         result = 31 * result + (userMessageChatId != null ? userMessageChatId.hashCode() : 0);
+        result = 31 * result + (messageTime != null ? messageTime.hashCode() : 0);
         return result;
     }
 }

@@ -9,4 +9,5 @@ import java.util.List;
  */
 public interface MessageService {
     List<UserMessage> findMessagesBetweenUsers(int userId, int secondUserId);
+    void haveIndividualConversation(int currentUserId, int toUserId, String message);
 }

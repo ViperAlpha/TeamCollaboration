@@ -12,5 +12,5 @@ import java.util.List;
  */
 @Repository
 public interface UserMessageRepository extends CrudRepository<UserMessage, Integer> {
-    List<UserMessage> findByUserMessageChatId(int userMessageChatId);
+    List<UserMessage> findByUserMessageChatIdOrderByMessageTime(int userMessageChatId);
 }
