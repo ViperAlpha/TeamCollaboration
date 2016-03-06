@@ -30,6 +30,8 @@ public class UserMessageController {
     @RequestMapping(value = "/team-messages/list") //add parameters
     @ResponseBody
     public String listTeamMessages() {
+        //SHOULD CALL MESSAGING SERVICE, You will need to change database schema
+
         //should return a json list of team messages depending on GET parameter
         //Gson gson = new Gson();
         //String json = gson.toJson(new Object());
@@ -39,6 +41,7 @@ public class UserMessageController {
     @RequestMapping(value = "/team-messages/insert") //add parameters
     @ResponseBody
     public String insertTeamMessage() {
+        //SHOULD CALL MESSAGING SERVICE, You will need to change database schema
         //should insert based on PUT
         //TeamMessage
         //Gson gson = new Gson();
@@ -47,7 +50,9 @@ public class UserMessageController {
     }
 
     /**
-     * Access this method after logging in like this: http://localhost:8080/user/message/individual-message/list/?firstUserId={sampleUserId}&secondUserId={sampleUserIdTwo}
+     * Access this method after logging in like this:
+     * <p>
+     * http://localhost:8080/user/message/individual-message/list/?firstUserId={sampleUserId}&secondUserId={sampleUserIdTwo}
      *
      * @param userId
      * @param secondUserId
