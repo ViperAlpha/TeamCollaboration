@@ -1,9 +1,6 @@
 package com.uww.messaging.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
@@ -30,6 +27,7 @@ public class UserMessage {
     }
 
     @Id
+    @GeneratedValue
     @Column(name = "userMessageId", nullable = false)
     public int getUserMessageId() {
         return userMessageId;

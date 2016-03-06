@@ -33,7 +33,7 @@ public class MessageServiceImpl implements MessageService {
         sizeGreaterThanOneThrowException(chatsByUserId, userId, secondUserId);
         if (chatsByUserId.size() == 0)
             return new ArrayList<>();
-        return userMessageRepository.findByUserMessageChatIdOrderByMessageTime(chatsByUserId.get(0).getUserMessageChatId());
+        return userMessageRepository.findByUserMessageChatIdOrderByMessageTimeAsc(chatsByUserId.get(0).getUserMessageChatId());
     }
 
     @Transactional
@@ -50,6 +50,7 @@ public class MessageServiceImpl implements MessageService {
             UserMessage userMessage = new UserMessage(currentUserId, toUserId, message, userMessageChat.getUserMessageChatId(),
                     currentTimestamp);
             userMessageRepository.save(userMessage);
+            return;
         }
         UserMessage userMessage = new UserMessage(currentUserId, toUserId, message, chatsByUserId.get(0).getUserMessageChatId(),
                 currentTimestamp);
