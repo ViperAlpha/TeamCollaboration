@@ -69,4 +69,9 @@ public class UserServiceImpl implements UserService {
         UserRole userRole = AuthenticationUtil.authenticationToRole(auth);
         return findUserById(userRole.getUserId());
     }
+
+    @Override
+    public List<User> findUsersStartingWith(String username) {
+        return userRepository.findByUsernameStartingWith(username);
+    }
 }
