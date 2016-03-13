@@ -2,9 +2,6 @@ package com.uww.messaging.factory;
 
 import com.uww.messaging.model.UserRole;
 
-/**
- * Created by horvste on 1/18/16.
- */
 public class UserRoleFactory {
 
     public static final String USER = "ROLE_USER";

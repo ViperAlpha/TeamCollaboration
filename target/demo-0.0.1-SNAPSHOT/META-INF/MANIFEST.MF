@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: Team Collab
 Implementation-Version: 0.0.1-SNAPSHOT
-Built-By: horvste
+Built-By: Reinaldo
 Implementation-Vendor-Id: com.uww
 Created-By: IntelliJ IDEA
-Build-Jdk: 1.8.0_66
+Build-Jdk: 1.8.0_60
 Main-Class: ${start-class}
 

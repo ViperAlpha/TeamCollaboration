@@ -6,9 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
-/**
- * Created by horvste on 1/19/16.
- */
 public class AuthenticationUtil {
     public static UserRole authenticationToRole(Authentication authentication) {
         Collection<? extends GrantedAuthority> grantedAuthorities = authentication.getAuthorities();

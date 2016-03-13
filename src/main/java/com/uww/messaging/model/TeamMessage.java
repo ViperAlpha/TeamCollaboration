@@ -2,9 +2,6 @@ package com.uww.messaging.model;
 
 import javax.persistence.*;
 
-/**
- * Created by horvste on 2/19/16.
- */
 @Entity
 public class TeamMessage {
     private int teamMessageId;

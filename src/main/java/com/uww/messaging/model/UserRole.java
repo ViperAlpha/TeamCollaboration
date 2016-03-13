@@ -4,9 +4,6 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
-/**
- * Created by horvste on 1/10/16.
- */
 @Entity
 public class UserRole implements GrantedAuthority {
     private int userRoleId;

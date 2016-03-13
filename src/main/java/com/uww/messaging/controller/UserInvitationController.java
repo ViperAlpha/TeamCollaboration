@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by horvste on 3/5/16.
- */
 @Controller
 @RequestMapping(value = "/user/invitation")
 public class UserInvitationController {

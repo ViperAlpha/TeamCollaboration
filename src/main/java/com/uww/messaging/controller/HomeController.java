@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 
-/**
- * Created by horvste on 1/10/16.
- */
 @Controller
 public class HomeController {
 

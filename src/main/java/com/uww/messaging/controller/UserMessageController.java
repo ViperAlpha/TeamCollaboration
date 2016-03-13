@@ -3,8 +3,8 @@ package com.uww.messaging.controller;
 import com.google.gson.Gson;
 import com.uww.messaging.contract.MessageService;
 import com.uww.messaging.contract.UserService;
-import com.uww.messaging.model.TeamMessage;
 import com.uww.messaging.model.UserMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-/**
- * Created by horvste on 3/1/16.
- */
 @Controller
 @RequestMapping(value = "/user/message")
 public class UserMessageController {
