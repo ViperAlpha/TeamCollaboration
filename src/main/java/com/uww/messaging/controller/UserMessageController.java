@@ -27,6 +27,7 @@ public class UserMessageController {
     @RequestMapping(value = "/team-messages/list") //add parameters
     @ResponseBody
     public String listTeamMessages() {
+        //
         //SHOULD CALL MESSAGING SERVICE, You will need to change database schema
 
         //should return a json list of team messages depending on GET parameter
