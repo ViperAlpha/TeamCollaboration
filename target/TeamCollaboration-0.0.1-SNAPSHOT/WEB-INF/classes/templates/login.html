@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragment/top" th:remove="tag">
+</th:block>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 col-md-offset-5">
+            <form class="col-md-12" th:action="@{/login}" method="POST">
+                <div class="form-group">
+                    <input id="username" name="username" type="text" class="form-control input-lg" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <input id="password" name="password" type="password" class="form-control input-lg"
+                           placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <input id="confirmPass" name="confirmPass" type="password" class="form-control input-lg"
+                           placeholder="Confirm Password">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-lg btn-block">Sign In</button>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-md-offset-5">
+                <a th:href="@{/register/index}">Don't have an account? Create one.</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="fragment/bottom" th:remove="tag">
+</th:block>

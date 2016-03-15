@@ -13,6 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 
+/**
+ * Created by horvste on 1/18/16.
+ */
 @Controller
 @RequestMapping(value = "/register")
 public class RegisterController {

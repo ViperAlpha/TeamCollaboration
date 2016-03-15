@@ -2,6 +2,9 @@ package com.uww.messaging.model;
 
 import javax.persistence.*;
 
+/**
+ * Created by horvste on 1/18/16.
+ */
 @Entity
 public class User {
     private int userId;

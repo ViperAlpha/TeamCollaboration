@@ -1,5 +1,8 @@
 package com.uww.messaging.mapper;
 
+/**
+ * Created by horvste on 1/19/16.
+ */
 public class RoleMapper {
     public static String mapRoleToRoute(String role) {
         switch (role) {

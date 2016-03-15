@@ -1,14 +1,11 @@
 package com.uww.messaging.model;
 
+import javax.persistence.*;
 import java.util.Date;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+/**
+ * Created by horvste on 2/19/16.
+ */
 @Entity
 public class Team {
     private int teamId;

@@ -1,5 +1,8 @@
 package com.uww.messaging.display;
 
+/**
+ * Created by horvste on 1/18/16.
+ */
 public class UserRegistration {
     private String firstName;
     private String lastName;
