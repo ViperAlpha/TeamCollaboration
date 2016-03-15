@@ -12,4 +12,7 @@ import java.util.List;
 public interface UserMessageChatRepository extends CrudRepository<UserMessageChat, Integer> {
     @Query("SELECT u FROM UserMessageChat u WHERE (u.fromUserId=?1 AND u.toUserId=?2) OR (u.fromUserId=?2 AND u.toUserId=?1)")
     List<UserMessageChat> findChatsByUserId(int fromUserId, int toUserId);
+
+    @Query("SELECT u FROM UserMessageChat u WHERE u.fromUserId=?1 OR u.toUserId=?1")
+    List<UserMessageChat> findChatsByUserId(int userId);
 }
