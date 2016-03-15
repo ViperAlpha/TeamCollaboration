@@ -22,3 +22,7 @@
 ## File-based project format:
 *.ipr
 *.iws
+
+# Binary files
+target/
+
