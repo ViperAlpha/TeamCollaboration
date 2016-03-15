@@ -1,6 +1,8 @@
 package com.uww.messaging.contract;
 
+import com.uww.messaging.model.User;
 import com.uww.messaging.model.UserMessage;
+import com.uww.messaging.model.UserMessageChat;
 
 import java.util.List;
 
@@ -13,4 +15,6 @@ public interface MessageService {
     List<UserMessage> findMessagesBetweenUsers(int userId, int secondUserId);
 
     void haveIndividualConversation(int currentUserId, int toUserId, String message);
+
+    List<UserMessageChat> findUserMessages(int userId);
 }

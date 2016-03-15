@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" ng-app="messagingApp" ng-controller="userController">
 <th:block th:replace="fragment/User/top">
 
 </th:block>
@@ -93,6 +93,13 @@
             </div>
         </form>
     </div>
+</div>
+
+<div class="text-center" ng-repeat="message in messages">
+   From: {{message.fromFirstName}}
+   To: {{message.toFirstName}}
+   Timestamp: {{message.timeOfMessage}}
+   Message: {{message.message}}
 </div>
 
 

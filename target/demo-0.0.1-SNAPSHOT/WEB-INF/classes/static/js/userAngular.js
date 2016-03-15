@@ -5,6 +5,23 @@
 var messagingApp = angular.module('messagingApp', []);
 
 messagingApp.controller('userController', function ($scope, $http, $interval, $window) {
+    $http.get("/user/message/individual-message/listUsers/")
+        .then(function(response) {
+            $scope.users = response.data;
+        });
+
+    $scope.displayMessages = function(firstUserId){
+        var url = '/user/message/individual-message/listBySingleUserId?userId=' + firstUserId;
+        $http.get(url)
+            .then(function(response) {
+                $scope.messages = response.data;
+            });
+    };
+
+    $scope.hello = function(){
+        alert('hello');
+    };
+
 });
 
 /**

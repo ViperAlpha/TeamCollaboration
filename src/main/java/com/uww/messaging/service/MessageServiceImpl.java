@@ -58,6 +58,11 @@ public class MessageServiceImpl implements MessageService {
 
     }
 
+    @Override
+    public List<UserMessageChat> findUserMessages(int userId) {
+        return userMessageChatRepository.findMessageChatsByUserId(userId);
+    }
+
     private static void sizeGreaterThanOneThrowException(List<UserMessageChat> userMessageChats, int userId, int secondUserId) {
         if (userMessageChats.size() > 1) {
             String errorMessage = MessageFormat.format("Data Corruption: UserMessageChat table has more than one entry for userId: {0} and userId: {1}", userId, secondUserId);

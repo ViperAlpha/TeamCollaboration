@@ -3,8 +3,11 @@ package com.uww.messaging.controller;
 import com.google.gson.Gson;
 import com.uww.messaging.contract.MessageService;
 import com.uww.messaging.contract.UserService;
+import com.uww.messaging.display.UserMessageDisplay;
 import com.uww.messaging.model.TeamMessage;
+import com.uww.messaging.model.User;
 import com.uww.messaging.model.UserMessage;
+import com.uww.messaging.model.UserMessageChat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,6 +69,44 @@ public class UserMessageController {
         Gson gson = new Gson();
         List<UserMessage> messagesBetweenUsers = messageService.findMessagesBetweenUsers(userId, secondUserId);
         return gson.toJson(messagesBetweenUsers);
+    }
+
+    @RequestMapping(value = "/individual-message/listBySingleUserId", method = RequestMethod.GET)
+    @ResponseBody
+    public String listIndividualMessages(Authentication authentication, @RequestParam("userId") int firstUserId) {
+        Gson gson = new Gson();
+        int userId = userService.userByAuthentication(authentication).getUserId();
+        List<UserMessage> messagesBetweenUsers = messageService.findMessagesBetweenUsers(userId, firstUserId);
+        List<UserMessageDisplay> userMessageDisplays = new ArrayList<>();
+        messagesBetweenUsers.forEach(userMessageChat -> {
+            User fromUser = userService.findUserById(userMessageChat.getFromUserId());
+            User toUser = userService.findUserById(userMessageChat.getToUserId());
+            userMessageDisplays.add(new UserMessageDisplay(
+                    userMessageChat.getMessage(),
+                    fromUser.getFirstName(),
+                    toUser.getFirstName(),
+                    userMessageChat.getMessageTime()
+                )
+            );
+        });
+        return gson.toJson(userMessageDisplays);
+    }
+
+    @RequestMapping(value = "/individual-message/listUsers", method = RequestMethod.GET)
+    @ResponseBody
+    public String listIndividualMessages(Authentication authentication) {
+        Gson gson = new Gson();
+        int userId = userService.userByAuthentication(authentication).getUserId();
+        List<User> users = new ArrayList<>();
+        List<UserMessageChat> messagesBetweenUsers = messageService.findUserMessages(userId);
+        messagesBetweenUsers.forEach(userMessageChat -> {
+            if (userMessageChat.getFromUserId() == userId) {
+                users.add(userService.findUserById(userMessageChat.getToUserId()));
+            } else {
+                users.add(userService.findUserById(userMessageChat.getFromUserId()));
+            }
+        });
+        return gson.toJson(users);
     }
 
     @RequestMapping(value = "/individual-message/insert", method = RequestMethod.PUT)
