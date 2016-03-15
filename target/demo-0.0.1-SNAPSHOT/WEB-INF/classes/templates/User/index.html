@@ -101,6 +101,12 @@
    Timestamp: {{message.timeOfMessage}}
    Message: {{message.message}}
 </div>
+<!-- currently broken form !-->
+<div class="text-center">
+    <label class="control-label">Enter Message:</label>
+    <input ng-value="currentMessage" type="text" class="form-control" id="message" name="message">
+    <button ng-click="sendMessage()" type="submit" class="btn btn-default">Send! To {{currentUserId}}</button>
+</div>
 
 
 <th:block th:replace="fragment/User/bottom">
