@@ -7,60 +7,72 @@ import javax.persistence.*;
  */
 @Entity
 public class TeamMember {
-    private int teamMemberId;
-    private Integer userId;
-    private Integer teamId;
+	private int teamMemberId;
+	private Integer userId;
+	private Integer teamId;
+	private TeamMessageChat teamMessageChatId;
 
-    @Id
-    @GeneratedValue
-    @Column(name = "teamMemberId", nullable = false)
-    public int getTeamMemberId() {
-        return teamMemberId;
-    }
+	@Id
+	@GeneratedValue
+	@Column(name = "teamMemberId", nullable = false)
+	public int getTeamMemberId() {
+		return teamMemberId;
+	}
 
-    public void setTeamMemberId(int teamMemberId) {
-        this.teamMemberId = teamMemberId;
-    }
+	public void setTeamMemberId(int teamMemberId) {
+		this.teamMemberId = teamMemberId;
+	}
 
-    @Basic
-    @Column(name = "userId", nullable = true)
-    public Integer getUserId() {
-        return userId;
-    }
+	@Basic
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "teamMessageChatId")
+	public TeamMessageChat getTeamMessageChatId() {
+		return teamMessageChatId;
+	}
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
+	public void setTeamMessageChatId(final TeamMessageChat teamMessageChatId) {
+		this.teamMessageChatId = teamMessageChatId;
+	}
 
-    @Basic
-    @Column(name = "teamId", nullable = true)
-    public Integer getTeamId() {
-        return teamId;
-    }
+	@Column(name = "userId", nullable = true)
+	public Integer getUserId() {
+		return userId;
+	}
 
-    public void setTeamId(Integer teamId) {
-        this.teamId = teamId;
-    }
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+	@Basic
+	@Column(name = "teamId", nullable = true)
+	public Integer getTeamId() {
+		return teamId;
+	}
 
-        TeamMember that = (TeamMember) o;
+	public void setTeamId(Integer teamId) {
+		this.teamId = teamId;
+	}
 
-        if (teamMemberId != that.teamMemberId) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
-        if (teamId != null ? !teamId.equals(that.teamId) : that.teamId != null) return false;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) { return true; }
+		if (o == null || getClass() != o.getClass()) { return false; }
 
-        return true;
-    }
+		TeamMember that = (TeamMember) o;
 
-    @Override
-    public int hashCode() {
-        int result = teamMemberId;
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
-        result = 31 * result + (teamId != null ? teamId.hashCode() : 0);
-        return result;
-    }
+		if (teamMemberId != that.teamMemberId) { return false; }
+		if (userId != null ? !userId.equals(that.userId) : that.userId != null) { return false; }
+		if (teamId != null ? !teamId.equals(that.teamId) : that.teamId != null) { return false; }
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = teamMemberId;
+		result = 31 * result + (userId != null ? userId.hashCode() : 0);
+		result = 31 * result + (teamId != null ? teamId.hashCode() : 0);
+		return result;
+	}
+
 }

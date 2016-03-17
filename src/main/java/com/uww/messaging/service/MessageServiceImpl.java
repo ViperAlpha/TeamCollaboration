@@ -1,11 +1,15 @@
 package com.uww.messaging.service;
 
 import com.uww.messaging.contract.MessageService;
-import com.uww.messaging.model.User;
+import com.uww.messaging.model.TeamMessage;
+import com.uww.messaging.model.TeamMessageChat;
 import com.uww.messaging.model.UserMessage;
 import com.uww.messaging.model.UserMessageChat;
+import com.uww.messaging.repository.TeamMessageChatRepository;
+import com.uww.messaging.repository.TeamMessageRepository;
 import com.uww.messaging.repository.UserMessageChatRepository;
 import com.uww.messaging.repository.UserMessageRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +31,14 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private UserMessageChatRepository userMessageChatRepository;
 
-    @Override
+	@Autowired
+	private TeamMessageRepository teamMessageRepository;
+
+	@Autowired
+	private TeamMessageChatRepository teamMessageChatRepository;
+
+
+	@Override
     public List<UserMessage> findMessagesBetweenUsers(int userId, int secondUserId) {
         List<UserMessageChat> chatsByUserId = userMessageChatRepository.findChatsByUserId(userId, secondUserId);
         sizeGreaterThanOneThrowException(chatsByUserId, userId, secondUserId);
@@ -57,6 +68,33 @@ public class MessageServiceImpl implements MessageService {
         userMessageRepository.save(userMessage);
 
     }
+
+
+	@Override
+	public List<TeamMessage> findMessagesFromTeam(final int teamId) {
+		List<TeamMessageChat> chatsByTeamId = teamMessageChatRepository.findChatsByTeamId(teamId);
+
+		return (chatsByTeamId.size() == 0) ?
+		       new ArrayList<>() :
+		       teamMessageRepository.findByTeamMessageChatIdOrderByMessageTimeAsc(chatsByTeamId.get(0).getTeamMessageChatId());
+
+	}
+
+	@Transactional
+	@Override
+	public void sendMessageToTeam(final int fromUserId, final int teamId, final String message) {
+
+		List<TeamMessageChat> chatsByTeamId = teamMessageChatRepository.findChatsByTeamId(teamId);
+		Timestamp time = new Timestamp(new Date().getTime());
+
+		if(chatsByTeamId.size() == 0){
+			TeamMessageChat chat = new TeamMessageChat(new ArrayList<>(),teamId,time);
+			teamMessageChatRepository.save(chat);
+		}
+		TeamMessage team = new TeamMessage(fromUserId,teamId,message,chatsByTeamId.get(0).getTeamMessageChatId(),time);
+
+		teamMessageRepository.save(team);
+	}
 
     @Override
     public List<UserMessageChat> findUserMessages(int userId) {

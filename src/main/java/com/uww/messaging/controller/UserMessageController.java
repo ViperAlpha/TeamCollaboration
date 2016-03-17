@@ -31,25 +31,25 @@ public class UserMessageController {
     @Autowired
     private MessageService messageService;
 
-    @RequestMapping(value = "/team-messages/list") //add parameters
+    @RequestMapping(value = "/team-messages/list", method = RequestMethod.GET)
     @ResponseBody
-    public String listTeamMessages() {
-        //SHOULD CALL MESSAGING SERVICE, You will need to change database schema
+    public String listTeamMessages(@RequestParam("teamId") int teamId) {
 
-        //should return a json list of team messages depending on GET parameter
-        //Gson gson = new Gson();
-        //String json = gson.toJson(new Object());
-        return "";
+        Gson gson = new Gson();
+
+        List<TeamMessage> messagesFromTeam = messageService.findMessagesFromTeam(teamId);
+        return gson.toJson(messagesFromTeam);
+
     }
 
-    @RequestMapping(value = "/team-messages/insert") //add parameters
+    @RequestMapping(value = "/team-messages/insert")
     @ResponseBody
-    public String insertTeamMessage() {
-        //SHOULD CALL MESSAGING SERVICE, You will need to change database schema
-        //should insert based on PUT
-        //TeamMessage
-        //Gson gson = new Gson();
-        //String json = gson.toJson(new Object());
+    public String insertTeamMessage(Authentication authentication, @RequestParam("toUserId") int toTeamId, @RequestParam("message") String message) {
+
+        int userId = userService.userByAuthentication(authentication).getUserId();
+
+        messageService.sendMessageToTeam(userId, toTeamId, message);
+
         return "";
     }
 

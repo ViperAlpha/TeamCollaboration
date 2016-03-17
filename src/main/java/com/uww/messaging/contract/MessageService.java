@@ -1,6 +1,6 @@
 package com.uww.messaging.contract;
 
-import com.uww.messaging.model.User;
+import com.uww.messaging.model.TeamMessage;
 import com.uww.messaging.model.UserMessage;
 import com.uww.messaging.model.UserMessageChat;
 
@@ -17,4 +17,8 @@ public interface MessageService {
     void haveIndividualConversation(int currentUserId, int toUserId, String message);
 
     List<UserMessageChat> findUserMessages(int userId);
+
+    List<TeamMessage> findMessagesFromTeam(int teamId);
+
+    void sendMessageToTeam(int fromUserId, int toTeamId, String message);
 }
