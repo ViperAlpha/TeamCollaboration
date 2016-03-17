@@ -11,10 +11,7 @@ import com.uww.messaging.model.UserMessageChat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +107,6 @@ public class UserMessageController {
     }
 
     @RequestMapping(value = "/individual-message/insert", method = RequestMethod.PUT)
-    @ResponseBody
     public String insertIndividualMessages(Authentication authentication, @RequestParam("toUserId") int toUserId, @RequestParam("message") String message) {
         int currentUserId = userService.userByAuthentication(authentication).getUserId();
         messageService.haveIndividualConversation(
@@ -118,7 +114,7 @@ public class UserMessageController {
                 toUserId,
                 message
         );
-        return "";
+        return "redirect:/user";
     }
 
 

@@ -5,46 +5,29 @@
 var messagingApp = angular.module('messagingApp', []);
 
 messagingApp.controller('userController', function ($scope, $http, $interval, $window) {
+    $scope.currentUserId = null;
+    $scope.currentName = null;
+
     $http.get("/user/message/individual-message/listUsers/")
         .then(function(response) {
             $scope.users = response.data;
         });
 
-    $scope.displayMessages = function(firstUserId){
-        var url = '/user/message/individual-message/listBySingleUserId?userId=' + firstUserId;
-        $scope.currentUserId = firstUserId;
+    $scope.displayMessages = function(user){
+        $scope.currentUserId = user.userId;
+        $scope.currentName = user.firstName + ' ' + user.lastName;
+        var url = '/user/message/individual-message/listBySingleUserId?userId=' + $scope.currentUserId;
         $http.get(url)
             .then(function(response) {
                 $scope.messages = response.data;
             });
     };
 
-    //currently broken function needs fixing
-    $scope.sendMessage = function(){
-        var url = '/user/message/individual-message/insert';
-
-        var data = $.param({
-            toUserId: $scope.currentUserId,
-            message: $scope.currentMessage
-        });
-
-        var headers = $.param({ 'Content-Type': 'application/x-www-form-urlencoded' });
-
-        $http.put(url, data)
-            .success(function (data, status, headers) {
-                $scope.ServerResponse = data;
-            })
-            .error(function (data, status, header, config) {
-                $scope.ServerResponse =  htmlDecode("Data: " + data +
-                    "\n\n\n\nstatus: " + status +
-                    "\n\n\n\nheaders: " + header +
-                    "\n\n\n\nconfig: " + config);
-            });
-    };
-
-    $scope.hello = function(){
-        alert('hello');
-    };
+    $scope.displayFirstMessage = function(user){
+        if($scope.currentUserId !== null)
+            return;
+        $scope.displayMessages(user);
+    }
 
 });
 

@@ -1,6 +1,7 @@
 <div xmlns="http://www.w3.org/1999/xhtml"
      xmlns:th="http://www.thymeleaf.org">
     <head>
+
         <div th:replace="fragment/dependency" th:remove="tag"></div>
         <!--/*@thymesVar id="user" type="com.uww.messaging.model.User"*/-->
         <title th:text="'Hi ' + ${user.firstName}"></title>
@@ -42,18 +43,3 @@
 
     </nav>
 
-    <!-- Sidebar -->
-    <div id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li class="sidebar-brand">
-                <a href="#">
-                    Start Bootstrap
-                </a>
-            </li>
-            <li ng-repeat="user in users" ng-click="displayMessages(user.userId)">
-                <a href="#">{{user.firstName}} {{user.lastName}}</a>
-            </li>
-        </ul>
-    </div>
-    <!-- /#sidebar-wrapper -->
-</div>

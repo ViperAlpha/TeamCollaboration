@@ -16,7 +16,7 @@
             <form action="#" th:action="@{/register/registerUser}" class="form-horizontal" th:object="${userRegistration}"
                   role="form" method="post">
 
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
 
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="firstName">First</label>

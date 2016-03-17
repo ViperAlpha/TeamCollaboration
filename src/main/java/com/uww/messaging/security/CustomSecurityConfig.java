@@ -29,6 +29,7 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
         http
                 .authorizeRequests()
                 .antMatchers("/", "/register/**", "/product/**", "/page/**", "/css/**", "/js/**", "/ajax/**",
@@ -51,5 +52,4 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
         handler.setDefaultTargetUrl("/login");
         return handler;
     }
-
 }
