@@ -9,6 +9,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
     $scope.currentName = null;
     $scope.currentInvite = null;
     $scope.invitedUsername = null;
+    $scope.showFileUpload = false;
 
     $http.get("/user/invitation/see/accepted")
         .then(function (response) {

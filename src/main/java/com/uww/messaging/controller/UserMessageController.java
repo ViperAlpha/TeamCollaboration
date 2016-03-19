@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,11 +81,11 @@ public class UserMessageController {
             User fromUser = userService.findUserById(userMessageChat.getFromUserId());
             User toUser = userService.findUserById(userMessageChat.getToUserId());
             userMessageDisplays.add(new UserMessageDisplay(
-                    userMessageChat.getMessage(),
-                    fromUser.getFirstName(),
-                    toUser.getFirstName(),
-                    userMessageChat.getMessageTime()
-                )
+                            userMessageChat.getMessage(),
+                            fromUser.getFirstName(),
+                            toUser.getFirstName(),
+                            userMessageChat.getMessageTime()
+                    )
             );
         });
         return gson.toJson(userMessageDisplays);
@@ -106,8 +108,9 @@ public class UserMessageController {
         return gson.toJson(users);
     }
 
-    @RequestMapping(value = "/individual-message/insert", method = RequestMethod.PUT)
-    public String insertIndividualMessages(Authentication authentication, @RequestParam("toUserId") int toUserId, @RequestParam("message") String message) {
+    @RequestMapping(value = "/individual-message/insert", method = RequestMethod.POST)
+    public String insertIndividualMessages(Authentication authentication, @RequestParam("toUserId") int toUserId, @RequestParam("message") String message,
+                                           @RequestParam("fileUpload") MultipartFile multiPartFile) {
         int currentUserId = userService.userByAuthentication(authentication).getUserId();
         messageService.haveIndividualConversation(
                 currentUserId,
