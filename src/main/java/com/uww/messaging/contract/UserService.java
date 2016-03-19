@@ -22,7 +22,7 @@ public interface UserService {
 
     User userByAuthentication(Authentication auth);
 
-    List<User> findUsersStartingWith(String username);
+    List<String> findUsersStartingWith(String username);
 
     void sendInvitation(int loggedInUserId, UserInvitationForm userInvitationForm);
 
