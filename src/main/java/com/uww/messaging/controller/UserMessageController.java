@@ -1,13 +1,12 @@
 package com.uww.messaging.controller;
 
 import com.google.gson.Gson;
+import com.uww.messaging.MessagingApplication;
 import com.uww.messaging.contract.MessageService;
 import com.uww.messaging.contract.UserService;
 import com.uww.messaging.display.UserMessageDisplay;
-import com.uww.messaging.model.TeamMessage;
-import com.uww.messaging.model.User;
-import com.uww.messaging.model.UserMessage;
-import com.uww.messaging.model.UserMessageChat;
+import com.uww.messaging.model.*;
+import com.uww.messaging.util.UtilString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,9 @@ public class UserMessageController {
 
     @Autowired
     private MessageService messageService;
+
+    @Autowired
+    private MessagingApplication messagingApplication;
 
     @RequestMapping(value = "/team-messages/list") //add parameters
     @ResponseBody
@@ -66,7 +70,7 @@ public class UserMessageController {
     @ResponseBody
     public String listIndividualMessages(@RequestParam("firstUserId") int userId, @RequestParam("secondUserId") int secondUserId) {
         Gson gson = new Gson();
-        List<UserMessage> messagesBetweenUsers = messageService.findMessagesBetweenUsers(userId, secondUserId);
+        List<UserMessageDisplay> messagesBetweenUsers = messageService.findMessagesBetweenUsers(userId, secondUserId);
         return gson.toJson(messagesBetweenUsers);
     }
 
@@ -75,19 +79,7 @@ public class UserMessageController {
     public String listIndividualMessages(Authentication authentication, @RequestParam("userId") int firstUserId) {
         Gson gson = new Gson();
         int userId = userService.userByAuthentication(authentication).getUserId();
-        List<UserMessage> messagesBetweenUsers = messageService.findMessagesBetweenUsers(userId, firstUserId);
-        List<UserMessageDisplay> userMessageDisplays = new ArrayList<>();
-        messagesBetweenUsers.forEach(userMessageChat -> {
-            User fromUser = userService.findUserById(userMessageChat.getFromUserId());
-            User toUser = userService.findUserById(userMessageChat.getToUserId());
-            userMessageDisplays.add(new UserMessageDisplay(
-                            userMessageChat.getMessage(),
-                            fromUser.getFirstName(),
-                            toUser.getFirstName(),
-                            userMessageChat.getMessageTime()
-                    )
-            );
-        });
+        List<UserMessageDisplay> userMessageDisplays = messageService.findMessagesBetweenUsers(userId, firstUserId);
         return gson.toJson(userMessageDisplays);
     }
 
@@ -110,14 +102,30 @@ public class UserMessageController {
 
     @RequestMapping(value = "/individual-message/insert", method = RequestMethod.POST)
     public String insertIndividualMessages(Authentication authentication, @RequestParam("toUserId") int toUserId, @RequestParam("message") String message,
-                                           @RequestParam("fileUpload") MultipartFile multiPartFile) {
+                                           @RequestParam("fileUpload") MultipartFile multiPartFile) throws IOException {
         int currentUserId = userService.userByAuthentication(authentication).getUserId();
-        messageService.haveIndividualConversation(
-                currentUserId,
-                toUserId,
-                message
-        );
-        return "redirect:/user";
+        String redirectToUserHomePage = "redirect:/user";
+        if (multiPartFile.isEmpty()) {
+            messageService.haveIndividualConversation(
+                    currentUserId,
+                    toUserId,
+                    message
+            );
+            return redirectToUserHomePage;
+        }
+
+
+        String fileName = UtilString.toValidFilePathString(multiPartFile.getOriginalFilename());
+        if (!new File(messagingApplication.userDownloadDir).exists()) {
+            throw new RuntimeException("You did not setup a user download directory in your application.properties file. This directory does not exist: "
+                    + messagingApplication.userDownloadDir);
+        }
+        String fileSavedPath = messagingApplication.userDownloadDir + "/" + fileName;
+        File file = new File(fileSavedPath);
+        multiPartFile.transferTo(file);
+        UserUploadedFile userUploadedFile = new UserUploadedFile(currentUserId, multiPartFile.getOriginalFilename(), fileSavedPath,-10);
+        messageService.haveIndividualConversation(currentUserId, toUserId, message, userUploadedFile);
+        return redirectToUserHomePage;
     }
 
 

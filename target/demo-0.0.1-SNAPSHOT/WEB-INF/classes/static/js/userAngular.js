@@ -2,7 +2,7 @@
  * Created by horvste on 3/5/16.
  */
 
-var messagingApp = angular.module('messagingApp', []);
+var messagingApp = angular.module('messagingApp', ['ngSanitize']);
 
 messagingApp.controller('userController', function ($scope, $http, $interval, $window) {
     $scope.currentUserId = null;

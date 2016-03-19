@@ -4,24 +4,9 @@
 -- ------------------------------------------------------
 -- Server version	5.5.46-0ubuntu0.14.04.2
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `Team`
---
-
 DROP TABLE IF EXISTS `Team`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
+
 CREATE TABLE `Team` (
   `teamId` int(11) NOT NULL AUTO_INCREMENT,
   `teamName` varchar(20) NOT NULL,
@@ -29,36 +14,24 @@ CREATE TABLE `Team` (
   `createdTime` datetime DEFAULT NULL,
   PRIMARY KEY (`teamId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `Team`
---
 
---
--- Table structure for table `TeamMember`
---
 
 DROP TABLE IF EXISTS `TeamMember`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
+
 CREATE TABLE `TeamMember` (
   `teamMemberId` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) DEFAULT NULL,
   `teamId` int(11) DEFAULT NULL,
   PRIMARY KEY (`teamMemberId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `TeamMember`
---
--- Table structure for table `TeamMessage`
---
+
+
+
 
 DROP TABLE IF EXISTS `TeamMessage`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `TeamMessage` (
   `teamMessageId` int(11) NOT NULL AUTO_INCREMENT,
   `fromUserid` int(11) DEFAULT NULL,
@@ -66,20 +39,13 @@ CREATE TABLE `TeamMessage` (
   `message` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`teamMessageId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `TeamMessage`
---
 
 
---
--- Table structure for table `User`
---
+
+
+
 
 DROP TABLE IF EXISTS `User`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `User` (
   `userId` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(40) NOT NULL,
@@ -89,20 +55,12 @@ CREATE TABLE `User` (
   `phoneNumber` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`userId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `User`
---
 
 
---
--- Table structure for table `UserInvitation`
---
+
 
 DROP TABLE IF EXISTS `UserInvitation`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `UserInvitation` (
   `userInvitationId` int(11) NOT NULL AUTO_INCREMENT,
   `fromUserId` int(11) NOT NULL,
@@ -111,20 +69,14 @@ CREATE TABLE `UserInvitation` (
   `status` varchar(10) NOT NULL,
   PRIMARY KEY (`userInvitationId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `UserInvitation`
---
 
 
---
--- Table structure for table `UserMessage`
---
+
+
+
 
 DROP TABLE IF EXISTS `UserMessage`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `UserMessage` (
   `userMessageId` int(11) NOT NULL AUTO_INCREMENT,
   `fromUserId` int(11) DEFAULT NULL,
@@ -133,21 +85,14 @@ CREATE TABLE `UserMessage` (
   `userMessageChatId` int(11) DEFAULT NULL,
   `messageTime` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`userMessageId`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `UserMessage`
---
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
 
 
---
--- Table structure for table `UserMessageChat`
---
+
+
 
 DROP TABLE IF EXISTS `UserMessageChat`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `UserMessageChat` (
   `userMessageChatId` int(11) NOT NULL AUTO_INCREMENT,
   `fromUserId` int(11) DEFAULT NULL,
@@ -155,28 +100,30 @@ CREATE TABLE `UserMessageChat` (
   `chatTime` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`userMessageChatId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `UserMessageChat`
---
 
 
---
--- Table structure for table `UserRole`
---
+
 
 DROP TABLE IF EXISTS `UserRole`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `UserRole` (
   `userRoleId` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(10) unsigned NOT NULL,
   `authority` varchar(45) NOT NULL,
   PRIMARY KEY (`userRoleId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `UserRole`
---
+
+
+
+DROP TABLE IF EXISTS `UserUploadedFile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `UserUploadedFile` (
+  `userUploadedFileKey` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL,
+  `fileName` varchar(100) NOT NULL,
+  `filePath` varchar(500) NOT NULL,
+  `chatId` int(11) NOT NULL,
+  PRIMARY KEY (`userUploadedFileKey`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;

@@ -10,12 +10,22 @@ public class UserMessageDisplay {
     private String toFirstName;
     private Timestamp timeOfMessage;
     private String message;
+    private String fileName;
 
-    public UserMessageDisplay(String message, String fromFirstName, String toFirstName, Timestamp timeOfMessage) {
+    public UserMessageDisplay(String message, String fromFirstName, String toFirstName, Timestamp timeOfMessage, String fileName) {
         this.message = message;
         this.fromFirstName = fromFirstName;
         this.toFirstName = toFirstName;
         this.timeOfMessage = timeOfMessage;
+        this.fileName = fileName;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getFromFirstName() {

@@ -177,6 +177,9 @@
                 To: {{message.toFirstName}}
                 Timestamp: {{message.timeOfMessage}}
                 Message: {{message.message}}
+                <div ng-if="message.fileName != 'null'">Attached Files: <a
+                        ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
+                </div>
             </div>
         </div>
 

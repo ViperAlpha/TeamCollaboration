@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     private static final String PENDING = "pending";
-    public static final String ACCEPTED = "accepted";
+    private static final String ACCEPTED = "accepted";
 
     public User findUserById(int userId) {
         return userRepository.findOne(userId);

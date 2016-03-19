@@ -1,11 +1,16 @@
 package com.uww.messaging.service;
 
 import com.uww.messaging.contract.MessageService;
+import com.uww.messaging.contract.UserService;
+import com.uww.messaging.display.UserMessageDisplay;
 import com.uww.messaging.model.User;
 import com.uww.messaging.model.UserMessage;
 import com.uww.messaging.model.UserMessageChat;
+import com.uww.messaging.model.UserUploadedFile;
 import com.uww.messaging.repository.UserMessageChatRepository;
 import com.uww.messaging.repository.UserMessageRepository;
+import com.uww.messaging.repository.UserRepository;
+import com.uww.messaging.repository.UserUploadedFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,18 +32,45 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private UserMessageChatRepository userMessageChatRepository;
 
+    @Autowired
+    private UserUploadedFileRepository userUploadedFileRepository;
+
+
+    @Autowired
+    private UserService userService;
+
     @Override
-    public List<UserMessage> findMessagesBetweenUsers(int userId, int secondUserId) {
+    public List<UserMessageDisplay> findMessagesBetweenUsers(int userId, int secondUserId) {
         List<UserMessageChat> chatsByUserId = userMessageChatRepository.findChatsByUserId(userId, secondUserId);
         sizeGreaterThanOneThrowException(chatsByUserId, userId, secondUserId);
         if (chatsByUserId.size() == 0)
             return new ArrayList<>();
-        return userMessageRepository.findByUserMessageChatIdOrderByMessageTimeAsc(chatsByUserId.get(0).getUserMessageChatId());
+        List<UserMessage> messagesBetweenUsers = userMessageRepository.findByUserMessageChatIdOrderByMessageTimeAsc(chatsByUserId.get(0).getUserMessageChatId());
+        List<UserMessageDisplay> userMessageDisplays = new ArrayList<>();
+        messagesBetweenUsers.forEach(userMessageChat -> {
+            User fromUser = userService.findUserById(userMessageChat.getFromUserId());
+            User toUser = userService.findUserById(userMessageChat.getToUserId());
+            List<UserUploadedFile> byChatId = userUploadedFileRepository.findByChatId(userMessageChat.getUserMessageId());
+            userMessageDisplays.add(new UserMessageDisplay(
+                            userMessageChat.getMessage(),
+                            fromUser.getFirstName(),
+                            toUser.getFirstName(),
+                            userMessageChat.getMessageTime(),
+                            byChatId.size() == 0 ? "null" : byChatId.get(0).getFileName()
+                    )
+            );
+        });
+        return userMessageDisplays;
     }
 
     @Transactional
     @Override
     public void haveIndividualConversation(int currentUserId, int toUserId, String message) {
+        individualConversation(currentUserId, toUserId, message);
+
+    }
+
+    private UserMessage individualConversation(int currentUserId, int toUserId, String message) {
         List<UserMessageChat> chatsByUserId = userMessageChatRepository.findChatsByUserId(currentUserId, toUserId);
         Timestamp currentTimestamp = new Timestamp(new Date().getTime());
         if (chatsByUserId.size() == 0) {
@@ -50,12 +82,21 @@ public class MessageServiceImpl implements MessageService {
             UserMessage userMessage = new UserMessage(currentUserId, toUserId, message, userMessageChat.getUserMessageChatId(),
                     currentTimestamp);
             userMessageRepository.save(userMessage);
-            return;
+            return userMessage;
         }
         UserMessage userMessage = new UserMessage(currentUserId, toUserId, message, chatsByUserId.get(0).getUserMessageChatId(),
                 currentTimestamp);
         userMessageRepository.save(userMessage);
+        return userMessage;
+    }
 
+    @Transactional
+    @Override
+    public void haveIndividualConversation(int currentUserId, int toUserId, String message, UserUploadedFile userUploadedFile) {
+        User loggedInUser = userService.findUserById(currentUserId);
+        UserMessage userMessage = individualConversation(currentUserId, toUserId, message);
+        userUploadedFile.setChatId(userMessage.getUserMessageId());
+        userUploadedFileRepository.save(userUploadedFile);
     }
 
     @Override
