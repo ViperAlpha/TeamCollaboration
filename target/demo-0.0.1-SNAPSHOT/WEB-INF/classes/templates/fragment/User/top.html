@@ -20,6 +20,20 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-cloak>Notifications
+                        ({{invitations.length}})<strong
+                                class="caret"></strong></a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="invite in invitations">
+                            <a ng-click="setCurrentInvite(invite)" data-toggle="modal" data-target="#invitationModal">{{invite.username}}
+                                Wants To
+                                Chat</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Actions<strong
                             class="caret"></strong></a>
@@ -31,13 +45,21 @@
                             <a data-toggle="modal" data-target="#invitePersonModal">Invite Person To Team</a>
                         </li>
                         <li>
-                            <a data-toggle="modal" data-target="#sendIndividualMessage">Send Individual Message (For-Testing)</a>
+                            <a data-toggle="modal" data-target="#sendIndividualMessage">Send Individual Message
+                                (For-Testing)</a>
+                        </li>
+                        <li>
+                            <a data-toggle="modal" data-target="#inviteIndividualModal">Invite Individual To Chatr</a>
                         </li>
                     </ul>
                 </li>
+
+
                 <li>
                     <a th:href="@{/logout}">Logout</a>
                 </li>
+
+
             </ul>
         </div>
 

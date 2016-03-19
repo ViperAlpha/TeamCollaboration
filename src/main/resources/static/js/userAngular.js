@@ -7,27 +7,53 @@ var messagingApp = angular.module('messagingApp', []);
 messagingApp.controller('userController', function ($scope, $http, $interval, $window) {
     $scope.currentUserId = null;
     $scope.currentName = null;
+    $scope.currentInvite = null;
+    $scope.invitedUsername = null;
 
-    $http.get("/user/message/individual-message/listUsers/")
-        .then(function(response) {
+    $http.get("/user/invitation/see/accepted")
+        .then(function (response) {
             $scope.users = response.data;
         });
 
-    $scope.displayMessages = function(user){
+    $http.get('/user/invitation/mine')
+        .then(function (response) {
+            $scope.invitations = response.data;
+        });
+
+    $scope.displayMessages = function (user) {
         $scope.currentUserId = user.userId;
         $scope.currentName = user.firstName + ' ' + user.lastName;
         var url = '/user/message/individual-message/listBySingleUserId?userId=' + $scope.currentUserId;
         $http.get(url)
-            .then(function(response) {
+            .then(function (response) {
                 $scope.messages = response.data;
             });
     };
 
-    $scope.displayFirstMessage = function(user){
-        if($scope.currentUserId !== null)
+    $scope.displayFirstMessage = function (user) {
+        if ($scope.currentUserId !== null)
             return;
         $scope.displayMessages(user);
-    }
+    };
+
+    $scope.sendInvitation = function () {
+        var data = $.param({
+            name: $scope.invitedUsername,
+            message: $scope.inviteMessage
+        });
+
+        $http.put('/user/invitation/invite', data, config)
+            .success(function (data, status, headers, config) {
+                alert('sent invite');
+            })
+            .error(function (data, status, header, config) {
+                alert('error');
+            });
+    };
+
+    $scope.setCurrentInvite = function (invite) {
+        $scope.currentInvite = invite;
+    };
 
 });
 
@@ -37,27 +63,89 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
  */
 $(document).ready(function () {
     var inputId = "#input-userName";
-    $(inputId).autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                type: "GET",
-                url: "/user/invitation/autocomplete-user/list",
-                data: {
-                    usernameToAuto: $(inputId).val()
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    alert('Error: ' + xhr.responseText);
-                },
-                success: function (data) {
-                    data = JSON.parse(data);
-                    response($.map(data, function (item) {
-                        return {
-                            label: item
-                        }
-                    }));
-                }
-            });
-        }
+    var inputIndvidual = "#input-individual";
+
+    function autocompleteWithInput(inputId) {
+        return {
+            source: function (request, response) {
+                $.ajax({
+                    type: "GET",
+                    url: "/user/invitation/autocomplete-user/list",
+                    data: {
+                        usernameToAuto: $(inputId).val()
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        alert('Error: ' + xhr.responseText);
+                    },
+                    success: function (data) {
+                        data = JSON.parse(data);
+                        response($.map(data, function (item) {
+                            return {
+                                label: item
+                            }
+                        }));
+                    }
+                });
+            }
+        };
+    }
+
+    $(inputId).autocomplete(autocompleteWithInput(inputId));
+    $(inputIndvidual).autocomplete(autocompleteWithInput(inputIndvidual));
+
+
+    $("#sendIndvidualInvite").click(function (e) {
+        var usernameChosen = $("#input-individual").val();
+        var message = $("#message").val();
+
+        var queryAsJson = {
+            name: usernameChosen,
+            message: message
+        };
+        queryAsJson = JSON.stringify(queryAsJson);
+
+        $.ajax({
+            type: 'PUT',
+            url: '/user/invitation/invite',
+            data: queryAsJson,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Error: ' + xhr.responseText);
+            },
+            success: function (data) {
+                alert('Invitation Sent');
+            }
+        });
     });
+
+    $("#acceptInvitation").click(function (e) {
+        var currentInviteFromId = $("#currentInviteFromId").val();
+        var currentInviteId = $("#currentInviteId").val();
+
+        var queryAsJson = {
+            fromUserId: currentInviteFromId,
+            userInvitationId: currentInviteId
+        };
+
+        queryAsJson = JSON.stringify(queryAsJson);
+
+        $.ajax({
+            type: 'PUT',
+            url: '/user/invitation/accept',
+            data: queryAsJson,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Error: ' + xhr.responseText);
+            },
+            success: function (data) {
+                alert('Invitation Accepted');
+            }
+        });
+
+    });
+
+
 });
 

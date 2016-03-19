@@ -1,5 +1,7 @@
 package com.uww.messaging.contract;
 
+import com.uww.messaging.display.UserInvitationForm;
+import com.uww.messaging.display.UserInvitationResponse;
 import com.uww.messaging.model.User;
 import com.uww.messaging.model.UserRole;
 import org.springframework.security.core.Authentication;
@@ -21,4 +23,12 @@ public interface UserService {
     User userByAuthentication(Authentication auth);
 
     List<User> findUsersStartingWith(String username);
+
+    void sendInvitation(int loggedInUserId, UserInvitationForm userInvitationForm);
+
+    void acceptInvitation(int loggedInUserId, int fromUserId, int userInvitationId);
+
+    List<UserInvitationResponse> findAllPendingInvitations(int userId);
+
+    List<User> findAcceptedInvitationUsers(int userId);
 }
