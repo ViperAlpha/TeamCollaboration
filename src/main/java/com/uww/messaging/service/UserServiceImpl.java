@@ -113,9 +113,21 @@ public class UserServiceImpl implements UserService {
                 userToInvite.getUserId()
         ).size() > 0;
 
+
         if (alreadyHasAnInvitation) {
             throw new IllegalArgumentException("Duplicate Invitation To: " + userToInvite.getUsername());
         }
+
+        alreadyHasAnInvitation = userInvitationRepository.findByFromUserIdAndToUserId(
+                userToInvite.getUserId(),
+                loggedInUserId
+        ).size() > 0;
+
+        if (alreadyHasAnInvitation) {
+            throw new IllegalArgumentException("Duplicate Invitation To: " + userToInvite.getUsername());
+        }
+
+
 
         userInvitation.setToUserId(userToInvite.getUserId());
         userInvitation.setStatus(PENDING);

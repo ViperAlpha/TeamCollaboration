@@ -24,5 +24,19 @@ After ensuring that you have all the above done here is a step by step process:
             //TODO: Documentation. I don't use eclipse so I don't know
 
 
+These are Test Users available in the defalut sql/create-database/TeamCollaboration.sql file:
+        username: joe@gmail.com
+        password: joe@gmail.com
 
 
+
+        username: dan@gmail.com
+        password: dan@gmail.com
+
+        username: thao@uww.edu
+        password: thao@uww.edu
+
+
+
+You will have to change resources/application.properties file's messaging.user.download.directory constant to
+a already created directory on your box if you want messages to be sent with links/attachments
