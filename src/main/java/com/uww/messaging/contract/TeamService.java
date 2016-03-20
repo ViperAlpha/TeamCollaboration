@@ -10,4 +10,5 @@ import java.util.List;
 public interface TeamService {
     void save(int creatorUserId, String teamName, String teamDescription);
     List<Team> findTeamsByUserId(int userId);
+	void addTeamMember(int teamId, int currentUserId, int invitedUserId);
 }

@@ -7,54 +7,61 @@ import javax.persistence.*;
  */
 @Entity
 public class TeamMember {
-    private int teamMemberId;
-    private Integer userId;
-    private Integer teamId;
+	private int teamMemberId;
+	private Integer userId;
+	private Integer teamId;
 
-    @Id
-    @GeneratedValue
-    @Column(name = "teamMemberId", nullable = false)
-    public int getTeamMemberId() {
-        return teamMemberId;
-    }
+	public TeamMember() {
+	}
 
-    public void setTeamMemberId(int teamMemberId) {
-        this.teamMemberId = teamMemberId;
-    }
+	public TeamMember(final Integer userId, final Integer teamId) {
+		this.userId = userId;
+		this.teamId = teamId;
+	}
 
-    @Basic
-    @Column(name = "userId", nullable = true)
-    public Integer getUserId() {
-        return userId;
-    }
+	@Id
+	@GeneratedValue
+	@Column(name = "teamMemberId", nullable = false)
+	public int getTeamMemberId() {
+		return teamMemberId;
+	}
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
+	public void setTeamMemberId(int teamMemberId) {
+		this.teamMemberId = teamMemberId;
+	}
 
-    @Basic
-    @Column(name = "teamId", nullable = true)
-    public Integer getTeamId() {
-        return teamId;
-    }
+	@Column(name = "userId", nullable = true)
+	public Integer getUserId() {
+		return userId;
+	}
 
-    public void setTeamId(Integer teamId) {
-        this.teamId = teamId;
-    }
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 
-    @Override
+	@Basic
+	@Column(name = "teamId", nullable = true)
+	public Integer getTeamId() {
+		return teamId;
+	}
+
+	public void setTeamId(Integer teamId) {
+		this.teamId = teamId;
+	}
+
+
+	@Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+		if (this == o) { return true; }
+		if (o == null || getClass() != o.getClass()) { return false; }
 
-        TeamMember that = (TeamMember) o;
+		TeamMember that = (TeamMember) o;
 
-        if (teamMemberId != that.teamMemberId) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
-        if (teamId != null ? !teamId.equals(that.teamId) : that.teamId != null) return false;
+		return teamMemberId == that.teamMemberId && (userId != null ?
+		                                             userId.equals(that.userId) :
+		                                             that.userId == null && (teamId != null ? teamId.equals(that.teamId) : that.teamId == null));
 
-        return true;
-    }
+	}
 
     @Override
     public int hashCode() {
