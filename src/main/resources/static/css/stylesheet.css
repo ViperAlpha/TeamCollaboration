@@ -1,5 +1,4 @@
 
-
 .ui-autocomplete {
     position: absolute;
     top: 100%;
@@ -70,7 +69,6 @@
     display: none;
 }
 
-
 /* Toggle Styles */
 
 #wrapper {
@@ -140,7 +138,7 @@
 .sidebar-nav li a:hover {
     text-decoration: none;
     color: #fff;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .sidebar-nav li a:active,
@@ -163,7 +161,7 @@
     background: none;
 }
 
-@media(min-width:768px) {
+@media (min-width: 768px) {
     #wrapper {
         padding-left: 250px;
     }
@@ -189,4 +187,44 @@
         position: relative;
         margin-right: 0;
     }
+}
+
+#jumbotron-home {
+    background: #fff;
+    text-align: center;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    margin-bottom: 0;
+    border-right-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+    border-image-slice: 100% 0 0;
+    border-image-width: 1 0 0;
+    margin-right: 0;
+    padding-top: 5px;
+}
+
+.row {
+    margin: 0;
 }
