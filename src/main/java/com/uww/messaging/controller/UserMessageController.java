@@ -51,7 +51,7 @@ public class UserMessageController {
 
 	}
 
-	@RequestMapping(value = "/team-messages/insert")
+	@RequestMapping(value = "/team-messages/insert", method = RequestMethod.PUT)
 	@ResponseBody
 	public String insertTeamMessage(Authentication authentication, @RequestParam("toTeamId") int toTeamId, @RequestParam("message") String message) {
 

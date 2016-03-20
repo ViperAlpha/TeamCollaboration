@@ -36,8 +36,6 @@ public class TeamController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
 	public String listTeams(Authentication authentication){
-
-
 		User currentUser = userService.userByAuthentication(authentication);
 		Gson gson = new Gson();
 		List<Team> teams = teamService.findTeamsByUserId(currentUser.getUserId());
@@ -45,11 +43,23 @@ public class TeamController {
 	}
 
 	@RequestMapping(value = "/invite", method = RequestMethod.PUT)
-	public String inviteToTeam(Authentication authentication, @RequestParam("teamId") int teamId, @RequestParam("invitedUserId") int invitedUserId){
+	public String inviteToTeam(Authentication authentication, @RequestParam("teamId") int teamId, @RequestParam("invitedUserId") int invitedUserId, @RequestParam("message") String message){
 
 		User currentUser = userService.userByAuthentication(authentication);
-		teamService.addTeamMember(teamId,currentUser.getUserId(),invitedUserId);
+		teamService.inviteMemberToTeam(teamId,currentUser.getUserId(),invitedUserId,message);
 
+		return "redirect:/user";
+	}
+
+	@RequestMapping(value = "/invite/accept", method = RequestMethod.PUT)
+	public String acceptInvitation(Authentication authentication, @RequestParam("teamInvitationId") int teamInvitationId){
+		teamService.acceptTeamInvitation(teamInvitationId);
+		return "redirect:/user";
+	}
+
+	@RequestMapping(value = "/invite/reject", method = RequestMethod.PUT)
+	public String rejectInvitation(Authentication authentication, @RequestParam("teamInvitationId") int teamInvitationId){
+		teamService.rejectTeamInvitation(teamInvitationId);
 		return "redirect:/user";
 	}
 }
