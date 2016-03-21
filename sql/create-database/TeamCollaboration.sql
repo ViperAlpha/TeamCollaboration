@@ -15,70 +15,83 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Database: `TeamCollaboration`
+--
+CREATE DATABASE IF NOT EXISTS `TeamCollaboration` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `TeamCollaboration`;
+
+-- --------------------------------------------------------
+
 --
 -- Table structure for table `Team`
 --
 
 DROP TABLE IF EXISTS `Team`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Team` (
+CREATE TABLE IF NOT EXISTS `Team` (
   `teamId` int(11) NOT NULL AUTO_INCREMENT,
   `teamName` varchar(20) NOT NULL,
   `teamDescription` varchar(100) DEFAULT NULL,
   `createdTime` datetime DEFAULT NULL,
   PRIMARY KEY (`teamId`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `Team`
 --
 
-LOCK TABLES `Team` WRITE;
-/*!40000 ALTER TABLE `Team` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Team` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `Team` (`teamId`, `teamName`, `teamDescription`, `createdTime`) VALUES
+(1, 'Team', 'Best team.', '2016-03-16 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `TeamInvitation`
+--
+
+DROP TABLE IF EXISTS `TeamInvitation`;
+CREATE TABLE IF NOT EXISTS `TeamInvitation` (
+  `teamInvitationId` int(11) NOT NULL AUTO_INCREMENT,
+  `fromUserId` int(11) NOT NULL,
+  `toUserId` int(11) NOT NULL,
+  `toTeamId` int(11) NOT NULL,
+  `invitationTime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`teamInvitationId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `TeamMember`
 --
 
 DROP TABLE IF EXISTS `TeamMember`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TeamMember` (
+CREATE TABLE IF NOT EXISTS `TeamMember` (
   `teamMemberId` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) DEFAULT NULL,
   `teamId` int(11) DEFAULT NULL,
+  `teamMessageChatId` int(11) NOT NULL,
   PRIMARY KEY (`teamMemberId`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `TeamMember`
---
-
-LOCK TABLES `TeamMember` WRITE;
-/*!40000 ALTER TABLE `TeamMember` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TeamMember` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `TeamMessage`
 --
 
 DROP TABLE IF EXISTS `TeamMessage`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TeamMessage` (
+CREATE TABLE IF NOT EXISTS `TeamMessage` (
   `teamMessageId` int(11) NOT NULL AUTO_INCREMENT,
-  `fromUserid` int(11) DEFAULT NULL,
+  `fromUserId` int(11) DEFAULT NULL,
   `toTeamId` int(11) DEFAULT NULL,
   `message` varchar(500) DEFAULT NULL,
+  `messageTime` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`teamMessageId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `TeamMessage`
@@ -88,6 +101,25 @@ LOCK TABLES `TeamMessage` WRITE;
 /*!40000 ALTER TABLE `TeamMessage` DISABLE KEYS */;
 /*!40000 ALTER TABLE `TeamMessage` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `TeamMessageChat`
+--
+
+DROP TABLE IF EXISTS `TeamMessageChat`;
+CREATE TABLE IF NOT EXISTS `TeamMessageChat` (
+  `teamMessageChatId` int(11) NOT NULL AUTO_INCREMENT,
+  `teamId` int(11) NOT NULL,
+  `chatTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`teamMessageChatId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `TeamMessageChat`
+--
+
+INSERT INTO `TeamMessageChat` (`teamMessageChatId`, `fromUserId`, `teamId`, `chatTime`, `members`) VALUES
+(1, 1, 1, '2016-03-17 08:04:00', 0);
 
 --
 -- Table structure for table `User`

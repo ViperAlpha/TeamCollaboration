@@ -10,4 +10,8 @@ import java.util.List;
 public interface TeamService {
     void save(int creatorUserId, String teamName, String teamDescription);
     List<Team> findTeamsByUserId(int userId);
+	void addTeamMember(int teamId, int currentUserId, int invitedUserId);
+	void inviteMemberToTeam(int teamId, int fromUserId, int invitedUserId, String message);
+	void acceptTeamInvitation(int teamInvitationId);
+	void rejectTeamInvitation(int teamInvitationId);
 }
