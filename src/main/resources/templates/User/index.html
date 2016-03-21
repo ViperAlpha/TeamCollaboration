@@ -9,16 +9,16 @@
 
 <!-- Sidebar -->
 <!--<div id="sidebar-wrapper"  class="col-md-2">-->
-    <!--<ul class="sidebar-nav">-->
-        <!--<li class="sidebar-brand">-->
-            <!--<a href="#">-->
-                <!--Individuals-->
-            <!--</a>-->
-        <!--</li>-->
-        <!--<li ng-repeat="user in users" ng-click="displayMessages(user)" ng-init="displayFirstMessage(user)">-->
-            <!--<a href="#">{{user.firstName}} {{user.lastName}}</a>-->
-        <!--</li>-->
-    <!--</ul>-->
+<!--<ul class="sidebar-nav">-->
+<!--<li class="sidebar-brand">-->
+<!--<a href="#">-->
+<!--Individuals-->
+<!--</a>-->
+<!--</li>-->
+<!--<li ng-repeat="user in users" ng-click="displayMessages(user)" ng-init="displayFirstMessage(user)">-->
+<!--<a href="#">{{user.firstName}} {{user.lastName}}</a>-->
+<!--</li>-->
+<!--</ul>-->
 <!--</div>-->
 <!-- /#sidebar-wrapper -->
 
@@ -31,10 +31,11 @@
 </div>
 
 <div id="page-content-wrapper">
-    <div class="container-fluid">    <!-- Add Team Modal -->
+    <div class="container-fluid">
+
+        <!-- Add Team Modal -->
         <div id="createTeamModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
-
                 <!-- Modal content-->
                 <form th:action="@{user/team/create}" th:method="PUT" enctype="multipart/form-data">
 
@@ -61,10 +62,8 @@
         <!-- Add Invite Modal -->
         <div id="invitePersonModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
-
                 <!-- Modal content-->
                 <form th:action="@{user/team/addUser}" th:method="PUT" enctype="multipart/form-data">
-
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -94,10 +93,8 @@
         <!-- Add Invite Modal -->
         <div id="inviteIndividualModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
-
                 <!-- Modal content-->
                 <form>
-
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -122,11 +119,9 @@
         <!-- Add Invite Modal -->
         <div id="sendIndividualMessage" class="modal fade" role="dialog">
             <div class="modal-dialog">
-
                 <!-- Modal content-->
                 <form th:action="@{user/message/individual-message/insert}" th:method="PUT"
                       enctype="multipart/form-data">
-
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -150,10 +145,8 @@
         <!-- Accept Invitation Modal-->
         <div id="invitationModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
-
                 <!-- Modal content-->
                 <form>
-
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -179,6 +172,7 @@
         </div>
 
 
+        <!-- Messages exchanged between two users -->
         <div class="row">
             <div class="text-center" ng-repeat="message in messages">
                 From: {{message.fromFirstName}}
