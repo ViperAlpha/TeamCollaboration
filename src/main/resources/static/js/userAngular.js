@@ -4,7 +4,7 @@
 
 var messagingApp = angular.module('messagingApp', ['ngSanitize']);
 
-messagingApp.controller('userController', function ($scope, $http, $interval, $window) {
+messagingApp.controller('userController', function ($scope, $http, $interval, $window, $timeout) {
     $scope.currentUserId = null;
     $scope.currentName = null;
     $scope.currentInvite = null;
@@ -21,14 +21,21 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
             $scope.invitations = response.data;
         });
 
-    $scope.displayMessages = function (user) {
-        $scope.currentUserId = user.userId;
-        $scope.currentName = user.firstName + ' ' + user.lastName;
+    $scope.updateMessageVar = function(){
+        if($scope.currentUserId === null)
+            return;
+
         var url = '/user/message/individual-message/listBySingleUserId?userId=' + $scope.currentUserId;
         $http.get(url)
             .then(function (response) {
                 $scope.messages = response.data;
             });
+    };
+
+    $scope.displayMessages = function (user) {
+        $scope.currentUserId = user.userId;
+        $scope.currentName = user.firstName + ' ' + user.lastName;
+        $scope.updateMessageVar();
     };
 
     $scope.displayFirstMessage = function (user) {
@@ -55,6 +62,17 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
     $scope.setCurrentInvite = function (invite) {
         $scope.currentInvite = invite;
     };
+
+
+    $scope.intervalFunction = function () {
+        $timeout(function () {
+            $scope.updateMessageVar();
+            $scope.intervalFunction();
+        }, 1000)
+    };
+
+    // Kick off the interval
+    $scope.intervalFunction();
 
 });
 

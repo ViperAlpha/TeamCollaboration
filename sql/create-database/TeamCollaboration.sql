@@ -118,8 +118,6 @@ CREATE TABLE IF NOT EXISTS `TeamMessageChat` (
 -- Dumping data for table `TeamMessageChat`
 --
 
-INSERT INTO `TeamMessageChat` (`teamMessageChatId`, `fromUserId`, `teamId`, `chatTime`, `members`) VALUES
-(1, 1, 1, '2016-03-17 08:04:00', 0);
 
 --
 -- Table structure for table `User`
