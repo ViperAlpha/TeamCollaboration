@@ -12,6 +12,8 @@ import java.util.List;
 public interface UserInvitationRepository extends CrudRepository<UserInvitation, Integer> {
     List<UserInvitation> findByToUserId(int toUserId);
 
+
+
     List<UserInvitation> findByFromUserIdAndToUserId(int fromUserId, int toUserId);
 
     List<UserInvitation> findByToUserIdAndStatusEquals(int toUserId, String status);
