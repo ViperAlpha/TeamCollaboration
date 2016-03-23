@@ -146,6 +146,7 @@ public class MessageServiceImpl implements MessageService {
 		teamMessageRepository.save(team);
 	}
 
+	//TODO: NEEDS LOGOUT TIME, CURRENTLY, LASTLOGGEDIN Is log in time.
 	@Override
 	public List<TeamMessage> findNewMessagesFromTeam(final User user, final int teamId) {
 

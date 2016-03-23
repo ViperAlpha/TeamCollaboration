@@ -59,6 +59,8 @@ CREATE TABLE IF NOT EXISTS `TeamInvitation` (
   `toUserId` int(11) NOT NULL,
   `toTeamId` int(11) NOT NULL,
   `invitationTime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `message` varchar(100) DEFAULT NULL,
+  `status` varchar(20) NOT NULL,
   PRIMARY KEY (`teamInvitationId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

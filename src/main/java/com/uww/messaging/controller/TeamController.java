@@ -3,7 +3,6 @@ package com.uww.messaging.controller;
 import com.google.gson.Gson;
 import com.uww.messaging.contract.TeamService;
 import com.uww.messaging.contract.UserService;
-import com.uww.messaging.display.TeamInvitationResponse;
 import com.uww.messaging.model.Team;
 import com.uww.messaging.model.User;
 
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,12 +30,10 @@ public class TeamController {
 
 	@RequestMapping(value = "/invitation/mine",method = RequestMethod.GET)
 	@ResponseBody
-	public String test(Authentication authentication){
-		List<TeamInvitationResponse> response = new ArrayList<>();
+	public String getTeamInvitations(Authentication authentication){
 
-		TeamInvitationResponse r = new TeamInvitationResponse();
-
-		return new Gson().toJson(teamService.findAllInvitations());
+		int userId = userService.userByAuthentication(authentication).getUserId();
+		return new Gson().toJson(teamService.findAllInvitationsToUser(userId));
 	}
 
 	@RequestMapping(value = "/add/user", method = RequestMethod.PUT)

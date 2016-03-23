@@ -75,22 +75,28 @@ public class TeamServiceImpl implements TeamService {
 	}
 
 	@Override
-	public List<TeamInvitationResponse> findAllInvitations() {
+	public List<TeamInvitationResponse> findAllInvitationsToUser(final int toUserId) {
 
-		Iterable<TeamInvitation> teamInvitations = teamInvitationRepository.findAll();
+		Iterable<TeamInvitation> teamInvitations = teamInvitationRepository.findByToUserId(toUserId);
 
 		List<TeamInvitationResponse> responses = new ArrayList<>();
 
 		teamInvitations.forEach(teamInvitation -> {
 			TeamInvitationResponse response = new TeamInvitationResponse();
-			response.setTeamInvitationId(teamInvitation.getTeamInvitationId());
 
-			User invited = userRepository.findOne(teamInvitation.getToUserId());
+			User invited = userRepository.findOne(teamInvitation.getFromUserId());
+			Team toTeam = teamRepository.findOne(teamInvitation.getToTeamId());
+
+			response.setTeamInvitationId(teamInvitation.getTeamInvitationId());
 
 			response.setToUserName(invited.getUsername());
 
+			response.setTeamName(toTeam.getTeamName());
+
 			response.setInvitationTime(teamInvitation.getInvitationTime());
+
 			response.setMessage(teamInvitation.getMessage());
+
 			response.setStatus(teamInvitation.getStatus());
 
 			responses.add(response);
