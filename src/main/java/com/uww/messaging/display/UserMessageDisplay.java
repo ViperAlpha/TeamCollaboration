@@ -1,6 +1,7 @@
 package com.uww.messaging.display;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by horvste on 3/15/16.
@@ -11,6 +12,7 @@ public class UserMessageDisplay {
     private Timestamp timeOfMessage;
     private String message;
     private String fileName;
+    private String prettyTime;
 
     public UserMessageDisplay(String message, String fromFirstName, String toFirstName, Timestamp timeOfMessage, String fileName) {
         this.message = message;
@@ -18,6 +20,7 @@ public class UserMessageDisplay {
         this.toFirstName = toFirstName;
         this.timeOfMessage = timeOfMessage;
         this.fileName = fileName;
+        this.prettyTime = new SimpleDateFormat("hh:mm a").format(timeOfMessage);
     }
 
     public String getFileName() {
