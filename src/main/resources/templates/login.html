@@ -7,7 +7,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2 col-md-offset-5">
-            <form class="col-md-12" th:action="@{/login}" method="POST">
+            <form id="loginForm" class="col-md-12" th:action="@{/login}" method="POST">
                 <div class="form-group">
                     <input id="username" name="username" type="text" class="form-control input-lg" placeholder="Email">
                 </div>
@@ -16,17 +16,13 @@
                            placeholder="Password">
                 </div>
                 <div class="form-group">
-                    <input id="confirmPass" name="confirmPass" type="password" class="form-control input-lg"
-                           placeholder="Confirm Password">
-                </div>
-                <div class="form-group">
                     <button class="btn btn-primary btn-lg btn-block">Sign In</button>
                 </div>
             </form>
         </div>
         <div class="row">
-            <div class="col-md-2 col-md-offset-5">
-                <a th:href="@{/register/index}">Dont have an account? Create one.</a>
+            <div id="createAccount" class="col-md-2 col-md-offset-5">
+                <a th:href="@{/register/index}">Don't have an account? Create one.</a>
             </div>
         </div>
     </div>
