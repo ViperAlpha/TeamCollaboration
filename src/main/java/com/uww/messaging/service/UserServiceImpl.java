@@ -42,6 +42,11 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findOne(userId);
 	}
 
+	@Override
+	public void save(final User user) {
+		userRepository.save(user);
+	}
+
 	public void save(User user, UserRole userRole) {
 		Preconditions.checkNotNull(user, "user");
 		Preconditions.checkNotNull(userRole, "userRole");

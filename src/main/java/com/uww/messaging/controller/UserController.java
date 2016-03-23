@@ -3,11 +3,15 @@ package com.uww.messaging.controller;
 import com.uww.messaging.contract.TeamService;
 import com.uww.messaging.contract.UserService;
 import com.uww.messaging.model.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.sql.Timestamp;
+import java.util.Calendar;
 
 /**
  * Created by horvste on 1/19/16.
@@ -24,6 +28,11 @@ public class UserController {
     @RequestMapping(value = "")
     public String index(Authentication authentication, Model model) {
         User currentUser = userService.userByAuthentication(authentication);
+
+	    currentUser.setLastLoggedIn(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+
+	    userService.save(currentUser);
+
         model.addAttribute("user", currentUser);
         model.addAttribute("teams", teamService.findTeamsByUserId(currentUser.getUserId()));
         return "User/index";

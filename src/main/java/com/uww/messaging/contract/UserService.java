@@ -14,6 +14,8 @@ import java.util.List;
 public interface UserService {
     User findUserById(int userId);
 
+	void save(User user);
+
     void save(User user, UserRole userRole);
 
     void deleteAll();

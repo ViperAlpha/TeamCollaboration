@@ -11,6 +11,11 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
     $scope.invitedUsername = null;
     $scope.showFileUpload = false;
 
+    $http.get('/team/invitation/mine')
+        .then(function (response) {
+            $scope.teaminvitations = response.data;
+        });
+
     $http.get("/user/invitation/see/accepted")
         .then(function (response) {
             $scope.users = response.data;
@@ -29,6 +34,27 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
             .then(function (response) {
                 $scope.messages = response.data;
             });
+    };
+
+    $scope.getTeamMessages = function (user, team) {
+        var url = "/team/message/list/new/message?teamId=" + team.teamId;
+
+        $http.get(url)
+            .then(function (response) {
+                $scope.teammessages = response.data;
+            });
+    };
+
+    $scope.getNewTeamMessages = function (user, team) {
+
+        var url = "/team/message/list/all/message?teamId=" + team.teamId;
+
+        $http.get(url)
+            .then(function (response) {
+                $scope.newteammessages = response.data;
+            });
+
+
     };
 
     $scope.displayFirstMessage = function (user) {
