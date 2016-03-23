@@ -10,6 +10,7 @@ import java.util.Date;
 public class TeamInvitationResponse {
 	private int teamInvitationId;
 	private String toUserName;
+	private String teamName;
 	private String message;
 	private String status;
 	private Date invitationTime;
@@ -57,5 +58,13 @@ public class TeamInvitationResponse {
 
 	public void setInvitationTime(final Date invitationTime) {
 		this.invitationTime = invitationTime;
+	}
+
+	public String getTeamName() {
+		return teamName;
+	}
+
+	public void setTeamName(final String teamName) {
+		this.teamName = teamName;
 	}
 }

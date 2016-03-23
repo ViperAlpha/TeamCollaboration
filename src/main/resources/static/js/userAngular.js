@@ -82,6 +82,10 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
         $scope.currentInvite = invite;
     };
 
+    $scope.setCurrentInvite = function (invite) {
+        $scope.currentTeamInvite = invite;
+    };
+
 });
 
 /**
