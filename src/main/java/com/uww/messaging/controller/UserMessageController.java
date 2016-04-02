@@ -5,7 +5,6 @@ import com.uww.messaging.MessagingApplication;
 import com.uww.messaging.contract.MessageService;
 import com.uww.messaging.contract.UserService;
 import com.uww.messaging.display.UserMessageDisplay;
-import com.uww.messaging.model.TeamMessage;
 import com.uww.messaging.model.User;
 import com.uww.messaging.model.UserMessageChat;
 import com.uww.messaging.model.UserUploadedFile;
@@ -39,28 +38,6 @@ public class UserMessageController {
 
 	@Autowired
 	private MessagingApplication messagingApplication;
-
-	@RequestMapping(value = "/team-messages/list", method = RequestMethod.GET)
-	@ResponseBody
-	public String listTeamMessages(@RequestParam("teamId") int teamId) {
-
-		Gson gson = new Gson();
-
-		List<TeamMessage> messagesFromTeam = messageService.findMessagesFromTeam(teamId);
-		return gson.toJson(messagesFromTeam);
-
-	}
-
-	@RequestMapping(value = "/team-messages/insert")
-	@ResponseBody
-	public String insertTeamMessage(Authentication authentication, @RequestParam("toTeamId") int toTeamId, @RequestParam("message") String message) {
-
-		int userId = userService.userByAuthentication(authentication).getUserId();
-
-		messageService.sendMessageToTeam(userId, toTeamId, message);
-
-		return "";
-	}
 
 	/**
 	 * Access this method after logging in like this:

@@ -2,14 +2,17 @@ package com.uww.messaging.service;
 
 import com.google.common.base.Preconditions;
 import com.uww.messaging.contract.TeamService;
+import com.uww.messaging.display.TeamInvitationResponse;
 import com.uww.messaging.model.Team;
 import com.uww.messaging.model.TeamInvitation;
 import com.uww.messaging.model.TeamMember;
 import com.uww.messaging.model.TeamMessageChat;
+import com.uww.messaging.model.User;
 import com.uww.messaging.repository.TeamInvitationRepository;
 import com.uww.messaging.repository.TeamMemberRepository;
 import com.uww.messaging.repository.TeamMessageChatRepository;
 import com.uww.messaging.repository.TeamRepository;
+import com.uww.messaging.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +40,9 @@ public class TeamServiceImpl implements TeamService {
 
 	@Autowired
 	private TeamInvitationRepository teamInvitationRepository;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@Transactional
 	@Override
@@ -66,6 +72,37 @@ public class TeamServiceImpl implements TeamService {
 		teamMemberByUserId.forEach(teamMem -> teamIds.add(teamMem.getTeamId())
 		);
 		return teamRepository.findByTeamIdIn(teamIds);
+	}
+
+	@Override
+	public List<TeamInvitationResponse> findAllInvitationsToUser(final int toUserId) {
+
+		Iterable<TeamInvitation> teamInvitations = teamInvitationRepository.findByToUserId(toUserId);
+
+		List<TeamInvitationResponse> responses = new ArrayList<>();
+
+		teamInvitations.forEach(teamInvitation -> {
+			TeamInvitationResponse response = new TeamInvitationResponse();
+
+			User invited = userRepository.findOne(teamInvitation.getFromUserId());
+			Team toTeam = teamRepository.findOne(teamInvitation.getToTeamId());
+
+			response.setTeamInvitationId(teamInvitation.getTeamInvitationId());
+
+			response.setToUserName(invited.getUsername());
+
+			response.setTeamName(toTeam.getTeamName());
+
+			response.setInvitationTime(teamInvitation.getInvitationTime());
+
+			response.setMessage(teamInvitation.getMessage());
+
+			response.setStatus(teamInvitation.getStatus());
+
+			responses.add(response);
+		});
+
+		return responses;
 	}
 
 

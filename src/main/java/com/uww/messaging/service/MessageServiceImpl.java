@@ -146,4 +146,10 @@ public class MessageServiceImpl implements MessageService {
 		teamMessageRepository.save(team);
 	}
 
+	@Override
+	public List<TeamMessage> findNewMessagesFromTeam(final User user, final int teamId) {
+
+		return teamMessageRepository.findNewMessages(teamId, user.getLastLoggedIn(), new Timestamp(System.currentTimeMillis()));
+	}
+
 }

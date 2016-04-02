@@ -22,6 +22,7 @@ public class HomeController {
 
     @RequestMapping(value = "/login")
     public String login(Principal principal, Authentication authentication) {
+
         if (principal == null)
             return "login";
         UserRole userRole  = AuthenticationUtil.authenticationToRole(authentication);
