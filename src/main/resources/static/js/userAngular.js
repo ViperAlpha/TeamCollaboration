@@ -86,6 +86,10 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
         $scope.currentTeamInvite = invite;
     };
 
+    $scope.nameStartsWith = function(currentName, messageFirstName){
+        return currentName.startsWith(messageFirstName);
+    }
+
 });
 
 /**
