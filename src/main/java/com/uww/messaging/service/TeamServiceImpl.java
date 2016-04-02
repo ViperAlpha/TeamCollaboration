@@ -15,6 +15,7 @@ import com.uww.messaging.repository.TeamRepository;
 import com.uww.messaging.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,12 +85,12 @@ public class TeamServiceImpl implements TeamService {
 		teamInvitations.forEach(teamInvitation -> {
 			TeamInvitationResponse response = new TeamInvitationResponse();
 
-			User invited = userRepository.findOne(teamInvitation.getFromUserId());
+			User inviter = userRepository.findOne(teamInvitation.getFromUserId());
 			Team toTeam = teamRepository.findOne(teamInvitation.getToTeamId());
 
 			response.setTeamInvitationId(teamInvitation.getTeamInvitationId());
 
-			response.setToUserName(invited.getUsername());
+			response.setFromUserName(inviter.getFirstName() + " " + inviter.getLastName());
 
 			response.setTeamName(toTeam.getTeamName());
 
@@ -130,7 +131,13 @@ public class TeamServiceImpl implements TeamService {
 
 	@Transactional
 	@Override
-	public void inviteMemberToTeam(final int teamId, final int fromUserId, final int invitedUserId, String message) {
+	public void inviteMemberToTeam(final int teamId, final int fromUserId, final String invitedUsername, String message) {
+
+		List<User> userList = userRepository.findByUsername(invitedUsername);
+
+		if (userList == null || userList.size() == 0) { throw new UsernameNotFoundException(invitedUsername); }
+
+		int invitedUserId = userList.get(0).getUserId();
 
 		List<TeamInvitation> toUserId = teamInvitationRepository.findByToUserId(invitedUserId);
 
@@ -160,7 +167,7 @@ public class TeamServiceImpl implements TeamService {
 
 		teamInvitationRepository.save(teamInvitation);
 
-		addTeamMember(teamInvitation.getToTeamId(),teamInvitation.getFromUserId(),teamInvitation.getToUserId());
+		addTeamMember(teamInvitation.getToTeamId(), teamInvitation.getFromUserId(), teamInvitation.getToUserId());
 	}
 
 	@Transactional

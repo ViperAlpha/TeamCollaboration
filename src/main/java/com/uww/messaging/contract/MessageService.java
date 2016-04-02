@@ -1,5 +1,6 @@
 package com.uww.messaging.contract;
 
+import com.uww.messaging.display.TeamMessageDisplay;
 import com.uww.messaging.display.UserMessageDisplay;
 import com.uww.messaging.model.TeamMessage;
 import com.uww.messaging.model.User;
@@ -22,7 +23,7 @@ public interface MessageService {
 
 	List<UserMessageChat> findUserMessages(int userId);
 
-	List<TeamMessage> findMessagesFromTeam(int teamId);
+	List<TeamMessageDisplay> findMessagesFromTeam(int teamId);
 
 	void sendMessageToTeam(int fromUserId, int toTeamId, String message);
 

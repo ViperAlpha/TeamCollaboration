@@ -9,20 +9,33 @@
 
 <div class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
     <ul class="nav navbar-stacked">
-        <li ng-repeat="user in users" ng-click="displayMessages(user)" ng-init="displayFirstMessage(user)">
-            <a href="#">{{user.firstName}} {{user.lastName}}</a>
-        </li>
+        <select ng-model="typemsg" ng-init="typemsgselected" ng-options="t as t.name for t in typemessages" ng-change="switchTypeMessage(typemsg)">
+
+        </select>
+
+        <div ng-if="typemsgselected == 'Individual'">
+            <li ng-repeat="user in users" ng-click="displayMessages(user)" ng-init="displayFirstMessage(user)">
+                <a href="#">{{user.firstName}} {{user.lastName}}</a>
+            </li>
+        </div>
+
+        <div ng-if="typemsgselected == 'Team'">
+            <li ng-repeat="team in teams" ng-click="getTeamMessages(team)" ng-init="getTeamMessages(team)">
+                <a href="#">{{team.teamName}}</a>
+            </li>
+        </div>
+
     </ul>
 </div>
 
 <div id="page-content-wrapper">
     <div class="container-fluid">
 
-        <!-- Add Team Modal -->
+        <!-- Create Team Modal -->
         <div id="createTeamModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <!-- Modal content-->
-                <form th:action="@{user/team/create}" th:method="PUT" enctype="multipart/form-data">
+                <form th:action="@{team/create}" th:method="PUT" enctype="multipart/form-data">
 
                     <div class="modal-content">
                         <div class="modal-header">
@@ -45,29 +58,32 @@
         </div>
         <!-- end Add Team Modal -->
 
-        <!-- Add Invite Modal -->
+        <!-- Add Invite individual Modal -->
         <div id="invitePersonModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <!-- Modal content-->
-                <form th:action="@{user/team/addUser}" th:method="PUT" enctype="multipart/form-data">
+                <form>
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Add User To Team</h4>
+                            <h2 class="modal-title">Invite user To team</h2>
                         </div>
                         <div class="modal-body">
 
-                            <label class="control-label">Enter User Name:</label>
+                            <label class="control-label">Enter user name:</label>
                             <select class="form-control" id="teamToAddTo">
                                 <option th:each="team : ${teams}" th:text="${team.getTeamName()}"
+                                        th:id="${team.teamId}"
                                         th:value="${team.getTeamName()}">
                                 </option>
                             </select>
                             <label class="control-label">Enter User Name:</label>
-                            <input type="text" class="form-control" id="input-userName" name="input-userName">
+                            <input type="text" class="form-control" id="invitedUserName" name="invitedUserName">
+                            <label class="control-label">Enter Message:</label>
+                            <input type="text" class="form-control" id="message" name="message">
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-default">Invite!</button>
+                            <button id="sendTeamInvite" type="submit" class="btn btn-default">Invite!</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -104,16 +120,15 @@
         <!-- end Add Invite Modal -->
 
 
-        <!-- Add Invite Modal -->
+        <!-- Send individual message Modal -->
         <div id="sendIndividualMessage" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <!-- Modal content-->
-                <form th:action="@{user/message/individual-message/insert}" th:method="PUT"
-                      enctype="multipart/form-data">
+                <form th:action="@{user/message/individual-message/insert}" th:method="PUT" enctype="multipart/form-data">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Add User To Team</h4>
+                            <h4 class="modal-title">Send Individual message</h4>
                         </div>
                         <div class="modal-body">
                             <label class="control-label">Enter To User Id:</label>
@@ -129,7 +144,6 @@
                 </form>
             </div>
         </div>
-        <!-- end Add Invite Modal -->
 
         <!-- Accept Invitation Modal-->
         <div id="invitationModal" class="modal fade" role="dialog">
@@ -145,10 +159,8 @@
                             {{currentInvite.username}} wants to chat with you. His message:
                             {{currentInvite.message}}
 
-                            <input id="currentInviteFromId" style="display: none" type="text"
-                                   ng-value="currentInvite.fromUserId">
-                            <input id="currentInviteId" style="display: none" type="text"
-                                   ng-value="currentInvite.userInvitationId">
+                            <input id="currentInviteId" style="display: none" type="text" ng-value="currentInvite.userInvitationId">
+                            <input id="currentInviteFromId" style="display: none" type="text" ng-value="currentInvite.fromUserId">
                         </div>
                         <div class="modal-footer">
                             <button id="acceptInvitation" type="submit" class="btn btn-default">Accept Invitation!
@@ -160,6 +172,59 @@
             </div>
         </div>
         <!-- end Accept Invitation Modal-->
+
+
+        <!-- Accept team Invitation Modal-->
+        <div id="teamInviteAcceptationModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <form>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Add User To Team</h4>
+                        </div>
+                        <div class="modal-body">
+                            {{currentTeamInvite.fromUserName}} wants you to join group {{currentTeamInvite.teamName}}.
+                            His message: {{currentTeamInvite.message}}
+
+                            <input id="teamInvitationId" style="display: none" type="text" ng-value="currentTeamInvite.teamInvitationId">
+                        </div>
+                        <div class="modal-footer">
+                            <button id="acceptTeamInvite" type="submit" class="btn btn-default">Accept</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- end Accept Invitation Modal-->
+
+
+        <!-- Send team message Modal -->
+        <div id="sendTeamMessageModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <form th:action="@{team/message/insert}" th:method="PUT" enctype="multipart/form-data">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Send message to a team</h4>
+                        </div>
+                        <div class="modal-body">
+                            <label class="control-label">Enter To team Id:</label>
+                            <input type="text" class="form-control" id="toTeamId" name="toTeamId">
+                            <label class="control-label">Enter Message:</label>
+                            <input type="text" class="form-control" id="message" name="message">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-default">Send!</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
 
         <div class="row">
@@ -174,45 +239,76 @@
                     </div>
                 </div>
 
-                <div class="row" ng-repeat="message in messages">
-                    <!-- Applies the offset class and sender-message class in case that the message is not from the current logged in user -->
-                    <div class="col-md-8"
-                         ng-class="{ 'col-md-offset-10 sender-message' : nameStartsWith(currentName, message.fromFirstName) }">
-                        <div class="page-header message-header">
-                            <h1>{{message.fromFirstName}}
-                                <small>{{message.prettyTime}}</small>
-                            </h1>
+                <!--INDIVIDUAL MESSAGES-->
+                <div ng-if="typemsgselected == 'Individual'">
+                    <div id="individualMsgs" class="row" ng-repeat="message in messages">
+                        <!-- Applies the offset class and sender-message class in case that the message is not from the current logged in user -->
+                        <div class="col-md-8"
+                             ng-class="{ 'col-md-offset-10 sender-message' : nameStartsWith(currentName, message.fromFirstName) }">
+                            <div class="page-header message-header">
+                                <h1>{{message.fromFirstName}}
+                                    <small>{{message.prettyTime}}</small>
+                                </h1>
+                            </div>
+                            {{message.message}}
+                            <div ng-if="message.fileName != 'null'">Attached Files: <a
+                                    ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
+                            </div>
                         </div>
-                        {{message.message}}
-                        <div ng-if="message.fileName != 'null'">Attached Files: <a
-                                ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
-                        </div>
-                    </div>
-                </div> <!-- end message repeat -->
-
-                <!-- Messages exchanged between two users -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <form th:action="@{/user/message/individual-message/insert}" th:method="POST"
-                              class="form-horizontal"
-                              enctype="multipart/form-data">
-                            <label class="control-label">Enter Message:</label>
-                            <input style="display: none" ng-value="currentUserId" type="text" id="toUserId"
-                                   name="toUserId">
-                            <div class="input-group">
-                                <input ng-model="currentMessage" type="text" class="form-control" id="message"
-                                       name="message">
-                        <span class="input-group-btn"><button type="submit" class="btn btn-default">Send! To
-                            {{currentName}}
+                    </div> <!-- end message repeat -->
+                    <!-- send messages -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form th:action="@{/user/message/individual-message/insert}" th:method="POST"
+                                  class="form-horizontal"
+                                  enctype="multipart/form-data">
+                                <label class="control-label">Enter Message:</label>
+                                <input style="display: none" ng-value="currentUserId" type="text" id="toUserId"
+                                       name="toUserId">
+                                <div class="input-group">
+                                    <input ng-model="currentMessage" type="text" class="form-control" id="message"
+                                           name="message">
+                        <span class="input-group-btn"><button type="submit" class="btn btn-default">Send to {{currentName}}
                         </button></span>
-                            </div>
+                                </div>
 
-                            <div class="text-center"><a ng-click="showFileUpload = !showFileUpload">Add file</a>
-                                <input ng-show="showFileUpload" type="file" name="fileUpload" id="fileUpload">
-                            </div>
-                        </form>
+                                <div class="text-center"><a ng-click="showFileUpload = !showFileUpload">Add file</a>
+                                    <input ng-show="showFileUpload" type="file" name="fileUpload" id="fileUpload">
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
+
+                <div ng-if="typemsgselected == 'Team'">
+                    <div id="teamMsgs" class="row" ng-repeat="msg in teammessages">
+
+                        <div class="col-md-8">
+                            <div class="page-header message-header">
+                                <h1>{{msg.fromFirstName}}
+                                    <small>{{msg.prettyTime}}</small>
+                                </h1>
+                            </div>
+                            {{msg.message}}
+                        </div>
+                    </div>
+                    <!--send team message-->
+                    <div class="row">
+                        <div class="col-md-6" role="dialog">>
+                            <form th:action="@{/team/message/insert}" th:method="PUT" class="form-horizontal" enctype="multipart/form-data">
+                                <label class="control-label">Enter Message:</label>
+                                <input style="display: none" id="toTeamId" ng-value="currentTeam.teamId" type="text" name="toTeamId">
+                                <div class="input-group">
+                                    <input ng-model="currentMessage" type="text" class="form-control" id="message" name="message">
+                                </div>
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default">Send to {{currentTeam.teamName}}</button>
+                        </span>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
 
             </div> <!-- end Messages column -->
         </div> <!-- end row -->
