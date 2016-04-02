@@ -177,23 +177,6 @@
                 </div>
 
                 <!-- Messages exchanged between two users -->
-                <div class="row" ng-repeat="message in messages">
-                    <div class="col-md-12">
-                        <div class="page-header message-header">
-                            <h1>{{message.fromFirstName}}
-                                <small>{{message.prettyTime}}</small>
-                            </h1>
-                        </div>
-                        <!--To: {{message.toFirstName}}-->
-                        <!--Timestamp: {{message.timeOfMessage}}-->
-                        {{message.message}}
-                        <div ng-if="message.fileName != 'null'">Attached Files: <a
-                                ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Send message -->
                 <div class="row">
                     <div class="col-md-6">
                         <form th:action="@{/user/message/individual-message/insert}" th:method="POST"
@@ -215,6 +198,42 @@
                             </div>
                         </form>
                     </div>
+                </div>
+
+                <!-- Send message -->
+                <div class="row" ng-repeat="message in messages">
+                    <div ng-if="nameStartsWith(currentName, message.fromFirstName) == false" class="col-md-12 ">
+                        <div class="page-header message-header">
+                            <h1>{{message.fromFirstName}}
+                                <small>{{message.prettyTime}}</small>
+                            </h1>
+                        </div>
+                        <!--To: {{message.toFirstName}}-->
+                        <!--Timestamp: {{message.timeOfMessage}}-->
+                        {{message.message}}
+                        <div ng-if="message.fileName != 'null'">Attached Files: <a
+                                ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
+                        </div>
+                    </div>
+
+
+                    <div ng-if="nameStartsWith(currentName, message.fromFirstName) == true" class="col-md-12 col-md-offset-6">
+                        <div class="page-header message-header">
+                            <h1>{{message.fromFirstName}}
+                                <small>{{message.prettyTime}}</small>
+                            </h1>
+                        </div>
+                        <!--To: {{message.toFirstName}}-->
+                        <!--Timestamp: {{message.timeOfMessage}}-->
+                        {{message.message}}
+                        <div ng-if="message.fileName != 'null'">Attached Files: <a
+                                ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
+                        </div>
+                    </div>
+
+
+
+
                 </div>
             </div>
             <!-- end Messages column -->
