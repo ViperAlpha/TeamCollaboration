@@ -40,7 +40,7 @@
                             class="caret"></strong></a>
                     <ul class="dropdown-menu">
                         <li ng-repeat="invite in teaminvitations">
-                            <a ng-click="setCurrentTeamInvite(invite)" data-toggle="modal" data-target="#teamInvitationModal">{{invite.toUserName}}
+                            <a ng-click="setCurrentTeamInvite(invite)" data-toggle="modal" data-target="#teamInviteAcceptationModal">{{invite.toUserName}}
                                 wants you to join team {{invite.teamName}}</a>
                         </li>
                         <a ng-if="teaminvitations.length === 0">No invitations.</a>
@@ -65,7 +65,7 @@
                             <a data-toggle="modal" data-target="#invitePersonModal">Invite Person To Team</a>
                         </li>
                         <li>
-                            <a data-toggle="modal" data-target="#sendTeamMessage">Send Team Message
+                            <a data-toggle="modal" data-target="#sendTeamMessageModal">Send Team Message
                                 (For test purpose)</a>
                         </li>
                     </ul>

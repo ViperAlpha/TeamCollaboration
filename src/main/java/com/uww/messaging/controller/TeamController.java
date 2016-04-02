@@ -57,14 +57,14 @@ public class TeamController {
 		User currentUser = userService.userByAuthentication(authentication);
 		Gson gson = new Gson();
 		List<Team> teams = teamService.findTeamsByUserId(currentUser.getUserId());
-		return "teams : "  + gson.toJson(teams);
+		return gson.toJson(teams);
 	}
 
 	@RequestMapping(value = "/invite", method = RequestMethod.PUT)
-	public String inviteToTeam(Authentication authentication, @RequestParam("teamId") int teamId, @RequestParam("invitedUserId") int invitedUserId, @RequestParam("message") String message){
+	public String inviteToTeam(Authentication authentication, @RequestParam("teamId") int teamId, @RequestParam("invitedUserName") String invitedUsername, @RequestParam("message") String message){
 
 		User currentUser = userService.userByAuthentication(authentication);
-		teamService.inviteMemberToTeam(teamId,currentUser.getUserId(),invitedUserId,message);
+		teamService.inviteMemberToTeam(teamId,currentUser.getUserId(),invitedUsername,message);
 
 		return "redirect:/user";
 	}

@@ -3,6 +3,7 @@ package com.uww.messaging.controller;
 import com.google.gson.Gson;
 import com.uww.messaging.contract.MessageService;
 import com.uww.messaging.contract.UserService;
+import com.uww.messaging.display.TeamMessageDisplay;
 import com.uww.messaging.model.TeamMessage;
 import com.uww.messaging.model.User;
 
@@ -35,15 +36,15 @@ public class TeamMessageController {
 	@ResponseBody
 	public String listTeamMessages(Authentication authentication, @RequestParam("teamId") int teamId) {
 
-		Gson gson = new Gson();
+		List<TeamMessageDisplay> messagesFromTeam = messageService.findMessagesFromTeam(teamId);
 
-		List<TeamMessage> messagesFromTeam = messageService.findMessagesFromTeam(teamId);
-		return gson.toJson(messagesFromTeam);
+		return new Gson().toJson(messagesFromTeam);
 	}
 
 	@RequestMapping(value = "/list/new/message",method = RequestMethod.GET)
 	@ResponseBody
 	public String listNewTeamMessages(Authentication authentication, @RequestParam("teamId") int teamId){
+		//TODO:
 		User user = userService.userByAuthentication(authentication);
 		List<TeamMessage> newMessages = messageService.findNewMessagesFromTeam(user,teamId);
 
@@ -51,7 +52,6 @@ public class TeamMessageController {
  	}
 
 	@RequestMapping(value = "/insert", method = RequestMethod.PUT)
-	@ResponseBody
 	public String insertTeamMessage(Authentication authentication, @RequestParam("toTeamId") int toTeamId, @RequestParam("message") String message) {
 
 		int userId = userService.userByAuthentication(authentication).getUserId();
