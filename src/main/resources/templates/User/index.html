@@ -174,10 +174,10 @@
                     </div>
                 </div>
 
-                <div class="row" ng-repeat="message in messages">
+                <div class="row message-row" ng-repeat="message in messages">
                     <!-- Applies the offset class and sender-message class in case that the message is not from the current logged in user -->
-                    <div class="col-md-8"
-                         ng-class="{ 'col-md-offset-10 sender-message' : nameStartsWith(currentName, message.fromFirstName) }">
+                    <div class="message col-md-8"
+                         ng-class="nameStartsWith(currentName, message.fromFirstName) ? 'col-md-offset-10 sender' : 'receiver'">
                         <div class="page-header message-header">
                             <h1>{{message.fromFirstName}}
                                 <small>{{message.prettyTime}}</small>
