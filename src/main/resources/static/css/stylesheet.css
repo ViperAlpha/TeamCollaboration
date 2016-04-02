@@ -145,3 +145,14 @@ body {
 .navbar-fixed-top {
    padding-right: 20px;
 }
+
+.sender-message {
+    border: 3px solid;
+    padding-bottom: 15px;
+    border-top-left-radius: 3em;
+    border-bottom-left-radius: 3em;
+    border-color: greenyellow;
+    text-align: right;
+}
+
+
