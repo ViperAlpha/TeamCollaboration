@@ -21,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `TeamCollaboration`
 --
-CREATE DATABASE IF NOT EXISTS `TeamCollaboration` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `TeamCollaboration`;
 
 -- --------------------------------------------------------
 
@@ -114,11 +112,6 @@ CREATE TABLE IF NOT EXISTS `TeamMessageChat` (
   `chatTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`teamMessageChatId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `TeamMessageChat`
---
-
 
 --
 -- Table structure for table `User`

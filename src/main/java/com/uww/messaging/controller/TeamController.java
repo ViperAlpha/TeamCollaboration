@@ -92,9 +92,4 @@ public class TeamController {
 		return "redirect:/user";
 	}
 
-//	@RequestMapping(value = "/invite/reject", method = RequestMethod.PUT)
-//	public String rejectInvitation(Authentication authentication, @RequestParam("teamInvitationId") int teamInvitationId){
-//		teamService.rejectTeamInvitation(teamInvitationId);
-//		return "redirect:/user";
-//	}
 }

@@ -33,4 +33,6 @@ public interface UserService {
     List<UserInvitationResponse> findAllPendingInvitations(int userId);
 
     List<User> findAcceptedInvitationUsers(int userId);
+
+    List<String> findUsersStartingWith(String username);
 }

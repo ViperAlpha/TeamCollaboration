@@ -4,7 +4,7 @@
 
 var messagingApp = angular.module('messagingApp', ['ngSanitize']);
 
-messagingApp.controller('userController', function ($scope, $http, $interval, $window) {
+messagingApp.controller('userController', function ($scope, $http, $interval, $window, $timeout) {
     $scope.currentUserId = null;
     $scope.currentName = null;
     $scope.currentInvite = null;
@@ -13,15 +13,17 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
 
     $scope.currentTeam = null;
 
+    var INDIVIDUAL = 'Individual';
+    var TEAM = 'Team';
+
     $scope.typemessages = [
-        {id: 1, name: 'Individual'}, {id: 2, name: 'Team'}
+        {id: 1, name: INDIVIDUAL}, {id: 2, name: TEAM}
     ];
     $scope.typemsgselected = $scope.typemessages[0].name;
 
     $scope.switchTypeMessage = function (t) {
         $scope.typemsgselected = t.name;
-
-    }
+    };
 
     $http.get('/team/invitation/mine')
         .then(function (response) {
@@ -43,8 +45,8 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
             $scope.invitations = response.data;
         });
 
-    $scope.updateMessageVar = function(){
-        if($scope.currentUserId === null)
+    $scope.updateMessageVar = function () {
+        if ($scope.currentUserId === null)
             return;
 
         var url = '/user/message/individual-message/listBySingleUserId?userId=' + $scope.currentUserId;
@@ -113,12 +115,22 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
 
     $scope.nameStartsWith = function (currentName, messageFirstName) {
         return currentName.startsWith(messageFirstName);
-    }
+    };
 
+    $scope.updateTeamMessageVar = function(){
+        if($scope.currentTeam === null)
+            return;
+
+        $scope.getTeamMessages($scope.currentTeam);
+    };
 
     $scope.intervalFunction = function () {
         $timeout(function () {
-            $scope.updateMessageVar();
+            if ($scope.typemessages === INDIVIDUAL) {
+                $scope.updateMessageVar();
+            } else {
+                $scope.updateTeamMessageVar();
+            }
             $scope.intervalFunction();
         }, 1000)
     };
