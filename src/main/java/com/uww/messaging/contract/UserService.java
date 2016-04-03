@@ -24,7 +24,7 @@ public interface UserService {
 
     User userByAuthentication(Authentication auth);
 
-    List<String> findUsersStartingWith(String username);
+    List<String> findUsersLackingInvitationsStartingWith(int loggedInUserId, String username);
 
     void sendInvitation(int loggedInUserId, UserInvitationForm userInvitationForm);
 
@@ -33,4 +33,6 @@ public interface UserService {
     List<UserInvitationResponse> findAllPendingInvitations(int userId);
 
     List<User> findAcceptedInvitationUsers(int userId);
+
+    List<String> findUsersStartingWith(String username);
 }

@@ -56,7 +56,6 @@ public class UserServiceImpl implements UserService {
 		userRole.setUserId(user.getUserId());
 		userRoleService.save(userRole);
 	}
-
 	public void deleteAll() {
 		userRoleService.deleteAll();
 		userRepository.deleteAll();
@@ -94,6 +93,24 @@ public class UserServiceImpl implements UserService {
 		});
 		return usernames;
 	}
+
+	@Override
+	public List<String> findUsersLackingInvitationsStartingWith(int loggedInUserId, String username) {
+		List<User> users = userRepository.findByUsernameStartingWith(username);
+		List<String> usernames = new ArrayList<>();
+		users.forEach(u -> {
+			int userStartingWithUserId = u.getUserId();
+
+			List<UserInvitation> userInvitationWithLoggedInFrom = userInvitationRepository.findByFromUserIdAndToUserId(loggedInUserId, userStartingWithUserId);
+			List<UserInvitation> userInvitationWithUserStartingFrom = userInvitationRepository.findByFromUserIdAndToUserId(userStartingWithUserId, loggedInUserId);
+
+			if (userInvitationWithLoggedInFrom.size() == 0 && userInvitationWithUserStartingFrom.size() == 0) {
+				usernames.add(u.getUsername());
+			}
+		});
+		return usernames;
+	}
+
 
 	@Override
 	public void sendInvitation(int loggedInUserId, UserInvitationForm userInvitationForm) {

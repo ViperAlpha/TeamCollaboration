@@ -4,12 +4,26 @@
 
 var messagingApp = angular.module('messagingApp', ['ngSanitize']);
 
-messagingApp.controller('userController', function ($scope, $http, $interval, $window) {
+messagingApp.controller('userController', function ($scope, $http, $interval, $window, $timeout) {
     $scope.currentUserId = null;
     $scope.currentName = null;
     $scope.currentInvite = null;
     $scope.invitedUsername = null;
     $scope.showFileUpload = false;
+
+    $scope.currentTeam = null;
+
+    var INDIVIDUAL = 'Individual';
+    var TEAM = 'Team';
+
+    $scope.typemessages = [
+        {id: 1, name: INDIVIDUAL}, {id: 2, name: TEAM}
+    ];
+    $scope.typemsgselected = $scope.typemessages[0].name;
+
+    $scope.switchTypeMessage = function (t) {
+        $scope.typemsgselected = t.name;
+    };
 
     $http.get('/team/invitation/mine')
         .then(function (response) {
@@ -21,14 +35,20 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
             $scope.users = response.data;
         });
 
+    $http.get("/team/list")
+        .then(function (response) {
+            $scope.teams = response.data;
+        });
+
     $http.get('/user/invitation/mine')
         .then(function (response) {
             $scope.invitations = response.data;
         });
 
-    $scope.displayMessages = function (user) {
-        $scope.currentUserId = user.userId;
-        $scope.currentName = user.firstName + ' ' + user.lastName;
+    $scope.updateMessageVar = function () {
+        if ($scope.currentUserId === null)
+            return;
+
         var url = '/user/message/individual-message/listBySingleUserId?userId=' + $scope.currentUserId;
         $http.get(url)
             .then(function (response) {
@@ -36,8 +56,9 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
             });
     };
 
-    $scope.getTeamMessages = function (user, team) {
-        var url = "/team/message/list/new/message?teamId=" + team.teamId;
+    $scope.getTeamMessages = function (team) {
+        $scope.currentTeam = team;
+        var url = "/team/message/list/all/message?teamId=" + team.teamId;
 
         $http.get(url)
             .then(function (response) {
@@ -45,8 +66,8 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
             });
     };
 
-    $scope.getNewTeamMessages = function (user, team) {
-
+    $scope.getNewTeamMessages = function (team) {
+        $scope.currentTeam = team;
         var url = "/team/message/list/all/message?teamId=" + team.teamId;
 
         $http.get(url)
@@ -55,6 +76,12 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
             });
 
 
+    };
+
+    $scope.displayMessages = function (user) {
+        $scope.currentUserId = user.userId;
+        $scope.currentName = user.firstName + ' ' + user.lastName;
+        $scope.updateMessageVar();
     };
 
     $scope.displayFirstMessage = function (user) {
@@ -82,13 +109,34 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
         $scope.currentInvite = invite;
     };
 
-    $scope.setCurrentInvite = function (invite) {
+    $scope.setCurrentTeamInvite = function (invite) {
         $scope.currentTeamInvite = invite;
     };
 
-    $scope.nameStartsWith = function(currentName, messageFirstName){
+    $scope.nameStartsWith = function (currentName, messageFirstName) {
         return currentName.startsWith(messageFirstName);
-    }
+    };
+
+    $scope.updateTeamMessageVar = function(){
+        if($scope.currentTeam === null)
+            return;
+
+        $scope.getTeamMessages($scope.currentTeam);
+    };
+
+    $scope.intervalFunction = function () {
+        $timeout(function () {
+            if ($scope.typemessages === INDIVIDUAL) {
+                $scope.updateMessageVar();
+            } else {
+                $scope.updateTeamMessageVar();
+            }
+            $scope.intervalFunction();
+        }, 1000)
+    };
+
+    // Kick off the interval
+    $scope.intervalFunction();
 
 });
 
@@ -169,6 +217,69 @@ $(document).ready(function () {
             type: 'PUT',
             url: '/user/invitation/accept',
             data: queryAsJson,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Error: ' + xhr.responseText);
+            },
+            success: function (data) {
+                alert('Invitation Accepted');
+            }
+        });
+
+    });
+
+
+    $("#sendTeamInvite").click(function (e) {
+        var teamInvitedTo = $("#teamToAddTo option:selected").attr('id');
+        var invitedUsername = $("#invitedUserName").val();
+        var message = $('#message').val();
+
+        var queryAsJson = {
+            teamId: teamInvitedTo,
+            invitedUserName: invitedUsername,
+            message: message
+        };
+
+        queryAsJson = JSON.stringify(queryAsJson);
+
+        alert(queryAsJson);
+
+        $.ajax({
+            type: 'PUT',
+            url: '/team/invite/send',
+            data: queryAsJson,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + " ..... " + errorThrown + " ... " + xhr.responseText);
+            },
+            success: function (data) {
+                alert('Invitation sent');
+            }
+        });
+
+    });
+
+
+    //TODO:
+
+    $("#acceptTeamInvite").click(function (e) {
+        var teamInvitationId = $("#teamInvitationId").val();
+
+        var data = {
+            teamInvitationId: teamInvitationId,
+        };
+
+        data = JSON.stringify(data);
+
+
+        alert(data);
+
+        $.ajax({
+            type: 'PUT',
+            url: '/team/invite/accept',
+            data: data,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             error: function (xhr, textStatus, errorThrown) {

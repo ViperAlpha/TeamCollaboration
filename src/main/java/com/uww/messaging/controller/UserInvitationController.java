@@ -26,9 +26,12 @@ public class UserInvitationController {
 
     @RequestMapping(value = "/autocomplete-user/list", method = RequestMethod.GET)
     @ResponseBody
-    public String autocompleteUserList(@RequestParam("usernameToAuto") String usernameToAuto) {
+    public String autocompleteUserList(Authentication authentication, @RequestParam("usernameToAuto") String usernameToAuto) {
+        User loggedInUser = userService.userByAuthentication(authentication);
+        List<String> usernamesLackingInvitations = userService.findUsersLackingInvitationsStartingWith(loggedInUser.getUserId(),
+                usernameToAuto);
         return new Gson().toJson
-                (userService.findUsersStartingWith(usernameToAuto));
+                (usernamesLackingInvitations);
     }
 
     @RequestMapping(value = "/mine", method = RequestMethod.GET)

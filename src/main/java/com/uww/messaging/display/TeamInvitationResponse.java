@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class TeamInvitationResponse {
 	private int teamInvitationId;
-	private String toUserName;
+	private String fromUserName;
 	private String teamName;
 	private String message;
 	private String status;
@@ -26,14 +26,6 @@ public class TeamInvitationResponse {
 
 	public void setTeamInvitationId(final int teamInvitationId) {
 		this.teamInvitationId = teamInvitationId;
-	}
-
-	public String getToUserName() {
-		return toUserName;
-	}
-
-	public void setToUserName(final String toUserName) {
-		this.toUserName = toUserName;
 	}
 
 	public String getMessage() {
@@ -66,5 +58,13 @@ public class TeamInvitationResponse {
 
 	public void setTeamName(final String teamName) {
 		this.teamName = teamName;
+	}
+
+	public String getFromUserName() {
+		return fromUserName;
+	}
+
+	public void setFromUserName(final String fromUserName) {
+		this.fromUserName = fromUserName;
 	}
 }

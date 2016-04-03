@@ -19,6 +19,9 @@
 .idea/dynamic.xml
 .idea/uiDesigner.xml
 
+# binary files
+target/*
+
 
 ## File-based project format:
 *.ipr

@@ -21,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `TeamCollaboration`
 --
-CREATE DATABASE IF NOT EXISTS `TeamCollaboration` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `TeamCollaboration`;
 
 -- --------------------------------------------------------
 
@@ -73,9 +71,8 @@ CREATE TABLE IF NOT EXISTS `TeamInvitation` (
 DROP TABLE IF EXISTS `TeamMember`;
 CREATE TABLE IF NOT EXISTS `TeamMember` (
   `teamMemberId` int(11) NOT NULL AUTO_INCREMENT,
-  `userId` int(11) DEFAULT NULL,
-  `teamId` int(11) DEFAULT NULL,
-  `teamMessageChatId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `teamId` int(11) NOT NULL,
   PRIMARY KEY (`teamMemberId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
