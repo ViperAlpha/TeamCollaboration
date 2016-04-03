@@ -9,9 +9,8 @@
 
 <div class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
     <ul class="nav navbar-stacked">
-        <select ng-model="typemsg" ng-init="typemsg=typemessages[0]" ng-options="t as t.name for t in typemessages"
+        <select class="form-control" ng-model="typemsg" ng-init="typemsg=typemessages[0]" ng-options="t as t.name for t in typemessages"
                 ng-change="switchTypeMessage(typemsg)">
-
         </select>
 
         <div ng-if="typemsgselected == 'Individual'">
@@ -25,7 +24,6 @@
                 <a href="#">{{team.teamName}}</a>
             </li>
         </div>
-
     </ul>
 </div>
 
