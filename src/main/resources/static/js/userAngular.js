@@ -16,7 +16,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
     $scope.typemessages = [
         {id: 1, name: 'Individual'}, {id: 2, name: 'Team'}
     ];
-    $scope.typemsgselected = $scope.typemessages[0].name;
+    $scope.typemsgselected = $scope.typemessages[1].name;
 
     $scope.switchTypeMessage = function (t) {
         $scope.typemsgselected = t.name;
@@ -234,16 +234,19 @@ $(document).ready(function () {
 
     $("#acceptTeamInvite").click(function (e) {
         var teamInvitationId = $("#teamInvitationId").val();
+        var userInvitedId = $("#userInvitedId").val();
 
         var data = {
-            teamInvitationId: teamInvitationId
+            fromUserId: teamInvitationId,
+            userInvitationId: userInvitedId
         };
 
         data = JSON.stringify(data);
 
+
         $.ajax({
             type: 'PUT',
-            url: '/team/invite/accept',
+            url: '/user/invitation/accept',
             data: data,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
