@@ -129,7 +129,7 @@ body {
     border-right: 1px solid #e7e7e7;
     background-repeat: repeat-x;
     border-radius: 4px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 5px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 5px rgba(0, 0, 0, .075);
     box-sizing: border-box;
 }
 
@@ -142,29 +142,34 @@ body {
     margin-top: 20px;
 }
 
-.navbar-fixed-top {
-   padding-right: 20px;
+.navbar-fixed-top, .navbar-header, .navbar-collapse, .dropdown {
+    background-color: #3a5795;
+    color: white;
 }
 
 .message {
     border: 3px solid;
     padding-bottom: 15px;
     border-radius: 3em;
-    color: white;
+    max-height: 50%;
 }
 
 .sender {
-    border-color: darkgreen;
-    background-color: darkgreen;
     text-align: right;
 }
 
 .receiver {
-    border-color: darkblue;
-    background-color: darkblue;
     text-align: left;
 }
 
 .message-row {
     margin: 5px;
+}
+
+#bs-example-navbar-collapse-1 {
+    border-bottom: 1px solid #103480;
+}
+
+#bs-example-navbar-collapse-1 a, .navbar-header > .navbar-brand {
+    color: white;
 }
