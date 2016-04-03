@@ -6,34 +6,40 @@ package com.uww.messaging.display;
  * @author reinaldo
  */
 public class TeamInvitationForm {
+    private int teamId;
+    private String invitedUserName;
+    private String message;
 
-	private int teamInvitedTo;
-	private String invitedUsername;
+    public TeamInvitationForm() {
+    }
 
-	public int getTeamInvitedTo() {
-		return teamInvitedTo;
-	}
+    public TeamInvitationForm(int teamId, String invitedUserName, String message) {
+        this.teamId = teamId;
+        this.invitedUserName = invitedUserName;
+        this.message = message;
+    }
 
-	public void setTeamInvitedTo(final int teamInvitedTo) {
-		this.teamInvitedTo = teamInvitedTo;
-	}
+    public int getTeamId() {
+        return teamId;
+    }
 
-	public String getInvitedUsername() {
-		return invitedUsername;
-	}
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
+    }
 
-	public void setInvitedUsername(final String invitedUsername) {
-		this.invitedUsername = invitedUsername;
-	}
+    public String getInvitedUserName() {
+        return invitedUserName;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public void setInvitedUserName(String invitedUserName) {
+        this.invitedUserName = invitedUserName;
+    }
 
-	public void setMessage(final String message) {
-		this.message = message;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	private String message;
-
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }
