@@ -26,165 +26,146 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserInvitationRepository userInvitationRepository;
+	@Autowired
+	private UserInvitationRepository userInvitationRepository;
 
-    @Autowired
-    private UserRoleService userRoleService;
+	@Autowired
+	private UserRoleService userRoleService;
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    private static final String PENDING = "pending";
-    private static final String ACCEPTED = "accepted";
+	private static final String PENDING = "pending";
+	private static final String ACCEPTED = "accepted";
 
-    public User findUserById(int userId) {
-        return userRepository.findOne(userId);
-    }
+	public User findUserById(int userId) {
+		return userRepository.findOne(userId);
+	}
 
-    public void save(User user, UserRole userRole) {
-        Preconditions.checkNotNull(user, "user");
-        Preconditions.checkNotNull(userRole, "userRole");
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user = userRepository.save(user);
-        userRole.setUserId(user.getUserId());
-        userRoleService.save(userRole);
-    }
+	public void save(User user, UserRole userRole) {
+		Preconditions.checkNotNull(user, "user");
+		Preconditions.checkNotNull(userRole, "userRole");
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		user = userRepository.save(user);
+		userRole.setUserId(user.getUserId());
+		userRoleService.save(userRole);
+	}
 
-    public void deleteAll() {
-        userRoleService.deleteAll();
-        userRepository.deleteAll();
-    }
+	public void deleteAll() {
+		userRoleService.deleteAll();
+		userRepository.deleteAll();
+	}
 
-    public void deleteAll(String role) {
-        String roleSuffix = role;
-        String rolePrefix = "ROLE_";
-        if (!role.startsWith(rolePrefix)) {
-            role = rolePrefix + role;
-        }
+	public void deleteAll(String role) {
+		String roleSuffix = role;
+		String rolePrefix = "ROLE_";
+		if (!role.startsWith(rolePrefix)) { role = rolePrefix + role; }
 
-        List<UserRole> userRoleList = userRoleService.findByAuthority(role);
+		List<UserRole> userRoleList = userRoleService.findByAuthority(role);
 
-        if (userRoleList.size() == 0) {
-            userRoleList = userRoleService.findByAuthority(roleSuffix);
-        }
+		if (userRoleList.size() == 0) { userRoleList = userRoleService.findByAuthority(roleSuffix); }
 
-        for (int i = 0; i < userRoleList.size(); i++) {
-            UserRole userRole = userRoleList.get(i);
-            User needsDeletingUser = userRepository.findOne(userRole.getUserId());
-            userRepository.delete(needsDeletingUser);
-            userRoleService.delete(userRole);
-        }
-    }
+		for (int i = 0; i < userRoleList.size(); i++) {
+			UserRole userRole = userRoleList.get(i);
+			User needsDeletingUser = userRepository.findOne(userRole.getUserId());
+			userRepository.delete(needsDeletingUser);
+			userRoleService.delete(userRole);
+		}
+	}
 
-    @Override
-    public User userByAuthentication(Authentication auth) {
-        UserRole userRole = AuthenticationUtil.authenticationToRole(auth);
-        return findUserById(userRole.getUserId());
-    }
+	@Override
+	public User userByAuthentication(Authentication auth) {
+		UserRole userRole = AuthenticationUtil.authenticationToRole(auth);
+		return findUserById(userRole.getUserId());
+	}
 
-    @Override
-    public List<String> findUsersLackingInvitationsStartingWith(int loggedInUserId, String username) {
-        List<User> users = userRepository.findByUsernameStartingWith(username);
-        List<String> usernames = new ArrayList<>();
-        users.forEach(u -> {
-            int userStartingWithUserId = u.getUserId();
+	@Override
+	public List<String> findUsersStartingWith(String username) {
+		List<User> users = userRepository.findByUsernameStartingWith(username);
+		List<String> usernames = new ArrayList<>();
+		users.forEach(u -> {
+			usernames.add(u.getUsername());
+		});
+		return usernames;
+	}
 
-            List<UserInvitation> userInvitationWithLoggedInFrom = userInvitationRepository.findByFromUserIdAndToUserId(loggedInUserId, userStartingWithUserId);
-            List<UserInvitation> userInvitationWithUserStartingFrom = userInvitationRepository.findByFromUserIdAndToUserId(userStartingWithUserId, loggedInUserId);
+	@Override
+	public void sendInvitation(int loggedInUserId, UserInvitationForm userInvitationForm) {
+		Preconditions.checkNotNull(userInvitationForm);
 
-            if (userInvitationWithLoggedInFrom.size() == 0 && userInvitationWithUserStartingFrom.size() == 0) {
-                usernames.add(u.getUsername());
-            }
-        });
-        return usernames;
-    }
+		UserInvitation userInvitation = new UserInvitation();
+		userInvitation.setFromUserId(loggedInUserId);
 
-    @Override
-    public void sendInvitation(int loggedInUserId, UserInvitationForm userInvitationForm) {
-        Preconditions.checkNotNull(userInvitationForm);
+		User userToInvite = userRepository.findByUsername(userInvitationForm.getName()).get(0);
 
-        UserInvitation userInvitation = new UserInvitation();
-        userInvitation.setFromUserId(loggedInUserId);
+		User loggedInUser = findUserById(loggedInUserId);
+		boolean tryingToSendInvitationToSelf = loggedInUser.getUsername().equals(userToInvite.getUsername());
 
-        User userToInvite = userRepository.findByUsername(userInvitationForm.getName()).get(0);
+		if (tryingToSendInvitationToSelf) {
+			throw new IllegalArgumentException("Attempting to send invitation to self: " + loggedInUser.getUsername());
+		}
 
-        User loggedInUser = findUserById(loggedInUserId);
-        boolean tryingToSendInvitationToSelf = loggedInUser.getUsername().equals(userToInvite.getUsername());
-
-        if (tryingToSendInvitationToSelf) {
-            throw new IllegalArgumentException("Attempting to send invitation to self: " + loggedInUser.getUsername());
-        }
-
-        boolean alreadyHasAnInvitation = userInvitationRepository.findByFromUserIdAndToUserId(
-                loggedInUserId,
-                userToInvite.getUserId()
-        ).size() > 0;
+		boolean alreadyHasAnInvitation = userInvitationRepository.findByFromUserIdAndToUserId(
+				loggedInUserId,
+				userToInvite.getUserId()
+		).size() > 0;
 
 
-        if (alreadyHasAnInvitation) {
-            throw new IllegalArgumentException("Duplicate Invitation To: " + userToInvite.getUsername());
-        }
+		if (alreadyHasAnInvitation) {
+			throw new IllegalArgumentException("Duplicate Invitation To: " + userToInvite.getUsername());
+		}
 
 
-        userInvitation.setToUserId(userToInvite.getUserId());
-        userInvitation.setStatus(PENDING);
-        userInvitation.setMessage(userInvitationForm.getMessage());
-        userInvitationRepository.save(userInvitation);
-    }
+		userInvitation.setToUserId(userToInvite.getUserId());
+		userInvitation.setStatus(PENDING);
+		userInvitation.setMessage(userInvitationForm.getMessage());
+		userInvitationRepository.save(userInvitation);
+	}
 
-    @Override
-    public void acceptInvitation(int loggedInUserId, int fromUserId, int userInvitationId) {
-        UserInvitation invite = userInvitationRepository.findOne(userInvitationId);
-        if (invite.getFromUserId() == fromUserId && invite.getToUserId() == loggedInUserId
-                && invite.getStatus().equals(PENDING)) {
-            invite.setStatus(ACCEPTED);
-            userInvitationRepository.save(invite);
-            return;
-        }
-        throw new IllegalArgumentException("Cannot accept invitation");
-    }
+	@Override
+	public void acceptInvitation(int loggedInUserId, int fromUserId, int userInvitationId) {
+		UserInvitation invite = userInvitationRepository.findOne(userInvitationId);
+		if (invite.getFromUserId() == fromUserId && invite.getToUserId() == loggedInUserId
+				&& invite.getStatus().equals(PENDING)) {
+			invite.setStatus(ACCEPTED);
+			userInvitationRepository.save(invite);
+			return;
+		}
+		throw new IllegalArgumentException("Cannot accept invitation");
+	}
 
-    /**
-     * This function is responsible for pending notifications (in drop down of applications).
-     */
-    @Override
-    public List<UserInvitationResponse> findAllPendingInvitations(int userId) {
-        List<UserInvitation> invitations = userInvitationRepository.findByToUserIdAndStatusEquals(userId, PENDING);
-        List<UserInvitationResponse> userInvitationResponses = new ArrayList<>();
-        invitations.forEach(invite -> {
-            User thatSent = findUserById(invite.getFromUserId());
-            UserInvitationResponse userInvitationResponse = new UserInvitationResponse(thatSent.getUserId(),
-                    thatSent.getUsername(),
-                    invite.getMessage(),
-                    invite.getUserInvitationId());
-            userInvitationResponses.add(userInvitationResponse);
-        });
-        return userInvitationResponses;
-    }
+	@Override
+	public List<UserInvitationResponse> findAllPendingInvitations(int userId) {
+		List<UserInvitation> invitations = userInvitationRepository.findByToUserIdAndStatusEquals(userId, PENDING);
+		List<UserInvitationResponse> userInvitationResponses = new ArrayList<>();
+		invitations.forEach(invite -> {
+			User thatSent = findUserById(invite.getFromUserId());
+			UserInvitationResponse userInvitationResponse = new UserInvitationResponse(thatSent.getUserId(),
+			                                                                           thatSent.getUsername(),
+			                                                                           invite.getMessage(),
+			                                                                           invite.getUserInvitationId());
+			userInvitationResponses.add(userInvitationResponse);
+		});
+		return userInvitationResponses;
+	}
 
-    /**
-     * This function is responsible for populating the sidebar of the application.
-     * It finds all the users that have already accepting a users invitation so then
-     * these will appear on the sidebar and you can send messages to them.
-     */
-    @Override
-    public List<User> findAcceptedInvitationUsers(int userId) {
-        List<UserInvitation> userInvitations = userInvitationRepository.findInvitationsByUserId(
-                userId,
-                ACCEPTED
-        );
-        List<User> users = new ArrayList<>();
-        userInvitations.forEach(userInvitation -> {
-            if (userInvitation.getFromUserId() == userId) {
-                users.add(findUserById(userInvitation.getToUserId()));
-                return;
-            }
-            users.add(findUserById(userInvitation.getFromUserId()));
-        });
-        return users;
-    }
+	@Override
+	public List<User> findAcceptedInvitationUsers(int userId) {
+		List<UserInvitation> userInvitations = userInvitationRepository.findInvitationsByUserId(
+				userId,
+				ACCEPTED
+		);
+		List<User> users = new ArrayList<>();
+		userInvitations.forEach(userInvitation -> {
+			if (userInvitation.getFromUserId() == userId) {
+				users.add(findUserById(userInvitation.getToUserId()));
+				return;
+			}
+			users.add(findUserById(userInvitation.getFromUserId()));
+		});
+		return users;
+	}
 
 
 }

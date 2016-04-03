@@ -3,12 +3,15 @@ package com.uww.messaging.controller;
 import com.google.gson.Gson;
 import com.uww.messaging.contract.TeamService;
 import com.uww.messaging.contract.UserService;
+import com.uww.messaging.display.Response;
+import com.uww.messaging.display.TeamInvitationForm;
 import com.uww.messaging.model.Team;
 import com.uww.messaging.model.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,49 +20,81 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "user/team")
+@RequestMapping(value = "/team")
 public class TeamController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @Autowired
-    private TeamService teamService;
+	@Autowired
+	private TeamService teamService;
 
-    @RequestMapping(value = "/create", method = RequestMethod.PUT)
-    public String createTeam(Authentication authentication, @RequestParam("teamName") String teamName, @RequestParam("teamDescription") String teamDescription) {
-        User currentUser = userService.userByAuthentication(authentication);
-        teamService.save(currentUser.getUserId(), teamName, teamDescription);
-        return "redirect:/user";
-    }
+	private static final String redirectHome = "redirect:/user";
+
+	@RequestMapping(value = "/invitation/mine", method = RequestMethod.GET)
+	@ResponseBody
+	public String getTeamInvitations(Authentication authentication) {
+
+		int userId = userService.userByAuthentication(authentication).getUserId();
+		return new Gson().toJson(teamService.findAllInvitationsToUser(userId));
+	}
+
+	@RequestMapping(value = "/add/user", method = RequestMethod.PUT)
+	public String addUserToTeam(Authentication authentication, @RequestParam("") String userName, int toTeamId) {
+
+		//TODO : ADD USER TO A GROUP.
+
+		return redirectHome;
+	}
+
+	@RequestMapping(value = "/create", method = RequestMethod.PUT)
+	public String createTeam(Authentication authentication, @RequestParam("teamName") String teamName, @RequestParam("teamDescription") String teamDescription) {
+		User currentUser = userService.userByAuthentication(authentication);
+		teamService.save(currentUser.getUserId(), teamName, teamDescription);
+		return redirectHome;
+	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public String listTeams(Authentication authentication){
+	public String listTeams(Authentication authentication) {
 		User currentUser = userService.userByAuthentication(authentication);
 		Gson gson = new Gson();
 		List<Team> teams = teamService.findTeamsByUserId(currentUser.getUserId());
-		return "teams : "  + gson.toJson(teams);
+		return gson.toJson(teams);
 	}
 
-	@RequestMapping(value = "/invite", method = RequestMethod.GET)
-	public String inviteToTeam(Authentication authentication, @RequestParam("teamId") int teamId, @RequestParam("invitedUserId") int invitedUserId, @RequestParam("message") String message){
+
+	//TODO: APPROPRIATE RESPONSE LATER.
+	@RequestMapping(value = "/invite/send", method = {RequestMethod.PUT})
+	@ResponseBody
+	public String inviteToTeam(Authentication authentication, @RequestBody TeamInvitationForm t) {
 
 		User currentUser = userService.userByAuthentication(authentication);
-		teamService.inviteMemberToTeam(teamId,currentUser.getUserId(),invitedUserId,message);
 
-		return "redirect:/user";
+		int teamId = t.getTeamInvitedTo();
+		String invitedUsername = t.getInvitedUsername();
+		String message = t.getMessage();
+
+		teamService.inviteMemberToTeam(teamId, currentUser.getUserId(), invitedUsername, message);
+
+		Response invitationResponse = new Response(
+				true,
+				"Send invitation to: " + t.getInvitedUsername(),
+				""
+		);
+		return new Gson().toJson(invitationResponse);
 	}
 
-	@RequestMapping(value = "/invite/accept", method = RequestMethod.GET)
-	public String acceptInvitation(Authentication authentication, @RequestParam("teamInvitationId") int teamInvitationId){
+	@RequestMapping(value = "/invite/accept", method = RequestMethod.PUT)
+	@ResponseBody
+	public String acceptInvitation(Authentication authentication, @RequestParam("teamInvitationId") int teamInvitationId) {
 		teamService.acceptTeamInvitation(teamInvitationId);
 		return "redirect:/user";
 	}
 
-	@RequestMapping(value = "/invite/reject", method = RequestMethod.GET)
-	public String rejectInvitation(Authentication authentication, @RequestParam("teamInvitationId") int teamInvitationId){
-		teamService.rejectTeamInvitation(teamInvitationId);
-		return "redirect:/user";
-	}
+//	@RequestMapping(value = "/invite/reject", method = RequestMethod.PUT)
+//	public String rejectInvitation(Authentication authentication, @RequestParam("teamInvitationId") int teamInvitationId){
+//		teamService.rejectTeamInvitation(teamInvitationId);
+//		return "redirect:/user";
+//	}
 }

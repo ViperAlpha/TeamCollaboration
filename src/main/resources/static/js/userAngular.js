@@ -4,16 +4,38 @@
 
 var messagingApp = angular.module('messagingApp', ['ngSanitize']);
 
-messagingApp.controller('userController', function ($scope, $http, $interval, $window, $timeout) {
+messagingApp.controller('userController', function ($scope, $http, $interval, $window) {
     $scope.currentUserId = null;
     $scope.currentName = null;
     $scope.currentInvite = null;
     $scope.invitedUsername = null;
     $scope.showFileUpload = false;
 
+    $scope.currentTeam = null;
+
+    $scope.typemessages = [
+        {id: 1, name: 'Individual'}, {id: 2, name: 'Team'}
+    ];
+    $scope.typemsgselected = $scope.typemessages[0].name;
+
+    $scope.switchTypeMessage = function (t) {
+        $scope.typemsgselected = t.name;
+
+    }
+
+    $http.get('/team/invitation/mine')
+        .then(function (response) {
+            $scope.teaminvitations = response.data;
+        });
+
     $http.get("/user/invitation/see/accepted")
         .then(function (response) {
             $scope.users = response.data;
+        });
+
+    $http.get("/team/list")
+        .then(function (response) {
+            $scope.teams = response.data;
         });
 
     $http.get('/user/invitation/mine')
@@ -30,6 +52,28 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
             .then(function (response) {
                 $scope.messages = response.data;
             });
+    };
+
+    $scope.getTeamMessages = function (team) {
+        $scope.currentTeam = team;
+        var url = "/team/message/list/all/message?teamId=" + team.teamId;
+
+        $http.get(url)
+            .then(function (response) {
+                $scope.teammessages = response.data;
+            });
+    };
+
+    $scope.getNewTeamMessages = function (team) {
+        $scope.currentTeam = team;
+        var url = "/team/message/list/all/message?teamId=" + team.teamId;
+
+        $http.get(url)
+            .then(function (response) {
+                $scope.newteammessages = response.data;
+            });
+
+
     };
 
     $scope.displayMessages = function (user) {
@@ -62,6 +106,14 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
     $scope.setCurrentInvite = function (invite) {
         $scope.currentInvite = invite;
     };
+
+    $scope.setCurrentTeamInvite = function (invite) {
+        $scope.currentTeamInvite = invite;
+    };
+
+    $scope.nameStartsWith = function (currentName, messageFirstName) {
+        return currentName.startsWith(messageFirstName);
+    }
 
 
     $scope.intervalFunction = function () {
@@ -153,6 +205,69 @@ $(document).ready(function () {
             type: 'PUT',
             url: '/user/invitation/accept',
             data: queryAsJson,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Error: ' + xhr.responseText);
+            },
+            success: function (data) {
+                alert('Invitation Accepted');
+            }
+        });
+
+    });
+
+
+    $("#sendTeamInvite").click(function (e) {
+        var teamInvitedTo = $("#teamToAddTo option:selected").attr('id');
+        var invitedUsername = $("#invitedUserName").val();
+        var message = $('#message').val();
+
+        var queryAsJson = {
+            teamId: teamInvitedTo,
+            invitedUserName: invitedUsername,
+            message: message
+        };
+
+        queryAsJson = JSON.stringify(queryAsJson);
+
+        alert(queryAsJson);
+
+        $.ajax({
+            type: 'PUT',
+            url: '/team/invite/send',
+            data: queryAsJson,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + " ..... " + errorThrown + " ... " + xhr.responseText);
+            },
+            success: function (data) {
+                alert('Invitation sent');
+            }
+        });
+
+    });
+
+
+    //TODO:
+
+    $("#acceptTeamInvite").click(function (e) {
+        var teamInvitationId = $("#teamInvitationId").val();
+
+        var data = {
+            teamInvitationId: teamInvitationId,
+        };
+
+        data = JSON.stringify(data);
+
+
+        alert(data);
+
+        $.ajax({
+            type: 'PUT',
+            url: '/team/invite/accept',
+            data: data,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             error: function (xhr, textStatus, errorThrown) {

@@ -13,16 +13,14 @@ public class TeamMessage {
 	private Integer fromUserId;
 	private Integer toTeamId;
 	private String message;
-	private Integer teamMessageChatId;
 	private Timestamp messageTime;
 
 	public TeamMessage() {}
 
-	public TeamMessage(final Integer fromUserId, final Integer toTeamId, final String message, final Integer teamMessageChatId, final Timestamp messageTime) {
+	public TeamMessage(final Integer fromUserId, final Integer toTeamId, final String message, final Timestamp messageTime) {
 		this.fromUserId = fromUserId;
 		this.toTeamId = toTeamId;
 		this.message = message;
-		this.teamMessageChatId = teamMessageChatId;
 		this.messageTime = messageTime;
 	}
 
@@ -65,16 +63,6 @@ public class TeamMessage {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	@Basic
-	@Column(name = "teamMessageChatId", nullable = true)
-	public Integer getTeamMessageChatId() {
-		return teamMessageChatId;
-	}
-
-	public void setTeamMessageChatId(final Integer teamMessageChatId) {
-		this.teamMessageChatId = teamMessageChatId;
 	}
 
 	@Basic

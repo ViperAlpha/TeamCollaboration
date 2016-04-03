@@ -3,6 +3,17 @@
       xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="fragment/top" th:remove="tag">
 </th:block>
-<div>Welcome to the mesaging service</div>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="jumbotron" id="jumbotron-home">
+            <h1>Welcome to the <br>Messaging System</h1>
+            <hr>
+            <p>Have an account? Click <code>Log in</code> above!</p>
+        </div>
+    </div>
+    <div id="createAccount" class="col-md-6 col-md-offset-3">
+        <p>Don't have an account? <a th:href="@{/register/index}">Create one.</a></p>
+    </div>
+</div>
 <th:block th:replace="fragment/bottom" th:remove="tag">
 </th:block>

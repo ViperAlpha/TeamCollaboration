@@ -1,5 +1,7 @@
 package com.uww.messaging.model;
 
+import java.sql.Timestamp;
+
 import javax.persistence.*;
 
 /**
@@ -13,6 +15,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+	private Timestamp lastLoggedIn;
 
     public User() {
     }
@@ -85,6 +88,16 @@ public class User {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+	@Basic
+	@Column(name = "lastLoggedIn", nullable = false)
+	public Timestamp getLastLoggedIn() {
+		return lastLoggedIn;
+	}
+
+	public void setLastLoggedIn(final Timestamp lastLoggedIn) {
+		this.lastLoggedIn = lastLoggedIn;
+	}
 
     @Override
     public boolean equals(Object o) {

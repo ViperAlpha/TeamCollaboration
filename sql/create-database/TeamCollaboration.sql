@@ -59,6 +59,8 @@ CREATE TABLE IF NOT EXISTS `TeamInvitation` (
   `toUserId` int(11) NOT NULL,
   `toTeamId` int(11) NOT NULL,
   `invitationTime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `message` varchar(100) DEFAULT NULL,
+  `status` varchar(20) NOT NULL,
   PRIMARY KEY (`teamInvitationId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -71,9 +73,8 @@ CREATE TABLE IF NOT EXISTS `TeamInvitation` (
 DROP TABLE IF EXISTS `TeamMember`;
 CREATE TABLE IF NOT EXISTS `TeamMember` (
   `teamMemberId` int(11) NOT NULL AUTO_INCREMENT,
-  `userId` int(11) DEFAULT NULL,
-  `teamId` int(11) DEFAULT NULL,
-  `teamMessageChatId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `teamId` int(11) NOT NULL,
   PRIMARY KEY (`teamMemberId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -133,6 +134,7 @@ CREATE TABLE `User` (
   `firstName` varchar(40) DEFAULT NULL,
   `lastName` varchar(40) DEFAULT NULL,
   `phoneNumber` varchar(40) DEFAULT NULL,
+  `lastLoggedIn` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`userId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -143,7 +145,7 @@ CREATE TABLE `User` (
 
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
-INSERT INTO `User` VALUES (12,'joe@gmail.com','$2a$10$JSRcaYBXM2MP5gOaNBJtAezsDtblv43feGcyDfwy3AjVbQh4CXtrK','Joe','Repo','(920)-728-7269'),(13,'dan@gmail.com','$2a$10$1IxJK.XiPn6W7oYd/2KAvu4TiZ6Rv9AIKCGI7xlk9WKMAy8UVMiRq','Dan','Jock','(920)-728-4269'),(14,'thao@uww.edu','$2a$10$XUbVaTerJI/ubhXkNYNAIu8.wfanXJRKKLJ/H1PZW9EZOAAdqUXZ.','cheng','thao','(920)-728-4269');
+INSERT INTO `User` VALUES (12,'joe@gmail.com','$2a$10$JSRcaYBXM2MP5gOaNBJtAezsDtblv43feGcyDfwy3AjVbQh4CXtrK','Joe','Repo','(920)-728-7269',NULL),(13,'dan@gmail.com','$2a$10$1IxJK.XiPn6W7oYd/2KAvu4TiZ6Rv9AIKCGI7xlk9WKMAy8UVMiRq','Dan','Jock','(920)-728-4269',NULL),(14,'thao@uww.edu','$2a$10$XUbVaTerJI/ubhXkNYNAIu8.wfanXJRKKLJ/H1PZW9EZOAAdqUXZ.','cheng','thao','(920)-728-4269',NULL );
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
 
