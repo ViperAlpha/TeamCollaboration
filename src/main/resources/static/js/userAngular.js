@@ -246,8 +246,8 @@ $(document).ready(function () {
         alert(queryAsJson);
 
         $.ajax({
-            type: 'PUT',
-            url: '/team/invite/send',
+            type: 'POST',
+            url: '/user/team/invite/send',
             data: queryAsJson,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
@@ -278,7 +278,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: 'PUT',
-            url: '/team/invite/accept',
+            url: '/user/team/invite/accept',
             data: data,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
