@@ -148,18 +148,23 @@ body {
 }
 
 .message {
-    border: 1px solid;
-    padding-bottom: 15px;
-    border-radius: 3em;
+    /*border: 1px solid;*/
+    padding-bottom: 5px;
+    border-radius: 7.5px;
     max-height: 50%;
+    box-shadow: 0 1px .5px rgba(0,0,0,.13);
+    transition: .2s cubic-bezier(.31,.34,.3,.99);
+    margin-bottom: 5px;
 }
 
 .sender {
     text-align: right;
+    background-color: #dcf8c6;
 }
 
 .receiver {
     text-align: left;
+    background-color: lightcyan;
 }
 
 .message-row {
