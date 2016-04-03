@@ -34,7 +34,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
         });
 
     $http.get("/team/list")
-        .then(function(response){
+        .then(function (response) {
             $scope.teams = response.data;
         });
 
@@ -200,32 +200,31 @@ $(document).ready(function () {
     });
 
 
-
-
-    $("#sendTeamInvite").click(function (e){
+    $("#sendTeamInvite").click(function (e) {
         var teamInvitedTo = $("#teamToAddTo option:selected").attr('id');
         var invitedUsername = $("#invitedUserName").val();
         var message = $('#message').val();
 
-        var data = {
-            teamId : teamInvitedTo,
-            invitedUserName : invitedUsername,
-            message : message
+        var queryAsJson = {
+            teamId: teamInvitedTo,
+            invitedUserName: invitedUsername,
+            message: message
         };
 
-        data = JSON.stringify(data);
+        queryAsJson = JSON.stringify(queryAsJson);
 
-        alert(data);
+        alert(queryAsJson);
 
         $.ajax({
             type: 'PUT',
             url: '/team/invite/send',
-            data: data,
+            data: queryAsJson,
             dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
             error: function (xhr, textStatus, errorThrown) {
-                alert('Error: ' + xhr.responseText);
+                alert('Error: ' + textStatus + " ..... " + errorThrown + " ... " + xhr.responseText);
             },
-            success: function(data){
+            success: function (data) {
                 alert('Invitation sent');
             }
         });
