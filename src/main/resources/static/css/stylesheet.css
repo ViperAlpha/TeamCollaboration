@@ -148,7 +148,7 @@ body {
 }
 
 .message {
-    border: 3px solid;
+    border: 1px solid;
     padding-bottom: 15px;
     border-radius: 3em;
     max-height: 50%;
@@ -177,4 +177,9 @@ body {
 .send-message-row {
     padding-top: 5px;
     padding-bottom: 10px;
+}
+
+.badge {
+    background-color: white;
+    color: #3a5795;
 }
