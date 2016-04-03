@@ -166,23 +166,13 @@
             <!-- Messages column -->
             <div class="col-md-6 col-md-offset-2">
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="page-header">
-                            <h1>Messages</h1>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="row message-row" ng-repeat="message in messages">
                     <!-- Applies the offset class and sender-message class in case that the message is not from the current logged in user -->
                     <div class="message col-md-8"
                          ng-class="nameStartsWith(currentName, message.fromFirstName) ? 'col-md-offset-10 sender' : 'receiver'">
-                        <div class="page-header message-header">
-                            <h1>{{message.fromFirstName}}
-                                <small>{{message.prettyTime}}</small>
-                            </h1>
-                        </div>
+                        <h4>{{message.fromFirstName}}
+                            <small>{{message.prettyTime}}</small>
+                        </h4>
                         {{message.message}}
                         <div ng-if="message.fileName != 'null'">Attached Files: <a
                                 ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
@@ -191,8 +181,8 @@
                 </div> <!-- end message repeat -->
 
                 <!-- Messages exchanged between two users -->
-                <div class="row">
-                    <div class="col-md-6">
+                <div class="row send-message-row">
+                    <div class="col-md-8 col-md-offset-4">
                         <form th:action="@{/user/message/individual-message/insert}" th:method="POST"
                               class="form-horizontal"
                               enctype="multipart/form-data">

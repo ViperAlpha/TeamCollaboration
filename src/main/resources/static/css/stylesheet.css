@@ -173,3 +173,8 @@ body {
 #bs-example-navbar-collapse-1 a, .navbar-header > .navbar-brand {
     color: white;
 }
+
+.send-message-row {
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
