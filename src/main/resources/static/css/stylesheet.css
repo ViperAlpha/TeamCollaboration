@@ -152,8 +152,8 @@ body {
     padding-bottom: 5px;
     border-radius: 7.5px;
     max-height: 50%;
-    box-shadow: 0 1px .5px rgba(0,0,0,.13);
-    transition: .2s cubic-bezier(.31,.34,.3,.99);
+    box-shadow: 0 1px .5px rgba(0, 0, 0, .13);
+    transition: .2s cubic-bezier(.31, .34, .3, .99);
     margin-bottom: 5px;
 }
 
@@ -175,8 +175,8 @@ body {
     border-bottom: 1px solid #103480;
 }
 
-#bs-example-navbar-collapse-1 a, .navbar-header > .navbar-brand {
-    color: white;
+.white-text, .navbar-header > .navbar-brand {
+    color: white !important;
 }
 
 .send-message-row {
@@ -187,4 +187,11 @@ body {
 .badge {
     background-color: white;
     color: #3a5795;
+}
+
+/*-- change navbar dropdown color --*/
+.navbar-default .navbar-nav .open .dropdown-menu > li > a, .navbar-default .navbar-nav .open .dropdown-menu {
+    background-color: white;
+    color: black;
+    cursor: pointer;
 }
