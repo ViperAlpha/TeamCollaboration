@@ -209,14 +209,17 @@ $(document).ready(function () {
 
         var data = {
             teamId : teamInvitedTo,
-            invitedUserName : invitedUsername
+            invitedUserName : invitedUsername,
+            message : message
         };
 
         data = JSON.stringify(data);
 
+        alert(data);
+
         $.ajax({
             type: 'PUT',
-            url: '/team/invite',
+            url: '/team/invite/send',
             data: data,
             dataType: 'json',
             error: function (xhr, textStatus, errorThrown) {
@@ -236,10 +239,13 @@ $(document).ready(function () {
         var teamInvitationId = $("#teamInvitationId").val();
 
         var data = {
-            teamInvitationId: teamInvitationId
+            teamInvitationId: teamInvitationId,
         };
 
         data = JSON.stringify(data);
+
+
+        alert(data);
 
         $.ajax({
             type: 'PUT',

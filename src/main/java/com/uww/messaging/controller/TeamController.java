@@ -60,7 +60,7 @@ public class TeamController {
 		return gson.toJson(teams);
 	}
 
-	@RequestMapping(value = "/invite", method = RequestMethod.PUT)
+	@RequestMapping(value = "/invite/send", method = {RequestMethod.PUT, RequestMethod.GET})
 	public String inviteToTeam(Authentication authentication, @RequestParam("teamId") int teamId, @RequestParam("invitedUserName") String invitedUsername, @RequestParam("message") String message){
 
 		User currentUser = userService.userByAuthentication(authentication);
