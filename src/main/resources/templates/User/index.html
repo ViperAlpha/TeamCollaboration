@@ -34,7 +34,7 @@
         <div id="createTeamModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <!-- Modal content-->
-                <form th:action="@{team/create}" th:method="PUT" enctype="multipart/form-data">
+                <form th:action="@{user/team/create}" th:method="PUT" enctype="multipart/form-data">
 
                     <div class="modal-content">
                         <div class="modal-header">
@@ -209,7 +209,7 @@
         <div id="sendTeamMessageModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <!-- Modal content-->
-                <form th:action="@{team/message/insert}" th:method="PUT" enctype="multipart/form-data">
+                <form th:action="@{user/team/message/insert}" th:method="PUT" enctype="multipart/form-data">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -287,16 +287,16 @@
                                 <small>{{message.prettyTime}}</small>
                             </h4>
                             {{message.message}}
-                            <div ng-if="message.fileName != 'null'">Attached Files: <a
+                            <div ng-if="message.fileName != null">Attached Files: <a
                                     ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
                             </div>
                         </div>
                     </div> <!-- end message repeat -->
 
                     <!--send team message-->
-                    <div class="row send-message-row">
+                    <div ng-if="teams.length > 0" class="row send-message-row">
                         <div class="col-md-8 col-md-offset-4">
-                            <form th:action="@{/team/message/insert}" th:method="PUT" class="form-horizontal"
+                            <form th:action="@{/user/team/message/insert}" th:method="PUT" class="form-horizontal"
                                   enctype="multipart/form-data">
                                 <label class="control-label">Enter Message:</label>
                                 <input style="display: none" id="toTeamId" ng-value="currentTeam.teamId" type="text"

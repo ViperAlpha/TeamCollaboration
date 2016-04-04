@@ -76,6 +76,37 @@ public class TeamServiceImpl implements TeamService {
 	}
 
 	@Override
+	public List<TeamInvitationResponse> findPendingInvitationsToUser(final int userId) {
+		Iterable<TeamInvitation> teamInvitations = teamInvitationRepository.findByToUserId(userId);
+
+		List<TeamInvitationResponse> responses = new ArrayList<>();
+
+		teamInvitations.forEach(teamInvitation -> {
+			if (teamInvitation.getStatus() != TeamInvitation.STATUS_PENDING) { return; }
+			TeamInvitationResponse response = new TeamInvitationResponse();
+
+			User inviter = userRepository.findOne(teamInvitation.getFromUserId());
+			Team toTeam = teamRepository.findOne(teamInvitation.getToTeamId());
+
+			response.setTeamInvitationId(teamInvitation.getTeamInvitationId());
+
+			response.setFromUserName(inviter.getFirstName() + " " + inviter.getLastName());
+
+			response.setTeamName(toTeam.getTeamName());
+
+			response.setInvitationTime(teamInvitation.getInvitationTime());
+
+			response.setMessage(teamInvitation.getMessage());
+
+			response.setStatus(teamInvitation.getStatus());
+
+			responses.add(response);
+		});
+
+		return responses;
+	}
+
+	@Override
 	public List<TeamInvitationResponse> findAllInvitationsToUser(final int toUserId) {
 
 		Iterable<TeamInvitation> teamInvitations = teamInvitationRepository.findByToUserId(toUserId);

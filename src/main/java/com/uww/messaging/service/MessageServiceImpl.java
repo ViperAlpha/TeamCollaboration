@@ -134,7 +134,7 @@ public class MessageServiceImpl implements MessageService {
 
 		teamMessages.forEach(msg -> {
 			User user = userService.findUserById(msg.getFromUserId());
-			TeamMessageDisplay tmd = new TeamMessageDisplay(msg.getTeamMessageId(),msg.getFromUserId(),user.getUsername(),user.getFirstName(),msg.getMessage(),msg.getMessageTime());
+			TeamMessageDisplay tmd = new TeamMessageDisplay(msg.getTeamMessageId(),msg.getFromUserId(),user.getUsername(),user.getFirstName(),msg.getMessage(),msg.getMessageTime(),null);
 			msgsDisplay.add(tmd);
 		});
 

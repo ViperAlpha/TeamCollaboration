@@ -25,7 +25,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
         $scope.typemsgselected = t.name;
     };
 
-    $http.get('/team/invitation/mine')
+    $http.get('/user/team/invitation/mine')
         .then(function (response) {
             $scope.teaminvitations = response.data;
         });
@@ -35,7 +35,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
             $scope.users = response.data;
         });
 
-    $http.get("/team/list")
+    $http.get("/user/team/list")
         .then(function (response) {
             $scope.teams = response.data;
         });
@@ -58,7 +58,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
 
     $scope.getTeamMessages = function (team) {
         $scope.currentTeam = team;
-        var url = "/team/message/list/all/message?teamId=" + team.teamId;
+        var url = "/user/team/message/list/all/message?teamId=" + team.teamId;
 
         $http.get(url)
             .then(function (response) {
@@ -68,7 +68,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
 
     $scope.getNewTeamMessages = function (team) {
         $scope.currentTeam = team;
-        var url = "/team/message/list/all/message?teamId=" + team.teamId;
+        var url = "/user/team/message/list/all/message?teamId=" + team.teamId;
 
         $http.get(url)
             .then(function (response) {
@@ -243,8 +243,6 @@ $(document).ready(function () {
 
         queryAsJson = JSON.stringify(queryAsJson);
 
-        alert(queryAsJson);
-
         $.ajax({
             type: 'POST',
             url: '/user/team/invite/send',
@@ -273,11 +271,8 @@ $(document).ready(function () {
 
         data = JSON.stringify(data);
 
-
-        alert(data);
-
         $.ajax({
-            type: 'PUT',
+            type: 'POST',
             url: '/user/team/invite/accept',
             data: data,
             dataType: 'json',
