@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by horvste on 2/19/16.
@@ -82,7 +79,7 @@ public class TeamServiceImpl implements TeamService {
 		List<TeamInvitationResponse> responses = new ArrayList<>();
 
 		teamInvitations.forEach(teamInvitation -> {
-			if (teamInvitation.getStatus() != TeamInvitation.STATUS_PENDING) { return; }
+			if (!Objects.equals(teamInvitation.getStatus(), TeamInvitation.STATUS_PENDING)) { return; }
 			TeamInvitationResponse response = new TeamInvitationResponse();
 
 			User inviter = userRepository.findOne(teamInvitation.getFromUserId());

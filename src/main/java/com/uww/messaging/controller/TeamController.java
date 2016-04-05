@@ -5,6 +5,7 @@ import com.uww.messaging.contract.TeamService;
 import com.uww.messaging.contract.UserService;
 import com.uww.messaging.display.Response;
 import com.uww.messaging.display.TeamInvitationForm;
+import com.uww.messaging.display.TeamInvitationResponse;
 import com.uww.messaging.display.TeamInviteAccept;
 import com.uww.messaging.model.Team;
 import com.uww.messaging.model.User;
@@ -37,7 +38,8 @@ public class TeamController {
 	public String getTeamInvitations(Authentication authentication) {
 
 		int userId = userService.userByAuthentication(authentication).getUserId();
-		return new Gson().toJson(teamService.findPendingInvitationsToUser(userId));
+        List<TeamInvitationResponse> pendingInvitationsToUser = teamService.findPendingInvitationsToUser(userId);
+        return new Gson().toJson(pendingInvitationsToUser);
 	}
 
 	@RequestMapping(value = "/add/user", method = RequestMethod.PUT)
