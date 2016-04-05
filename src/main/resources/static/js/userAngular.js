@@ -259,9 +259,6 @@ $(document).ready(function () {
 
     });
 
-
-    //TODO:
-
     $("#acceptTeamInvite").click(function (e) {
         var teamInvitationId = $("#teamInvitationId").val();
 
@@ -286,6 +283,41 @@ $(document).ready(function () {
         });
 
     });
+
+
+    //send individual message
+    //$('#sendind').click(function (e){
+    //
+    //    e.preventDefault();
+    //
+    //    var toUserId = $('#itoUserId').val();
+    //    var message = $('#imessage').val();
+    //
+    //    var data = {
+    //        toUserId : toUserId,
+    //        message : message
+    //    }
+    //
+    //    data = JSON.stringify(data);
+    //    alert('sending msg');
+    //    console.log(data);
+    //
+    //    $.ajax({
+    //        type: 'POST',
+    //        url: '/user/message/individual-message/insert',
+    //        data: data,
+    //        dataType: 'json',
+    //        contentType: 'application/json; charset=utf-8',
+    //        error: function (xhr, textStatus, errorThrown) {
+    //            alert('Error while sending the message.');
+    //            console.log(textStatus + ' ... '  + errorThrown);
+    //        },
+    //        success: function (data) {
+    //            console.log(data);
+    //        }
+    //    });
+    //
+    //});
 
 
 });
