@@ -2,6 +2,7 @@ package com.uww.messaging.repository;
 
 import com.uww.messaging.model.TeamInvitation;
 
+import com.uww.messaging.model.UserInvitation;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -13,4 +14,5 @@ import java.util.List;
  */
 public interface TeamInvitationRepository extends CrudRepository<TeamInvitation, Integer> {
 	List<TeamInvitation> findByToUserId(int toUserId);
+
 }

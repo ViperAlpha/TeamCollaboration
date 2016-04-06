@@ -27,197 +27,205 @@ import java.util.*;
  */
 @Service
 public class TeamServiceImpl implements TeamService {
-	@Autowired
-	private TeamRepository teamRepository;
+    @Autowired
+    private TeamRepository teamRepository;
 
-	@Autowired
-	private TeamMemberRepository teamMemberRepository;
+    @Autowired
+    private TeamMemberRepository teamMemberRepository;
 
-	@Autowired
-	private TeamMessageChatRepository teamMessageChatRepository;
+    @Autowired
+    private TeamMessageChatRepository teamMessageChatRepository;
 
-	@Autowired
-	private TeamInvitationRepository teamInvitationRepository;
+    @Autowired
+    private TeamInvitationRepository teamInvitationRepository;
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Transactional
-	@Override
-	public void save(int creatorUserId, String teamName, String teamDescription) {
-		Preconditions.checkNotNull(teamName);
-		Preconditions.checkNotNull(teamDescription);
-		Team team = new Team();
-		team.setTeamName(teamName);
-		team.setTeamDescription(teamDescription);
-		Date currentDate = new Date();
-		team.setCreatedTime(currentDate);
-		teamRepository.save(team);
+    @Transactional
+    @Override
+    public void save(int creatorUserId, String teamName, String teamDescription) {
+        Preconditions.checkNotNull(teamName);
+        Preconditions.checkNotNull(teamDescription);
+        Team team = new Team();
+        team.setTeamName(teamName);
+        team.setTeamDescription(teamDescription);
+        Date currentDate = new Date();
+        team.setCreatedTime(currentDate);
+        teamRepository.save(team);
 
-		TeamMessageChat teamMessageChat = new TeamMessageChat(team.getTeamId(), null);
-		teamMessageChatRepository.save(teamMessageChat);
+        TeamMessageChat teamMessageChat = new TeamMessageChat(team.getTeamId(), null);
+        teamMessageChatRepository.save(teamMessageChat);
 
-		TeamMember teamMember = new TeamMember();
-		teamMember.setTeamId(team.getTeamId());
-		teamMember.setUserId(creatorUserId);
-		teamMemberRepository.save(teamMember);
-	}
+        TeamMember teamMember = new TeamMember();
+        teamMember.setTeamId(team.getTeamId());
+        teamMember.setUserId(creatorUserId);
+        teamMemberRepository.save(teamMember);
+    }
 
-	@Override
-	public List<Team> findTeamsByUserId(int userId) {
-		List<TeamMember> teamMemberByUserId = teamMemberRepository.findTeamMemberByUserId(userId);
-		List<Integer> teamIds = new ArrayList<>();
-		teamMemberByUserId.forEach(teamMem -> teamIds.add(teamMem.getTeamId())
-		);
-		return teamRepository.findByTeamIdIn(teamIds);
-	}
+    @Override
+    public List<Team> findTeamsByUserId(int userId) {
+        List<TeamMember> teamMemberByUserId = teamMemberRepository.findTeamMemberByUserId(userId);
+        List<Integer> teamIds = new ArrayList<>();
+        teamMemberByUserId.forEach(teamMem -> teamIds.add(teamMem.getTeamId())
+        );
+        return teamRepository.findByTeamIdIn(teamIds);
+    }
 
-	@Override
-	public List<TeamInvitationResponse> findPendingInvitationsToUser(final int userId) {
-		Iterable<TeamInvitation> teamInvitations = teamInvitationRepository.findByToUserId(userId);
+    @Override
+    public List<TeamInvitationResponse> findPendingInvitationsToUser(final int userId) {
+        Iterable<TeamInvitation> teamInvitations = teamInvitationRepository.findByToUserId(userId);
 
-		List<TeamInvitationResponse> responses = new ArrayList<>();
+        List<TeamInvitationResponse> responses = new ArrayList<>();
 
-		teamInvitations.forEach(teamInvitation -> {
-			if (!Objects.equals(teamInvitation.getStatus(), TeamInvitation.STATUS_PENDING)) { return; }
-			TeamInvitationResponse response = new TeamInvitationResponse();
+        teamInvitations.forEach(teamInvitation -> {
+            if (!Objects.equals(teamInvitation.getStatus(), TeamInvitation.STATUS_PENDING)) {
+                return;
+            }
+            TeamInvitationResponse response = new TeamInvitationResponse();
 
-			User inviter = userRepository.findOne(teamInvitation.getFromUserId());
-			Team toTeam = teamRepository.findOne(teamInvitation.getToTeamId());
+            User inviter = userRepository.findOne(teamInvitation.getFromUserId());
+            Team toTeam = teamRepository.findOne(teamInvitation.getToTeamId());
 
-			response.setTeamInvitationId(teamInvitation.getTeamInvitationId());
+            response.setTeamInvitationId(teamInvitation.getTeamInvitationId());
 
-			response.setFromUserName(inviter.getFirstName() + " " + inviter.getLastName());
+            response.setFromUserName(inviter.getFirstName() + " " + inviter.getLastName());
 
-			response.setTeamName(toTeam.getTeamName());
+            response.setTeamName(toTeam.getTeamName());
 
-			response.setInvitationTime(teamInvitation.getInvitationTime());
+            response.setInvitationTime(teamInvitation.getInvitationTime());
 
-			response.setMessage(teamInvitation.getMessage());
+            response.setMessage(teamInvitation.getMessage());
 
-			response.setStatus(teamInvitation.getStatus());
+            response.setStatus(teamInvitation.getStatus());
 
-			responses.add(response);
-		});
+            responses.add(response);
+        });
 
-		return responses;
-	}
+        return responses;
+    }
 
-	@Override
-	public List<TeamInvitationResponse> findAllInvitationsToUser(final int toUserId) {
+    @Override
+    public List<TeamInvitationResponse> findAllInvitationsToUser(final int toUserId) {
 
-		Iterable<TeamInvitation> teamInvitations = teamInvitationRepository.findByToUserId(toUserId);
+        Iterable<TeamInvitation> teamInvitations = teamInvitationRepository.findByToUserId(toUserId);
 
-		List<TeamInvitationResponse> responses = new ArrayList<>();
+        List<TeamInvitationResponse> responses = new ArrayList<>();
 
-		teamInvitations.forEach(teamInvitation -> {
-			TeamInvitationResponse response = new TeamInvitationResponse();
+        teamInvitations.forEach(teamInvitation -> {
+            TeamInvitationResponse response = new TeamInvitationResponse();
 
-			User inviter = userRepository.findOne(teamInvitation.getFromUserId());
-			Team toTeam = teamRepository.findOne(teamInvitation.getToTeamId());
+            User inviter = userRepository.findOne(teamInvitation.getFromUserId());
+            Team toTeam = teamRepository.findOne(teamInvitation.getToTeamId());
 
-			response.setTeamInvitationId(teamInvitation.getTeamInvitationId());
+            response.setTeamInvitationId(teamInvitation.getTeamInvitationId());
 
-			response.setFromUserName(inviter.getFirstName() + " " + inviter.getLastName());
+            response.setFromUserName(inviter.getFirstName() + " " + inviter.getLastName());
 
-			response.setTeamName(toTeam.getTeamName());
+            response.setTeamName(toTeam.getTeamName());
 
-			response.setInvitationTime(teamInvitation.getInvitationTime());
+            response.setInvitationTime(teamInvitation.getInvitationTime());
 
-			response.setMessage(teamInvitation.getMessage());
+            response.setMessage(teamInvitation.getMessage());
 
-			response.setStatus(teamInvitation.getStatus());
+            response.setStatus(teamInvitation.getStatus());
 
-			responses.add(response);
-		});
+            responses.add(response);
+        });
 
-		return responses;
-	}
-
-
-	@Transactional
-	@Override
-	public void addTeamMember(final int teamId, final int currentUserId, final int invitedUserId) {
-		List<Team> teams = teamRepository.findByTeamIdIn(new ArrayList<Integer>() {{add(teamId);}});
-
-		// makes sure there is one and only one team
-		if (teams.size() > 1) { throw new RuntimeException("Size greater than one"); } else if (teams.size() == 0) {
-			throw new RuntimeException("No team with this id: " + teamId);
-		}
-
-		Team team = teams.get(0);
-		System.out.println("team : " + team.getTeamName() + " desc: " + team.getTeamDescription());
-
-		// makes sure the currentUser is in the team so it can invite
-		if (!isMemberIsInTeam(teamId, currentUserId)) {
-			throw new RuntimeException("Member is not in this team " + teamId);
-		}
-
-		TeamMember teamMember = new TeamMember(invitedUserId, teamId);
-		teamMemberRepository.save(teamMember);
-	}
-
-	@Transactional
-	@Override
-	public void inviteMemberToTeam(final int teamId, final int fromUserId, final String invitedUsername, String message) {
-
-		List<User> userList = userRepository.findByUsername(invitedUsername);
-
-		if (userList == null || userList.size() == 0) { throw new UsernameNotFoundException(invitedUsername); }
-
-		int invitedUserId = userList.get(0).getUserId();
-
-		List<TeamInvitation> toUserId = teamInvitationRepository.findByToUserId(invitedUserId);
-
-		if (toUserId.size() > 0) {
-			throw new IllegalArgumentException("User already has an invitation. Id: " + invitedUserId);
-		}
+        return responses;
+    }
 
 
-		TeamInvitation teamInvitation = new TeamInvitation();
-		teamInvitation.setFromUserId(fromUserId);
-		teamInvitation.setToUserId(invitedUserId);
-		teamInvitation.setToTeamId(teamId);
-		teamInvitation.setMessage(message);
-		teamInvitation.setInvitationTime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
-		teamInvitation.setStatus(TeamInvitation.STATUS_PENDING);
+    @Transactional
+    @Override
+    public void addTeamMember(final int teamId, final int currentUserId, final int invitedUserId) {
+        List<Team> teams = teamRepository.findByTeamIdIn(new ArrayList<Integer>() {{
+            add(teamId);
+        }});
 
-		teamInvitationRepository.save(teamInvitation);
+        // makes sure there is one and only one team
+        if (teams.size() > 1) {
+            throw new RuntimeException("Size greater than one");
+        } else if (teams.size() == 0) {
+            throw new RuntimeException("No team with this id: " + teamId);
+        }
 
-	}
+        Team team = teams.get(0);
+        System.out.println("team : " + team.getTeamName() + " desc: " + team.getTeamDescription());
 
-	@Transactional
-	@Override
-	public void acceptTeamInvitation(final int teamInvitationId) {
-		TeamInvitation teamInvitation = teamInvitationRepository.findOne(teamInvitationId);
+        // makes sure the currentUser is in the team so it can invite
+        if (!isMemberIsInTeam(teamId, currentUserId)) {
+            throw new RuntimeException("Member is not in this team " + teamId);
+        }
 
-		teamInvitation.setStatus(TeamInvitation.STATUS_ACCEPTED);
+        TeamMember teamMember = new TeamMember(invitedUserId, teamId);
+        teamMemberRepository.save(teamMember);
+    }
 
-		teamInvitationRepository.save(teamInvitation);
+    @Transactional
+    @Override
+    public void inviteMemberToTeam(final int teamId, final int fromUserId, final String invitedUsername, String message) {
 
-		addTeamMember(teamInvitation.getToTeamId(), teamInvitation.getFromUserId(), teamInvitation.getToUserId());
-	}
+        List<User> userList = userRepository.findByUsername(invitedUsername);
 
-	@Transactional
-	@Override
-	public void rejectTeamInvitation(final int teamInvitationId) {
-		TeamInvitation teamInvitation = teamInvitationRepository.findOne(teamInvitationId);
+        if (userList == null || userList.size() == 0) {
+            throw new UsernameNotFoundException(invitedUsername);
+        }
 
-		teamInvitation.setStatus(TeamInvitation.STATUS_REJECTED);
+        int invitedUserId = userList.get(0).getUserId();
 
-		teamInvitationRepository.save(teamInvitation);
-	}
+        List<TeamInvitation> toUserId = teamInvitationRepository.findByToUserId(invitedUserId);
 
-	public boolean isMemberIsInTeam(int teamId, int userId) {
+        if (toUserId.size() > 0) {
+            throw new IllegalArgumentException("User already has an invitation. Id: " + invitedUserId);
+        }
 
-		List<TeamMember> teamMemberByUserId = teamMemberRepository.findTeamMemberByUserId(userId);
 
-		for (TeamMember member : teamMemberByUserId) {
-			if (member.getTeamId() == teamId) {
-				return true;
-			}
-		}
+        TeamInvitation teamInvitation = new TeamInvitation();
+        teamInvitation.setFromUserId(fromUserId);
+        teamInvitation.setToUserId(invitedUserId);
+        teamInvitation.setToTeamId(teamId);
+        teamInvitation.setMessage(message);
+        teamInvitation.setInvitationTime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        teamInvitation.setStatus(TeamInvitation.STATUS_PENDING);
 
-		return false;
-	}
+        teamInvitationRepository.save(teamInvitation);
+
+    }
+
+    @Transactional
+    @Override
+    public void acceptTeamInvitation(final int teamInvitationId) {
+        TeamInvitation teamInvitation = teamInvitationRepository.findOne(teamInvitationId);
+
+        teamInvitation.setStatus(TeamInvitation.STATUS_ACCEPTED);
+
+        teamInvitationRepository.save(teamInvitation);
+
+        addTeamMember(teamInvitation.getToTeamId(), teamInvitation.getFromUserId(), teamInvitation.getToUserId());
+    }
+
+    @Transactional
+    @Override
+    public void rejectTeamInvitation(final int teamInvitationId) {
+        TeamInvitation teamInvitation = teamInvitationRepository.findOne(teamInvitationId);
+
+        teamInvitation.setStatus(TeamInvitation.STATUS_REJECTED);
+
+        teamInvitationRepository.save(teamInvitation);
+    }
+
+    public boolean isMemberIsInTeam(int teamId, int userId) {
+
+        List<TeamMember> teamMemberByUserId = teamMemberRepository.findTeamMemberByUserId(userId);
+
+        for (TeamMember member : teamMemberByUserId) {
+            if (member.getTeamId() == teamId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
