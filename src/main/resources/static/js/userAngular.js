@@ -126,7 +126,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
 
     $scope.intervalFunction = function () {
         $timeout(function () {
-            if ($scope.typemessages === INDIVIDUAL) {
+            if ($scope.typemsgselected === INDIVIDUAL) {
                 $scope.updateMessageVar();
             } else {
                 $scope.updateTeamMessageVar();
