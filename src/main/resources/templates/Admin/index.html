@@ -1,22 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<head>
-    <div th:replace="fragment/dependency" th:remove="tag"></div>
-    <title th:text="'Hi ' + ${user.firstName} + '!'"></title>
-</head>
-<body>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div th:replace="fragment/Admin/header" th:remove="tag"></div>
-        </div>
-    </div>
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" ng-app="messagingAdminApp"
+      ng-controller="adminController">
+<th:block th:replace="fragment/Admin/top">
+
+</th:block>
+
+
+<div class="container">
+    <h2>All Users</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>User ID</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Last Log In Date</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="user in users">
+            <td>{{user.userId}}</td>
+            <td>{{user.firstName}}</td>
+            <td>{{user.lastName}}</td>
+            <td>{{user.username}}</td>
+            <td>{{user.lastLoggedIn}}</td>
+            <td><a href="#" class="btn btn-primary">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
-<th:block th:replace="fragment/dependencyBottom"></th:block>
-<th:block th:replace="fragment/footer" th:remove="tag"></th:block>
 
-</body>
-</html>
+<th:block th:replace="fragment/Admin/bottom">
+
+</th:block>

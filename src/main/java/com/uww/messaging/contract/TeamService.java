@@ -10,12 +10,20 @@ import java.util.List;
  */
 public interface TeamService {
     void save(int creatorUserId, String teamName, String teamDescription);
+
     List<Team> findTeamsByUserId(int userId);
-	List<TeamInvitationResponse> findAllInvitationsToUser(final int userId);
-	List<TeamInvitationResponse> findPendingInvitationsToUser(int userId);
-	void addTeamMember(int teamId, int currentUserId, int invitedUserId);
-	void inviteMemberToTeam(int teamId, int fromUserId, String invitedUsername, String message);
-	void acceptTeamInvitation(int teamInvitationId);
-	void rejectTeamInvitation(int teamInvitationId);
+
+    List<TeamInvitationResponse> findAllInvitationsToUser(final int userId);
+
+    List<TeamInvitationResponse> findPendingInvitationsToUser(int userId);
+
+    void addTeamMember(int teamId, int currentUserId, int invitedUserId);
+
+    void inviteMemberToTeam(int teamId, int fromUserId, String invitedUsername, String message);
+
+    void acceptTeamInvitation(int teamInvitationId);
+
+    void rejectTeamInvitation(int teamInvitationId);
+
 
 }
