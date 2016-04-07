@@ -13,6 +13,24 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
     $scope.autocompleteData = null;
     $scope.currentTeam = null;
 
+
+    $scope.options = [
+        {id: 0, label: "Indvidual"},
+        {id: 1, label: "Team"}
+    ];
+
+    $scope.teamSelects = null;
+
+    $scope.updateTeamSelect = function () {
+        var url = '/user/team';
+        $http.get(url)
+            .then(function (response) {
+                $scope.teamSelects = response.data;
+                if ($scope.teamSelect.length > 0)
+                    $scope.teamSelect = $scope.teamSelects[0];
+            });
+    };
+
     var INDIVIDUAL = 'Individual';
     var TEAM = 'Team';
 
@@ -142,8 +160,10 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
         $timeout(function () {
             if ($scope.typemsgselected === INDIVIDUAL) {
                 $scope.updateMessageVar();
-            } else {
+            } else if ($scope.typemsgselected === TEAM) {
                 $scope.updateTeamMessageVar();
+            } else {
+                return;
             }
             $scope.intervalFunction();
         }, 1000)
@@ -153,6 +173,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
     $scope.intervalFunction();
 
 });
+
 
 /**
  * Should eventually migrate over to angular but this was just an easier solution in this case.
