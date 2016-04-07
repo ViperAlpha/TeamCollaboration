@@ -10,7 +10,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
     $scope.currentInvite = null;
     $scope.invitedUsername = null;
     $scope.showFileUpload = false;
-
+    $scope.autocompleteData = null;
     $scope.currentTeam = null;
 
     var INDIVIDUAL = 'Individual';
@@ -117,11 +117,25 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
         return currentName.startsWith(messageFirstName);
     };
 
-    $scope.updateTeamMessageVar = function(){
-        if($scope.currentTeam === null)
+    $scope.updateTeamMessageVar = function () {
+        if ($scope.currentTeam === null)
             return;
 
         $scope.getTeamMessages($scope.currentTeam);
+    };
+
+    $scope.autocompleteSearchBar = function (text) {
+        var data = $.param({
+            q: $scope.text
+        });
+
+        $http.get('/user/search', data, config)
+            .success(function (data, status, headers, config) {
+                $scope.autocompleteData = data;
+            })
+            .error(function (data, status, header, config) {
+                alert('error');
+            });
     };
 
     $scope.intervalFunction = function () {
@@ -172,6 +186,7 @@ $(document).ready(function () {
             }
         };
     }
+
 
     $(inputId).autocomplete(autocompleteWithInput(inputId));
     $(inputIndvidual).autocomplete(autocompleteWithInput(inputIndvidual));
