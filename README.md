@@ -49,6 +49,13 @@ username: thao@uww.edu
 password: thao@uww.edu
 ```
 
+These are Test Users available in the default `sql/create-database/TeamCollaboration.sql` file:
+
+```
+username: admin@gmail.com
+password: admin@gmail.com
+
+```
 You will have to change `resources/application.properties` file's `messaging.user.download.directory` constant to
 an already created directory on your box if you want messages to be sent with `links/attachments`
 
