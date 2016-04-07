@@ -117,8 +117,8 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
         return currentName.startsWith(messageFirstName);
     };
 
-    $scope.updateTeamMessageVar = function(){
-        if($scope.currentTeam === null)
+    $scope.updateTeamMessageVar = function () {
+        if ($scope.currentTeam === null)
             return;
 
         $scope.getTeamMessages($scope.currentTeam);
@@ -290,6 +290,15 @@ $(document).ready(function () {
             }
         });
 
+    });
+
+    // Code for the search panel with dropdown on the left
+    $('.search-panel .search-dropdown-menu').find('a').click(function (e) {
+        e.preventDefault();
+        var param = $(this).attr("href").replace("#", "");
+        var concept = $(this).text();
+        $('.search-panel span#search_concept').text(concept);
+        $('.input-group #search_param').val(param);
     });
 
 
