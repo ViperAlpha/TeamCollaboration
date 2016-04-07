@@ -3,6 +3,8 @@ package com.uww.messaging.service;
 import com.google.common.base.Preconditions;
 import com.uww.messaging.contract.TeamService;
 import com.uww.messaging.display.TeamInvitationResponse;
+import com.uww.messaging.display.TeamMessageDisplay;
+import com.uww.messaging.display.UserDisplay;
 import com.uww.messaging.model.Team;
 import com.uww.messaging.model.TeamInvitation;
 import com.uww.messaging.model.TeamMember;
@@ -27,20 +29,24 @@ import java.util.*;
  */
 @Service
 public class TeamServiceImpl implements TeamService {
-    @Autowired
     private TeamRepository teamRepository;
 
-    @Autowired
     private TeamMemberRepository teamMemberRepository;
 
-    @Autowired
     private TeamMessageChatRepository teamMessageChatRepository;
 
-    @Autowired
     private TeamInvitationRepository teamInvitationRepository;
 
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    public TeamServiceImpl(TeamRepository teamRepository, TeamMemberRepository teamMemberRepository, TeamMessageChatRepository teamMessageChatRepository, TeamInvitationRepository teamInvitationRepository, UserRepository userRepository) {
+        this.teamRepository = teamRepository;
+        this.teamMemberRepository = teamMemberRepository;
+        this.teamMessageChatRepository = teamMessageChatRepository;
+        this.teamInvitationRepository = teamInvitationRepository;
+        this.userRepository = userRepository;
+    }
 
     @Transactional
     @Override
@@ -228,4 +234,25 @@ public class TeamServiceImpl implements TeamService {
 
         return false;
     }
+
+    public Set<UserDisplay> findUsersLackingInvitationFromTeamOwner(int loggedInUserId, String username) {
+        List<Team> teams = findTeamsByUserId(loggedInUserId);
+        if (teams == null)
+            return new ArrayList<>();
+        Set<UserDisplay> userDisplays = new HashSet<>();
+        teams.forEach(currentTeam -> {
+            List<User> byUsernameStartingWith = userRepository.findByUsernameStartingWith(username);
+            for (User in : byUsernameStartingWith) {
+                boolean partOfTeam = isMemberIsInTeam(currentTeam.getTeamId(), in.getUserId());
+                if (partOfTeam) {
+                    userDisplays.add(new UserDisplay(
+                            in.getUserId(),
+                            in.getUsername()
+                    ));
+                }
+            }
+        });
+        return userDisplays;
+    }
+
 }

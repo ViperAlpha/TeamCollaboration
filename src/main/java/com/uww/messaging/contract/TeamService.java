@@ -1,9 +1,11 @@
 package com.uww.messaging.contract;
 
 import com.uww.messaging.display.TeamInvitationResponse;
+import com.uww.messaging.display.UserDisplay;
 import com.uww.messaging.model.Team;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by horvste on 2/19/16.
@@ -25,5 +27,6 @@ public interface TeamService {
 
     void rejectTeamInvitation(int teamInvitationId);
 
+    Set<UserDisplay> findUsersLackingInvitationFromTeamOwner(int loggedInUserId, String username);
 
 }

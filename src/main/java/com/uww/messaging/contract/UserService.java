@@ -8,6 +8,7 @@ import com.uww.messaging.model.UserRole;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by horvste on 1/18/16.
@@ -28,7 +29,7 @@ public interface UserService {
 
     User userByAuthentication(Authentication auth);
 
-    List<UserDisplay> findUsersLackingInvitationsStartingWith(int loggedInUserId, String username);
+    Set<UserDisplay> findUsersLackingInvitationsStartingWith(int loggedInUserId, String username);
 
     void sendInvitation(int loggedInUserId, UserInvitationForm userInvitationForm);
 

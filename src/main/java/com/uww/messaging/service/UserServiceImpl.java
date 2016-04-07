@@ -19,7 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by horvste on 1/18/16.
@@ -117,9 +119,9 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<UserDisplay> findUsersLackingInvitationsStartingWith(int loggedInUserId, String username) {
+    public Set<UserDisplay> findUsersLackingInvitationsStartingWith(int loggedInUserId, String username) {
         List<User> users = userRepository.findByUsernameStartingWith(username);
-        List<UserDisplay> userDisplays = new ArrayList<>();
+        Set<UserDisplay> userDisplays = new HashSet<>();
         users.forEach(u -> {
             int userStartingWithUserId = u.getUserId();
 

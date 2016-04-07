@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by horvste on 4/6/16.
@@ -30,18 +31,20 @@ public class UserSearchController {
     }
 
     /**
-     * For the autocomplete feature.
-     *
-     * @param authentication
-     * @param query
-     * @return
+     * For the autocomplete feature. Returns a list of users that don't belong
+     * to a team that you are owner of or is not part of your individual message
+     * circle.
      */
     @RequestMapping(value = "/search")
     @ResponseBody
     public String search(Authentication authentication, @RequestParam("q") String query) {
         User loggedInUser = userService.userByAuthentication(authentication);
-        List<UserDisplay> userNamesLackingInvites =
-                userService.findUsersLackingInvitationsStartingWith(loggedInUser.getUserId(), query);
+        Set<UserDisplay> userNamesLackingInvites = userService.findUsersLackingInvitationsStartingWith(loggedInUser.getUserId(), query);
+        Set<UserDisplay> userNamesLackingTeamInvites = teamService.findUsersLackingInvitationFromTeamOwner(
+                loggedInUser.getUserId(),
+                query
+        );
+        userNamesLackingInvites.addAll(userNamesLackingTeamInvites);
         return new Gson().toJson(userNamesLackingInvites);
     }
 }
