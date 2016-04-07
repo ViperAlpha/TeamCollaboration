@@ -105,6 +105,16 @@ public class UserServiceImpl implements UserService {
         return usernames;
     }
 
+    @Override
+    public void delete(int userId) {
+        userRepository.delete(userId);
+    }
+
+    @Override
+    public boolean exists(int userId) {
+        return userRepository.findOne(userId) != null;
+    }
+
 
     @Override
     public List<UserDisplay> findUsersLackingInvitationsStartingWith(int loggedInUserId, String username) {

@@ -28,7 +28,7 @@
             <td>{{user.lastName}}</td>
             <td>{{user.username}}</td>
             <td>{{user.lastLoggedIn}}</td>
-            <td><a href="#" class="btn btn-primary">Delete</a></td>
+            <td ng-click="deleteUser(user)"><a href="#" class="btn btn-primary">Delete</a></td>
         </tr>
         </tbody>
     </table>

@@ -40,4 +40,7 @@ public interface UserService {
 
     List<String> findUsersStartingWith(String username);
 
+    void delete(int userId);
+
+    boolean exists(int userId);
 }
