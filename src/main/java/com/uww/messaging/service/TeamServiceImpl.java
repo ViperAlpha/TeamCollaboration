@@ -238,7 +238,7 @@ public class TeamServiceImpl implements TeamService {
     public Set<UserDisplay> findUsersLackingInvitationFromTeamOwner(int loggedInUserId, String username) {
         List<Team> teams = findTeamsByUserId(loggedInUserId);
         if (teams == null)
-            return new ArrayList<>();
+            return new HashSet<>();
         Set<UserDisplay> userDisplays = new HashSet<>();
         teams.forEach(currentTeam -> {
             List<User> byUsernameStartingWith = userRepository.findByUsernameStartingWith(username);
