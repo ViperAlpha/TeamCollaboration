@@ -13,4 +13,5 @@ import java.util.List;
 @Repository
 public interface TeamRepository extends CrudRepository<Team, Integer> {
     List<Team> findByTeamIdIn(Collection<Integer> teamIds);
+    List<Team> findByTeamNameStartingWith(String teamName);
 }

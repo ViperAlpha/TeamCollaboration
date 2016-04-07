@@ -1,4 +1,4 @@
-package com.uww.messaging.controller;
+package com.uww.messaging.controller.admin;
 
 import com.uww.messaging.contract.UserService;
 import com.uww.messaging.factory.UserRoleFactory;

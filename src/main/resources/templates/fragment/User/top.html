@@ -77,12 +77,10 @@
                             <a ng-click="setCurrentTeamInvite(invite)" data-toggle="modal"
                                data-target="#teamInviteAcceptationModal">
                                 {{invite.fromUserName}} wants you to join team {{invite.teamName}}</a>
-                            <a ng-click="setCurrentTeamInvite(invite)" data-toggle="modal"
-                               data-target="#teamInvitationModal">{{invite.toUserName}}
-                                wants you to join team {{invite.teamName}}</a>
                         </li>
+
                         <li ng-if="teaminvitations.length === 0">
-                            <a data-toggle="modal">No invitations</a>
+                            <a data-toggle="modal">No invitations.</a>
                         </li>
                     </ul>
                 </li>

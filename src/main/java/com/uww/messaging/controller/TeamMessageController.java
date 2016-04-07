@@ -23,7 +23,7 @@ import java.util.List;
  * @author reinaldo
  */
 @Controller
-@RequestMapping(value = "/team/message")
+@RequestMapping(value = "user/team/message")
 public class TeamMessageController {
 
 	@Autowired
@@ -44,7 +44,6 @@ public class TeamMessageController {
 	@RequestMapping(value = "/list/new/message",method = RequestMethod.GET)
 	@ResponseBody
 	public String listNewTeamMessages(Authentication authentication, @RequestParam("teamId") int teamId){
-		//TODO:
 		User user = userService.userByAuthentication(authentication);
 		List<TeamMessage> newMessages = messageService.findNewMessagesFromTeam(user,teamId);
 

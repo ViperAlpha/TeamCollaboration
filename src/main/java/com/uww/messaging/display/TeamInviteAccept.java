@@ -6,4 +6,13 @@ package com.uww.messaging.display;
  * @author reinaldo
  */
 public class TeamInviteAccept {
+	private int teamInvitationId;
+
+	public int getTeamInvitationId() {
+		return teamInvitationId;
+	}
+
+	public void setTeamInvitationId(final int teamInvitationId) {
+		this.teamInvitationId = teamInvitationId;
+	}
 }

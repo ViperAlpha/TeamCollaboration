@@ -15,43 +15,40 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
---
--- Database: `TeamCollaboration`
---
-
--- --------------------------------------------------------
-
 --
 -- Table structure for table `Team`
 --
 
 DROP TABLE IF EXISTS `Team`;
-CREATE TABLE IF NOT EXISTS `Team` (
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Team` (
   `teamId` int(11) NOT NULL AUTO_INCREMENT,
   `teamName` varchar(20) NOT NULL,
   `teamDescription` varchar(100) DEFAULT NULL,
   `createdTime` datetime DEFAULT NULL,
   PRIMARY KEY (`teamId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `Team`
 --
 
-INSERT INTO `Team` (`teamId`, `teamName`, `teamDescription`, `createdTime`) VALUES
-(1, 'Team', 'Best team.', '2016-03-16 00:00:00');
-
--- --------------------------------------------------------
+LOCK TABLES `Team` WRITE;
+/*!40000 ALTER TABLE `Team` DISABLE KEYS */;
+INSERT INTO `Team` VALUES (1,'Team','Best team.','2016-03-16 00:00:00');
+/*!40000 ALTER TABLE `Team` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `TeamInvitation`
 --
 
 DROP TABLE IF EXISTS `TeamInvitation`;
-CREATE TABLE IF NOT EXISTS `TeamInvitation` (
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TeamInvitation` (
   `teamInvitationId` int(11) NOT NULL AUTO_INCREMENT,
   `fromUserId` int(11) NOT NULL,
   `toUserId` int(11) NOT NULL,
@@ -60,37 +57,58 @@ CREATE TABLE IF NOT EXISTS `TeamInvitation` (
   `message` varchar(100) DEFAULT NULL,
   `status` varchar(20) NOT NULL,
   PRIMARY KEY (`teamInvitationId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `TeamInvitation`
+--
+
+LOCK TABLES `TeamInvitation` WRITE;
+/*!40000 ALTER TABLE `TeamInvitation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `TeamInvitation` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `TeamMember`
 --
 
 DROP TABLE IF EXISTS `TeamMember`;
-CREATE TABLE IF NOT EXISTS `TeamMember` (
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TeamMember` (
   `teamMemberId` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL,
   `teamId` int(11) NOT NULL,
   PRIMARY KEY (`teamMemberId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `TeamMember`
+--
+
+LOCK TABLES `TeamMember` WRITE;
+/*!40000 ALTER TABLE `TeamMember` DISABLE KEYS */;
+/*!40000 ALTER TABLE `TeamMember` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `TeamMessage`
 --
 
 DROP TABLE IF EXISTS `TeamMessage`;
-CREATE TABLE IF NOT EXISTS `TeamMessage` (
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TeamMessage` (
   `teamMessageId` int(11) NOT NULL AUTO_INCREMENT,
   `fromUserId` int(11) DEFAULT NULL,
   `toTeamId` int(11) DEFAULT NULL,
   `message` varchar(500) DEFAULT NULL,
   `messageTime` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`teamMessageId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `TeamMessage`
@@ -106,12 +124,24 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `TeamMessageChat`;
-CREATE TABLE IF NOT EXISTS `TeamMessageChat` (
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TeamMessageChat` (
   `teamMessageChatId` int(11) NOT NULL AUTO_INCREMENT,
   `teamId` int(11) NOT NULL,
   `chatTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`teamMessageChatId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `TeamMessageChat`
+--
+
+LOCK TABLES `TeamMessageChat` WRITE;
+/*!40000 ALTER TABLE `TeamMessageChat` DISABLE KEYS */;
+/*!40000 ALTER TABLE `TeamMessageChat` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `User`
@@ -129,7 +159,7 @@ CREATE TABLE `User` (
   `phoneNumber` varchar(40) DEFAULT NULL,
   `lastLoggedIn` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -138,7 +168,7 @@ CREATE TABLE `User` (
 
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
-INSERT INTO `User` VALUES (12,'joe@gmail.com','$2a$10$JSRcaYBXM2MP5gOaNBJtAezsDtblv43feGcyDfwy3AjVbQh4CXtrK','Joe','Repo','(920)-728-7269',NULL),(13,'dan@gmail.com','$2a$10$1IxJK.XiPn6W7oYd/2KAvu4TiZ6Rv9AIKCGI7xlk9WKMAy8UVMiRq','Dan','Jock','(920)-728-4269',NULL),(14,'thao@uww.edu','$2a$10$XUbVaTerJI/ubhXkNYNAIu8.wfanXJRKKLJ/H1PZW9EZOAAdqUXZ.','cheng','thao','(920)-728-4269',NULL );
+INSERT INTO `User` VALUES (12,'joe@gmail.com','$2a$10$JSRcaYBXM2MP5gOaNBJtAezsDtblv43feGcyDfwy3AjVbQh4CXtrK','Joe','Repo','(920)-728-7269',NULL),(13,'dan@gmail.com','$2a$10$1IxJK.XiPn6W7oYd/2KAvu4TiZ6Rv9AIKCGI7xlk9WKMAy8UVMiRq','Dan','Jock','(920)-728-4269',NULL),(14,'thao@uww.edu','$2a$10$XUbVaTerJI/ubhXkNYNAIu8.wfanXJRKKLJ/H1PZW9EZOAAdqUXZ.','cheng','thao','(920)-728-4269',NULL),(15,'admin@gmail.com','$2a$10$kNx0HjX0iW1C751.TfH3kOjr086z2tOcUHeXxC.1GKm9T5cNtS/Na','FirstAdmin','LastAdmin','(920)-728-4269',NULL);
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,7 +265,7 @@ CREATE TABLE `UserRole` (
   `userId` int(10) unsigned NOT NULL,
   `authority` varchar(45) NOT NULL,
   PRIMARY KEY (`userRoleId`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -244,7 +274,7 @@ CREATE TABLE `UserRole` (
 
 LOCK TABLES `UserRole` WRITE;
 /*!40000 ALTER TABLE `UserRole` DISABLE KEYS */;
-INSERT INTO `UserRole` VALUES (11,12,'ROLE_USER'),(12,13,'ROLE_USER'),(13,14,'ROLE_USER');
+INSERT INTO `UserRole` VALUES (11,12,'ROLE_USER'),(12,13,'ROLE_USER'),(13,14,'ROLE_USER'),(14,15,'ROLE_ADMIN');
 /*!40000 ALTER TABLE `UserRole` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -283,4 +313,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-19 20:36:46
+-- Dump completed on 2016-04-06 19:33:03

@@ -25,7 +25,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
         $scope.typemsgselected = t.name;
     };
 
-    $http.get('/team/invitation/mine')
+    $http.get('/user/team/invitation/mine')
         .then(function (response) {
             $scope.teaminvitations = response.data;
         });
@@ -35,7 +35,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
             $scope.users = response.data;
         });
 
-    $http.get("/team/list")
+    $http.get("/user/team/list")
         .then(function (response) {
             $scope.teams = response.data;
         });
@@ -58,7 +58,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
 
     $scope.getTeamMessages = function (team) {
         $scope.currentTeam = team;
-        var url = "/team/message/list/all/message?teamId=" + team.teamId;
+        var url = "/user/team/message/list/all/message?teamId=" + team.teamId;
 
         $http.get(url)
             .then(function (response) {
@@ -68,7 +68,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
 
     $scope.getNewTeamMessages = function (team) {
         $scope.currentTeam = team;
-        var url = "/team/message/list/all/message?teamId=" + team.teamId;
+        var url = "/user/team/message/list/all/message?teamId=" + team.teamId;
 
         $http.get(url)
             .then(function (response) {
@@ -126,7 +126,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
 
     $scope.intervalFunction = function () {
         $timeout(function () {
-            if ($scope.typemessages === INDIVIDUAL) {
+            if ($scope.typemsgselected === INDIVIDUAL) {
                 $scope.updateMessageVar();
             } else {
                 $scope.updateTeamMessageVar();
@@ -243,8 +243,6 @@ $(document).ready(function () {
 
         queryAsJson = JSON.stringify(queryAsJson);
 
-        alert(queryAsJson);
-
         $.ajax({
             type: 'POST',
             url: '/user/team/invite/send',
@@ -261,9 +259,6 @@ $(document).ready(function () {
 
     });
 
-
-    //TODO:
-
     $("#acceptTeamInvite").click(function (e) {
         var teamInvitationId = $("#teamInvitationId").val();
 
@@ -273,11 +268,8 @@ $(document).ready(function () {
 
         data = JSON.stringify(data);
 
-
-        alert(data);
-
         $.ajax({
-            type: 'PUT',
+            type: 'POST',
             url: '/user/team/invite/accept',
             data: data,
             dataType: 'json',
@@ -300,6 +292,41 @@ $(document).ready(function () {
         $('.search-panel span#search_concept').text(concept);
         $('.input-group #search_param').val(param);
     });
+
+
+    //send individual message
+    //$('#sendind').click(function (e){
+    //
+    //    e.preventDefault();
+    //
+    //    var toUserId = $('#itoUserId').val();
+    //    var message = $('#imessage').val();
+    //
+    //    var data = {
+    //        toUserId : toUserId,
+    //        message : message
+    //    }
+    //
+    //    data = JSON.stringify(data);
+    //    alert('sending msg');
+    //    console.log(data);
+    //
+    //    $.ajax({
+    //        type: 'POST',
+    //        url: '/user/message/individual-message/insert',
+    //        data: data,
+    //        dataType: 'json',
+    //        contentType: 'application/json; charset=utf-8',
+    //        error: function (xhr, textStatus, errorThrown) {
+    //            alert('Error while sending the message.');
+    //            console.log(textStatus + ' ... '  + errorThrown);
+    //        },
+    //        success: function (data) {
+    //            console.log(data);
+    //        }
+    //    });
+    //
+    //});
 
 
 });

@@ -8,12 +8,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-offset-2">
-            <p>Create Account</p>
+            <h1>Create Account</h1>
         </div>
     </div>
     <div class="row">
         <div class="col-md-8 col-md-offset-4 text-center">
-            <form action="#" th:action="@{/register/registerUser}" class="form-horizontal" th:object="${userRegistration}"
+            <form action="#" th:action="@{/register/registerUser}" class="form-horizontal"
+                  th:object="${userRegistration}"
                   role="form" method="post">
 
                 <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
@@ -31,7 +32,8 @@
                     <label class="control-label col-sm-2" for="lastName">Last</label>
 
                     <div class="col-sm-5">
-                        <input type="text" th:field="*{lastName}" class="form-control input-sm" id="lastName" name="lastName"
+                        <input type="text" th:field="*{lastName}" class="form-control input-sm" id="lastName"
+                               name="lastName"
                                placeholder="Enter Last Name">
                     </div>
                 </div>
@@ -79,7 +81,7 @@
 
                     <div class="col-sm-5">
                         <input type="text" class="form-control input-sm" id="phoneNumber"
-                               th:field="*{phoneNumber}"  name="phoneNumber" placeholder="Enter Phone Number">
+                               th:field="*{phoneNumber}" name="phoneNumber" placeholder="Enter Phone Number">
                     </div>
                 </div>
 

@@ -15,11 +15,12 @@ public class TeamMessageDisplay {
 	private String fromFirstName;
 	private String message;
 	private Timestamp messageTime;
+	private String fileName;
 	private String prettyTime;
 
 	public TeamMessageDisplay(){}
 
-	public TeamMessageDisplay(final int teamMessageId, final Integer fromUserId, final String fromUserName, final String fromFirstName, final String message, final Timestamp messageTime) {
+	public TeamMessageDisplay(final int teamMessageId, final Integer fromUserId, final String fromUserName, final String fromFirstName, final String message, final Timestamp messageTime, final String fileName) {
 		this.teamMessageId = teamMessageId;
 		this.fromUserId = fromUserId;
 		this.fromUserName = fromUserName;
@@ -27,6 +28,7 @@ public class TeamMessageDisplay {
 		this.message = message;
 		this.messageTime = messageTime;
 		this.prettyTime = new SimpleDateFormat("hh:mm a").format(messageTime);
+		this.fileName = fileName;
 	}
 
 	public int getTeamMessageId() {

@@ -28,10 +28,11 @@ public class UserInvitationController {
     @ResponseBody
     public String autocompleteUserList(Authentication authentication, @RequestParam("usernameToAuto") String usernameToAuto) {
         User loggedInUser = userService.userByAuthentication(authentication);
-        List<String> usernamesLackingInvitations = userService.findUsersLackingInvitationsStartingWith(loggedInUser.getUserId(),
-                usernameToAuto);
-        return new Gson().toJson
-                (usernamesLackingInvitations);
+        List<String> usernamesLackingInvitations = new ArrayList<>();
+        // using this to not break compatibility
+        userService.findUsersLackingInvitationsStartingWith(loggedInUser.getUserId(),
+                usernameToAuto).forEach(x -> usernamesLackingInvitations.add(x.getUsername()));
+        return new Gson().toJson(usernamesLackingInvitations);
     }
 
     @RequestMapping(value = "/mine", method = RequestMethod.GET)
