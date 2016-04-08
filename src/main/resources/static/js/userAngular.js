@@ -18,6 +18,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
 
     var INDIVIDUAL = 'Individual';
     var TEAM = 'Team';
+    var SEARCH_BAR_MODAL_ID = "#searchModal";
 
     $scope.options = [
         {id: 0, label: INDIVIDUAL},
@@ -49,15 +50,17 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
             url: "/user/invitation/searchBarInvite",
             data: {
                 teamOrIndv: $scope.option.label,
-                teamName: $scope.teamSelect,
+                teamName: $("#teamSelectedId option:selected").text(),
                 message: $scope.modalMessageInvite,
                 name: $scope.searchBarAtTopUsername
             }
         })
             .success(function (data, status, headers, config) {
+                $(SEARCH_BAR_MODAL_ID).modal('hide');
                 alert('sent invite');
             })
             .error(function (data, status, header, config) {
+                $(SEARCH_BAR_MODAL_ID).modal('hide');
                 alert('error');
             });
     };
@@ -67,7 +70,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
 
         $http.get('/user/valid?username=' + $scope.searchBarAtTopUsername)
             .success(function (data, status, headers, config) {
-                $("#searchModal").modal('show');
+                $(SEARCH_BAR_MODAL_ID).modal('show');
             })
             .error(function (data, status, header, config) {
                 alert('This username was not found.');

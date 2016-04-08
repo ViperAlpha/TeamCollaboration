@@ -55,11 +55,12 @@
                                 ng-if="option.label == 'Team' && teamSelects != null"
                                 ng-init="teamSelect = teamSelects[0]"
                                 ng-model="teamSelect"
-                                ng-options="teamSelect as teamSelect.teamName for teamSelect in teamSelects">
+                                ng-options="teamSelect as teamSelect.teamName for teamSelect in teamSelects"
+                                id="teamSelectedId">
                         </select>
 
                         <label class="control-label">Enter Invite Message:</label>
-                        <input ng-model="modalMessageInvite" type="text" class="form-control" id="modalMessageInvite" name="modalMessageInvite">
+                        <input ng-model="modalMessageInvite" type="text" class="form-control" id="modelMessge" name="modelMessge">
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-default" ng-click="sendSearchInvite()">Invite</button>
