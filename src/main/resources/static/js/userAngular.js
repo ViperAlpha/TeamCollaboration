@@ -12,17 +12,28 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
     $scope.showFileUpload = false;
     $scope.autocompleteData = null;
     $scope.currentTeam = null;
+    $scope.modalMessageInvite = null;
+    $scope.option = null;
 
+
+    var INDIVIDUAL = 'Individual';
+    var TEAM = 'Team';
 
     $scope.options = [
-        {id: 0, label: "Indvidual"},
-        {id: 1, label: "Team"}
+        {id: 0, label: INDIVIDUAL},
+        {id: 1, label: TEAM}
     ];
 
+    $scope.teamSelect = null;
     $scope.teamSelects = null;
 
-    $scope.updateTeamSelect = function () {
+    $scope.updateTeamSelect = function (option) {
         var url = '/user/team';
+        if (option.label !== TEAM) {
+            $scope.teamSelect = null;
+            $scope.teamSelects = null;
+            return;
+        }
         $http.get(url)
             .then(function (response) {
                 $scope.teamSelects = response.data;
@@ -31,8 +42,37 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
             });
     };
 
-    var INDIVIDUAL = 'Individual';
-    var TEAM = 'Team';
+    $scope.sendSearchInvite = function () {
+
+        $http({
+            method: "PUT",
+            url: "/user/invitation/searchBarInvite",
+            data: {
+                teamOrIndv: $scope.option.label,
+                teamName: $scope.teamSelect,
+                message: $scope.modalMessageInvite,
+                name: $scope.searchBarAtTopUsername
+            }
+        })
+            .success(function (data, status, headers, config) {
+                alert('sent invite');
+            })
+            .error(function (data, status, header, config) {
+                alert('error');
+            });
+    };
+
+    $scope.openInviteModal = function () {
+        $scope.searchBarAtTopUsername = $("#search-bar-at-top").val();
+
+        $http.get('/user/valid?username=' + $scope.searchBarAtTopUsername)
+            .success(function (data, status, headers, config) {
+                $("#searchModal").modal('show');
+            })
+            .error(function (data, status, header, config) {
+                alert('This username was not found.');
+            });
+    };
 
     $scope.typemessages = [
         {id: 1, name: INDIVIDUAL}, {id: 2, name: TEAM}
@@ -182,6 +222,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
 $(document).ready(function () {
     var inputId = "#input-userName";
     var inputIndvidual = "#input-individual";
+    var inputSearchBar = "#search-bar-at-top";
 
     function autocompleteWithInput(inputId) {
         return {
@@ -209,9 +250,35 @@ $(document).ready(function () {
     }
 
 
+    function autocompleteTopSearchBar(inputId) {
+        return {
+            source: function (request, response) {
+                $.ajax({
+                    type: "GET",
+                    url: "/user/search",
+                    data: {
+                        q: $(inputId).val()
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        alert('Error: ' + xhr.responseText);
+                    },
+                    success: function (data) {
+                        data = JSON.parse(data);
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.username
+                            }
+                        }));
+                    }
+                });
+            }
+        };
+    }
+
+
     $(inputId).autocomplete(autocompleteWithInput(inputId));
     $(inputIndvidual).autocomplete(autocompleteWithInput(inputIndvidual));
-
+    $(inputSearchBar).autocomplete(autocompleteTopSearchBar(inputSearchBar));
 
     $("#sendIndvidualInvite").click(function (e) {
         var usernameChosen = $("#input-individual").val();
@@ -321,9 +388,9 @@ $(document).ready(function () {
     });
 
     // Code for the search panel with dropdown on the left
-    $('.search-panel #search-dropdown-menu').find('a').click(function(e) {
+    $('.search-panel #search-dropdown-menu').find('a').click(function (e) {
         e.preventDefault();
-        var param = $(this).attr("href").replace("#","");
+        var param = $(this).attr("href").replace("#", "");
         var concept = $(this).text();
         $('.search-panel span#search_concept').text(concept);
         $('.input-group #search_param').val(param);

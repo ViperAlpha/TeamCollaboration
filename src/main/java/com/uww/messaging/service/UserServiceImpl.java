@@ -117,6 +117,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findOne(userId) != null;
     }
 
+    @Override
+    public boolean exists(String username) {
+        return userRepository.findByUsername(username).size() != 0;
+    }
+
 
     @Override
     public Set<UserDisplay> findUsersLackingInvitationsStartingWith(int loggedInUserId, String username) {

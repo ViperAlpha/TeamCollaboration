@@ -44,4 +44,5 @@ public interface UserService {
     void delete(int userId);
 
     boolean exists(int userId);
+    boolean exists(String username);
 }

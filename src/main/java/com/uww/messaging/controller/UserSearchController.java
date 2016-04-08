@@ -46,4 +46,5 @@ public class UserSearchController {
         userNamesLackingInvites.addAll(userNamesLackingTeamInvites);
         return new Gson().toJson(userNamesLackingInvites);
     }
+
 }

@@ -5,13 +5,16 @@ import com.uww.messaging.contract.UserService;
 import com.uww.messaging.model.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Map;
 
 /**
  * Created by horvste on 1/19/16.
@@ -29,12 +32,20 @@ public class UserController {
     public String index(Authentication authentication, Model model) {
         User currentUser = userService.userByAuthentication(authentication);
 
-	    currentUser.setLastLoggedIn(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        currentUser.setLastLoggedIn(new Timestamp(Calendar.getInstance().getTimeInMillis()));
 
-	    userService.save(currentUser);
+        userService.save(currentUser);
 
         model.addAttribute("user", currentUser);
         model.addAttribute("teams", teamService.findTeamsByUserId(currentUser.getUserId()));
         return "User/index";
+    }
+
+    @RequestMapping(value = "/valid", method = RequestMethod.GET)
+    public ResponseEntity valid(@RequestParam("username") String username) {
+        if (userService.exists(username)) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 }

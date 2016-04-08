@@ -13,6 +13,8 @@ import java.util.Set;
 public interface TeamService {
     void save(int creatorUserId, String teamName, String teamDescription);
 
+    Team findTeamByTeamName(String teamName);
+
     List<Team> findTeamsByUserId(int userId);
 
     List<TeamInvitationResponse> findAllInvitationsToUser(final int userId);

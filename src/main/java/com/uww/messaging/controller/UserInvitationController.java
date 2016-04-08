@@ -1,12 +1,18 @@
 package com.uww.messaging.controller;
 
 import com.google.gson.Gson;
+import com.uww.messaging.contract.MessageService;
+import com.uww.messaging.contract.TeamService;
 import com.uww.messaging.contract.UserService;
+import com.uww.messaging.display.Invitation;
 import com.uww.messaging.display.Response;
 import com.uww.messaging.display.UserInvitationForm;
 import com.uww.messaging.display.UserInviteAccept;
+import com.uww.messaging.model.Team;
 import com.uww.messaging.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +26,16 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/user/invitation")
 public class UserInvitationController {
-    @Autowired
     private UserService userService;
+    private TeamService teamService;
+    private MessageService messageService;
+
+    @Autowired
+    public UserInvitationController(UserService userService, TeamService teamService, MessageService messageService) {
+        this.userService = userService;
+        this.teamService = teamService;
+        this.messageService = messageService;
+    }
 
 
     @RequestMapping(value = "/autocomplete-user/list", method = RequestMethod.GET)
@@ -78,5 +92,21 @@ public class UserInvitationController {
         int userId = userService.userByAuthentication(authentication).getUserId();
         List<User> acceptedInvitationUsers = userService.findAcceptedInvitationUsers(userId);
         return new Gson().toJson(acceptedInvitationUsers);
+    }
+
+    @RequestMapping(value = "/searchBarInvite", method = RequestMethod.PUT)
+    @ResponseBody
+    public ResponseEntity sendInvitation(Authentication authentication, @RequestBody Invitation invitation) {
+        int loggedInUser = userService.userByAuthentication(authentication)
+                .getUserId();
+        if (invitation.isIndvidualInvite()) {
+            userService.sendInvitation(loggedInUser, new UserInvitationForm(invitation.getName(), invitation.getMessage()));
+            return new ResponseEntity(HttpStatus.OK);
+        } else if (invitation.isTeamInvite()) {
+            Team team = teamService.findTeamByTeamName(invitation.getTeamName());
+            teamService.inviteMemberToTeam(team.getTeamId(), loggedInUser, invitation.getName(), invitation.getMessage());
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 }

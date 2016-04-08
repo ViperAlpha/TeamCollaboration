@@ -70,6 +70,12 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    public Team findTeamByTeamName(String teamName) {
+        List<Team> byTeamName = teamRepository.findByTeamName(teamName);
+        return byTeamName.size() == 0 ? null : byTeamName.get(0);
+    }
+
+    @Override
     public List<Team> findTeamsByUserId(int userId) {
         List<TeamMember> teamMemberByUserId = teamMemberRepository.findTeamMemberByUserId(userId);
         List<Integer> teamIds = new ArrayList<>();
@@ -244,7 +250,7 @@ public class TeamServiceImpl implements TeamService {
             List<User> byUsernameStartingWith = userRepository.findByUsernameStartingWith(username);
             for (User in : byUsernameStartingWith) {
                 boolean partOfTeam = isMemberIsInTeam(currentTeam.getTeamId(), in.getUserId());
-                if (partOfTeam) {
+                if (!partOfTeam) {
                     userDisplays.add(new UserDisplay(
                             in.getUserId(),
                             in.getUsername()
