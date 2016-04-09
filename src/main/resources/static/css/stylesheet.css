@@ -122,7 +122,7 @@ body {
     bottom: 0;
     min-height: 50%;
     max-height: calc(100% - 50px);
-    max-width: 200px;
+    max-width: 300px;
     overflow: auto;
     padding: 20px;
     background-color: #f5f5f5;
@@ -202,6 +202,10 @@ body {
 
 .divider {
     height: 3px;
-    background-color: limegreen;
-    color: limegreen;
+    background-color: #3a5795;
+    color: #3a5795;
+}
+
+.list-group-item-warning:hover {
+    cursor: default;
 }

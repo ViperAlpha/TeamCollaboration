@@ -14,17 +14,19 @@
         <div class="list-group" ng-if="typemsgselected == 'Individual'">
             <a href="#" ng-repeat="user in users" ng-click="displayMessages(user)"
                ng-class="(user.userId == currentUserId) ? 'list-group-item active' : 'list-group-item'"
-               ng-init="displayFirstMessage(user)">{{user.firstName}} {{user.lastName}}
+               ng-init="displayFirstMessage(user)">
+                <h5>{{user.firstName}} {{user.lastName}} <span class="label label-success">{{user.username}}</span></h5>
             </a>
 
-            <a href="#" class="list-group-item-warning" ng-if="users.length == 0">No users found!</a>
+            <a href="#" class="list-group-item list-group-item-warning" ng-if="users.length == 0">No users found!</a>
         </div>
 
         <!-- Display a list of teams -->
         <div class="list-group" ng-if="typemsgselected == 'Team'">
             <a href="#" ng-repeat="team in teams" ng-click="getTeamMessages(team)"
                ng-class="(team.teamId == currentTeam.teamId) ? 'list-group-item active' : 'list-group-item'"
-               ng-init="getTeamMessages(team)">{{team.teamName}}
+               ng-init="getTeamMessages(team)">
+                <h5>{{team.teamName}}</h5>
             </a>
 
             <a href="#" class="list-group-item list-group-item-warning" ng-if="teams.length == 0">No teams found!</a>
