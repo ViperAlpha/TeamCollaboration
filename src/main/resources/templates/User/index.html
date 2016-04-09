@@ -294,16 +294,14 @@
                     <!-- Messages exchanged between two users -->
                     <div class="row send-message-row">
                         <div class="col-md-8 col-md-offset-4">
-                            <form th:action="@{/user/message/individual-message/insert}" th:method="POST"
-                                  class="form-horizontal"
-                                  enctype="multipart/form-data">
-                                <label class="control-label">Enter Message:</label>
+                            <form id='sendIndividualMessageForm'>
+                                <label class="control-label">Enter Message here:</label>
                                 <input style='display: none' ng-value="currentUserId" type="text" id="itoUserId"
                                        name="toUserId">
                                 <div class="input-group">
                                     <input ng-model="currentMessage" type="text" class="form-control" id="imessage"
                                            name="message">
-                                    <span class="input-group-btn"><button id='sendind' type="submit"
+                                    <span class="input-group-btn"><button id='sendIndMsgButton' type="submit"
                                                                           class="btn btn-default">Send to
                                         {{currentName}}
                                     </button></span>
@@ -337,17 +335,16 @@
                     <!--send team message-->
                     <div ng-if="teams.length > 0" class="row send-message-row">
                         <div class="col-md-8 col-md-offset-4">
-                            <form th:action="@{/user/team/message/insert}" th:method="PUT" class="form-horizontal"
-                                  enctype="multipart/form-data">
+                            <form id='teamMessageForm'>
                                 <label class="control-label">Enter Message:</label>
-                                <input style="display: none" id="toTeamId" ng-value="currentTeam.teamId" type="text"
+                                <input style="display: none" id="ttoTeamId" ng-value="currentTeam.teamId" type="text"
                                        name="toTeamId">
                                 <div class="input-group">
-                                    <input ng-model="currentMessage" type="text" class="form-control" id="message"
+                                    <input ng-model="currentMessage" type="text" class="form-control" id="tmessage"
                                            name="message">
 
                         <span class="input-group-btn">
-                            <button type="submit" class="btn btn-default">Send to {{currentTeam.teamName}}</button>
+                            <button type="submit" id='teamMsgButton' class="btn btn-default">Send to {{currentTeam.teamName}}</button>
                         </span>
                                 </div>
 
