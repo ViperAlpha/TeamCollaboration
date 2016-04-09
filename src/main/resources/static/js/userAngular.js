@@ -14,6 +14,8 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
     $scope.currentTeam = null;
     $scope.modalMessageInvite = null;
     $scope.option = null;
+    $scope.currentMessage = null;
+    $scope.currentIndMessage = null;
 
 
     var INDIVIDUAL = 'Individual';
@@ -136,6 +138,51 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
                 $scope.newteammessages = response.data;
             });
 
+
+    };
+
+    $scope.sendIndMessage = function () {
+        if ($scope.currentIndMessage === null)
+            return;
+        if ($scope.currentIndMessage === '')
+            return;
+
+        $http({
+            method: "POST",
+            url: "/user/message/individual-message/insert",
+            data: {
+                toUserId: $scope.currentUserId,
+                message: $scope.currentIndMessage
+            }
+        })
+            .success(function (data, status, headers, config) {
+            })
+            .error(function (data, status, header, config) {
+                alert('Error Sending Team Message');
+            });
+    };
+
+    $scope.sendTeamMessageFunc = function () {
+        var currentMessageContent = $('#tmessage').val();
+
+        if (currentMessageContent === '')
+            return;
+
+        var toTeamId = $('#ttoTeamId').val();
+
+        $http({
+            method: "POST",
+            url: "/user/team/message/insert",
+            data: {
+                toTeamId: toTeamId,
+                message: currentMessageContent
+            }
+        })
+            .success(function (data, status, headers, config) {
+            })
+            .error(function (data, status, header, config) {
+                alert('Error Sending Team Message');
+            });
 
     };
 
@@ -398,89 +445,6 @@ $(document).ready(function () {
         $('.search-panel span#search_concept').text(concept);
         $('.input-group #search_param').val(param);
     });
-
-
-    $('#teamMsgButton').click(function (e){
-
-        alert('msg ');
-        e.preventDefault();
-
-        var toTeamId = $('#ttoTeamId').val();
-        var message = $('#tmessage').val();
-
-        $(':input','#teamMessageForm')
-            .not(':button, :submit, :reset, :hidden')
-            .val('')
-            .removeAttr('checked')
-            .removeAttr('selected');
-
-        var data = {
-            toTeamId : toTeamId,
-            message : message
-        }
-
-        data = JSON.stringify(data);
-
-        alert(data);
-        console.log(data);
-
-        $.ajax({
-            type: 'POST',
-            url: '/user/team/message/insert',
-            data: data,
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            error: function (xhr, textStatus, errorThrown) {
-                alert('Error while sending the message.');
-                console.log(textStatus + ' ... '  + errorThrown);
-            },
-            success: function (data) {
-                console.log(data);
-            }
-        });
-
-    });
-
-
-    $('#sendIndMsgButton').click(function (e){
-
-        e.preventDefault();
-
-        var toUserId = $('#itoUserId').val();
-        var message = $('#imessage').val();
-
-        $(':input','#sendIndividualMessageForm')
-            .not(':button, :submit, :reset, :hidden')
-            .val('')
-            .removeAttr('checked')
-            .removeAttr('selected');
-
-        var data = {
-            toUserId : toUserId,
-            message : message
-        }
-
-        data = JSON.stringify(data);
-
-        console.log(data);
-
-        $.ajax({
-            type: 'POST',
-            url: '/user/message/individual-message/insert',
-            data: data,
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            error: function (xhr, textStatus, errorThrown) {
-                alert('Error while sending the message.');
-                console.log(textStatus + ' ... '  + errorThrown);
-            },
-            success: function (data) {
-                console.log(data);
-            }
-        });
-
-    });
-
 
 
 });
