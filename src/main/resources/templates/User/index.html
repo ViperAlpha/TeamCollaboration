@@ -6,33 +6,12 @@
 <th:block th:replace="fragment/User/top">
 </th:block>
 
-<!-- Sidebar -->
-<div class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
-    <ul class="nav navbar-stacked">
-        <select class="form-control" ng-model="typemsg" ng-init="typemsg=typemessages[0]"
-                ng-options="t as t.name for t in typemessages"
-                ng-change="switchTypeMessage(typemsg)">
-        </select>
-
-        <div ng-if="typemsgselected == 'Individual'">
-            <li ng-repeat="user in users" ng-click="displayMessages(user)" ng-init="displayFirstMessage(user)">
-                <a href="#">{{user.firstName}} {{user.lastName}}</a>
-            </li>
-        </div>
-
-        <div ng-if="typemsgselected == 'Team'">
-            <li ng-repeat="team in teams" ng-click="getTeamMessages(team)" ng-init="getTeamMessages(team)">
-                <a href="#">{{team.teamName}}</a>
-            </li>
-        </div>
-    </ul>
-</div>
-<!-- end of sidebar -->
+<th:block th:replace="fragment/User/sidebar"></th:block>
 
 <div id="page-content-wrapper">
     <div class="container-fluid">
 
-        <th:block th:replace="User/modals">
+        <th:block th:replace="fragment/User/modals">
         </th:block>
 
 
