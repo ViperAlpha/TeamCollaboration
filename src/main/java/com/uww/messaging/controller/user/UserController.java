@@ -1,4 +1,4 @@
-package com.uww.messaging.controller;
+package com.uww.messaging.controller.user;
 
 import com.uww.messaging.contract.TeamService;
 import com.uww.messaging.contract.UserService;
@@ -10,11 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Map;
 
 /**
  * Created by horvste on 1/19/16.

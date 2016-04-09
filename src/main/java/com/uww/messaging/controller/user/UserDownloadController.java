@@ -1,4 +1,4 @@
-package com.uww.messaging.controller;
+package com.uww.messaging.controller.user;
 
 import com.uww.messaging.model.UserUploadedFile;
 import com.uww.messaging.repository.UserUploadedFileRepository;

@@ -1,4 +1,4 @@
-package com.uww.messaging.controller;
+package com.uww.messaging.controller.user;
 
 import com.google.gson.Gson;
 import com.uww.messaging.MessagingApplication;
