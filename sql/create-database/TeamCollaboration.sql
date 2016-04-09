@@ -303,6 +303,35 @@ LOCK TABLES `UserUploadedFile` WRITE;
 /*!40000 ALTER TABLE `UserUploadedFile` DISABLE KEYS */;
 /*!40000 ALTER TABLE `UserUploadedFile` ENABLE KEYS */;
 UNLOCK TABLES;
+
+
+
+--
+-- Table structure for table `TeamUploadedFile`
+--
+
+DROP TABLE IF EXISTS `TeamUploadedFile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TeamUploadedFile` (
+  `teamUploadedFileKey` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL,
+  `fileName` varchar(100) DEFAULT NULL,
+  `filePath` varchar(500) DEFAULT NULL,
+  `teamMessageChatId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`teamUploadedFileKey`),
+  KEY `TeamUploadedFile_User_userId_fk` (`userId`),
+  KEY `TeamUploadedFile_TeamMessage_teamMessageId_fk` (`teamMessageChatId`),
+  CONSTRAINT `TeamUploadedFile_User_userId_fk` FOREIGN KEY (`userId`) REFERENCES `User` (`userId`),
+  CONSTRAINT `TeamUploadedFile_TeamMessage_teamMessageId_fk` FOREIGN KEY (`teamMessageChatId`) REFERENCES `TeamMessage` (`teamMessageId`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `TeamUploadedFile`
+--
+
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
