@@ -199,3 +199,9 @@ body {
 #search-bar {
     margin-top: 8px
 }
+
+.divider {
+    height: 3px;
+    background-color: limegreen;
+    color: limegreen;
+}

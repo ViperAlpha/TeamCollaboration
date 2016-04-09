@@ -1,22 +1,33 @@
-
 <!-- Sidebar -->
 <div class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
     <ul class="nav navbar-stacked">
+
+        <!-- User must choose between Individual or Team -->
         <select class="form-control" ng-model="typemsg" ng-init="typemsg=typemessages[0]"
                 ng-options="t as t.name for t in typemessages"
                 ng-change="switchTypeMessage(typemsg)">
         </select>
 
-        <div ng-if="typemsgselected == 'Individual'">
-            <li ng-repeat="user in users" ng-click="displayMessages(user)" ng-init="displayFirstMessage(user)">
-                <a href="#">{{user.firstName}} {{user.lastName}}</a>
-            </li>
+        <hr class="divider">
+
+        <!-- Display a list of individuals -->
+        <div class="list-group" ng-if="typemsgselected == 'Individual'">
+            <a href="#" ng-repeat="user in users" ng-click="displayMessages(user)"
+               ng-class="(user.userId == currentUserId) ? 'list-group-item active' : 'list-group-item'"
+               ng-init="displayFirstMessage(user)">{{user.firstName}} {{user.lastName}}
+            </a>
+
+            <a href="#" class="list-group-item-warning" ng-if="users.length == 0">No users found!</a>
         </div>
 
-        <div ng-if="typemsgselected == 'Team'">
-            <li ng-repeat="team in teams" ng-click="getTeamMessages(team)" ng-init="getTeamMessages(team)">
-                <a href="#">{{team.teamName}}</a>
-            </li>
+        <!-- Display a list of teams -->
+        <div class="list-group" ng-if="typemsgselected == 'Team'">
+            <a href="#" ng-repeat="team in teams" ng-click="getTeamMessages(team)"
+               ng-class="(team.teamId == currentTeam.teamId) ? 'list-group-item active' : 'list-group-item'"
+               ng-init="getTeamMessages(team)">{{team.teamName}}
+            </a>
+
+            <a href="#" class="list-group-item list-group-item-warning" ng-if="teams.length == 0">No teams found!</a>
         </div>
     </ul>
 </div>
