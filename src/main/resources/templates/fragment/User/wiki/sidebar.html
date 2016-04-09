@@ -1,0 +1,10 @@
+<!-- Wiki Sidebar -->
+<div class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate sidebar-md-show" xmlns:th="http://www.w3.org/1999/xhtml">
+    <ul class="nav navbar-stacked">
+
+        <li ng-repeat="user in users" ng-click="displayWiki(user)">
+            <a href="#">{{user.firstName}} {{user.lastName}}</a>
+        </li>
+    </ul>
+</div>
+<!-- end of sidebar -->

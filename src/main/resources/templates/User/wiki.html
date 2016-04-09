@@ -1,4 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head></head>
-<body>oi</body>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" ng-app="messagingApp"
+      ng-controller="userController">
+
+<th:block th:replace="fragment/User/top"/>
+
+<script type="text/javascript" th:src="@{/js/wikiAngular.js}"></script>
+<div ng-app="messagingApp" ng-controller="wikiController">
+    <th:block th:replace="fragment/User/wiki/sidebar"/>
+</div>
+
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+
+        <th:block th:replace="fragment/User/modals"/>
+
+
+    </div>
+</div>
+
+<th:block th:replace="fragment/User/bottom">
+
+</th:block>

@@ -332,6 +332,20 @@ CREATE TABLE `TeamUploadedFile` (
 --
 
 
+--
+-- Table structure for table `wiki`
+--
+
+DROP TABLE IF EXISTS `Wiki`;
+CREATE TABLE IF NOT EXISTS `Wiki` (
+  `wikiId` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL,
+  `content` text,
+  `editTme` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`wikiId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -343,3 +357,4 @@ CREATE TABLE `TeamUploadedFile` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2016-04-06 19:33:03
+
