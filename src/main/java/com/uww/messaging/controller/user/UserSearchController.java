@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.uww.messaging.contract.TeamService;
 import com.uww.messaging.contract.UserService;
 import com.uww.messaging.display.UserDisplay;
-import com.uww.messaging.model.User;
+import com.uww.messaging.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

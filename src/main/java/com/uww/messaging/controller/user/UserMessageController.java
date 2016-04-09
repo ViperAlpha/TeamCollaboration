@@ -7,10 +7,10 @@ import com.uww.messaging.contract.UserService;
 import com.uww.messaging.display.IndividualMessageRequestBody;
 import com.uww.messaging.display.Response;
 import com.uww.messaging.display.UserMessageDisplay;
-import com.uww.messaging.model.User;
-import com.uww.messaging.model.UserMessageChat;
+import com.uww.messaging.model.user.User;
+import com.uww.messaging.model.user.UserMessageChat;
 
-import com.uww.messaging.model.UserUploadedFile;
+import com.uww.messaging.model.user.UserUploadedFile;
 import com.uww.messaging.util.UtilString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -102,7 +102,6 @@ public class UserMessageController {
 	public String insertIndividualMessages(Authentication authentication, @RequestParam("toUserId") int toUserId, @RequestParam("message") String message,
 	                                       @RequestParam("fileUpload") MultipartFile multiPartFile) throws IOException {
 		int currentUserId = userService.userByAuthentication(authentication).getUserId();
-		String redirectToUserHomePage = "redirect:/user";
 		if (multiPartFile.isEmpty()) {
 			messageService.haveIndividualConversation(
 					currentUserId,

@@ -7,8 +7,8 @@ import com.uww.messaging.display.Response;
 import com.uww.messaging.display.TeamInvitationForm;
 import com.uww.messaging.display.TeamInvitationResponse;
 import com.uww.messaging.display.TeamInviteAccept;
-import com.uww.messaging.model.Team;
-import com.uww.messaging.model.User;
+import com.uww.messaging.model.team.Team;
+import com.uww.messaging.model.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

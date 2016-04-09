@@ -1,6 +1,6 @@
-package com.uww.messaging.repository;
+package com.uww.messaging.repository.user;
 
-import com.uww.messaging.model.UserUploadedFile;
+import com.uww.messaging.model.user.UserUploadedFile;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

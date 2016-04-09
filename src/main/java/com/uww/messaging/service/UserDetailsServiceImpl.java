@@ -1,9 +1,9 @@
 package com.uww.messaging.service;
 
-import com.uww.messaging.model.User;
-import com.uww.messaging.model.UserRole;
-import com.uww.messaging.repository.UserRepository;
-import com.uww.messaging.repository.UserRoleRepository;
+import com.uww.messaging.model.user.User;
+import com.uww.messaging.model.user.UserRole;
+import com.uww.messaging.repository.user.UserRepository;
+import com.uww.messaging.repository.user.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

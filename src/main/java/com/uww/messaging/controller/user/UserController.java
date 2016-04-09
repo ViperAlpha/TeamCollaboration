@@ -2,7 +2,7 @@ package com.uww.messaging.controller.user;
 
 import com.uww.messaging.contract.TeamService;
 import com.uww.messaging.contract.UserService;
-import com.uww.messaging.model.User;
+import com.uww.messaging.model.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

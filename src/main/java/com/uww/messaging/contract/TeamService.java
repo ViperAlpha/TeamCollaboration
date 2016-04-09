@@ -2,7 +2,7 @@ package com.uww.messaging.contract;
 
 import com.uww.messaging.display.TeamInvitationResponse;
 import com.uww.messaging.display.UserDisplay;
-import com.uww.messaging.model.Team;
+import com.uww.messaging.model.team.Team;
 
 import java.util.List;
 import java.util.Set;

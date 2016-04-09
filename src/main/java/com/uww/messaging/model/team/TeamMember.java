@@ -1,4 +1,4 @@
-package com.uww.messaging.model;
+package com.uww.messaging.model.team;
 
 import javax.persistence.*;
 

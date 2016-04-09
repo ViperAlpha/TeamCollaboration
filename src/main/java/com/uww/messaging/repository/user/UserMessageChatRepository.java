@@ -1,6 +1,6 @@
-package com.uww.messaging.repository;
+package com.uww.messaging.repository.user;
 
-import com.uww.messaging.model.UserMessageChat;
+import com.uww.messaging.model.user.UserMessageChat;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 

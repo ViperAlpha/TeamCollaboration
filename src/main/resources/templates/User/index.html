@@ -70,8 +70,8 @@
                                 <small>{{message.prettyTime}}</small>
                             </h4>
                             {{message.message}}
-                            <div ng-if="message.fileName != null">Attached Files: <a
-                                    ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
+                            <div ng-if="message.fileName != 'null'">Attached Files: <a
+                                    ng-attr-href="/user/team/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
                             </div>
                         </div>
                     </div> <!-- end message repeat -->
@@ -93,7 +93,7 @@
                                 </div>
 
                                 <div class="text-center"><a ng-click="showFileUpload = !showFileUpload">Add file</a>
-                                    <input ng-show="showFileUpload" type="file" name="fileUpload" id="fileUpload">
+                                    <input ng-show="showFileUpload" type="file" name="teamFileUpload" id="teamFileUpload">
                                 </div>
                             </form>
                         </div>

@@ -1,6 +1,6 @@
-package com.uww.messaging.repository;
+package com.uww.messaging.repository.team;
 
-import com.uww.messaging.model.TeamMember;
+import com.uww.messaging.model.team.TeamMember;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

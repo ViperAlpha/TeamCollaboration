@@ -1,6 +1,6 @@
 package com.uww.messaging.mapper;
 
-import com.uww.messaging.model.User;
+import com.uww.messaging.model.user.User;
 import com.uww.messaging.display.UserRegistration;
 
 /**
