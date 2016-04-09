@@ -6,6 +6,7 @@
 <th:block th:replace="fragment/User/top">
 </th:block>
 
+<!-- Sidebar -->
 <div class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
     <ul class="nav navbar-stacked">
         <select class="form-control" ng-model="typemsg" ng-init="typemsg=typemessages[0]"
@@ -26,6 +27,7 @@
         </div>
     </ul>
 </div>
+<!-- end of sidebar -->
 
 <div id="page-content-wrapper">
     <div class="container-fluid">
@@ -62,7 +64,7 @@
                                 <input style='display: none' ng-value="currentUserId" type="text" id="itoUserId"
                                        name="toUserId">
                                 <div class="input-group">
-                                    <input ng-model="currentIndMessage" type="text" class="form-control" id="imessage"
+                                    <input ng-model="message.ind" type="text" class="form-control" id="imessage"
                                            name="message">
                                     <span class="input-group-btn"><button ng-click="sendIndMessage()" id='sendIndMsgButton' type="submit"
                                                                           class="btn btn-default">Send to

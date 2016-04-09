@@ -10,6 +10,8 @@ import com.uww.messaging.display.UserMessageDisplay;
 import com.uww.messaging.model.User;
 import com.uww.messaging.model.UserMessageChat;
 
+import com.uww.messaging.model.UserUploadedFile;
+import com.uww.messaging.util.UtilString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -18,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,8 +96,9 @@ public class UserMessageController {
 
 		return new Response(true, "Message sent from " + currentUserId + " to " + param.getToUserId(), " ");
 	}
-/*
-	@RequestMapping(value = "/individual-message/insert", method = RequestMethod.POST)
+
+	@RequestMapping(value = "/individual-message/insertWithFile", method = RequestMethod.POST)
+	@ResponseBody
 	public String insertIndividualMessages(Authentication authentication, @RequestParam("toUserId") int toUserId, @RequestParam("message") String message,
 	                                       @RequestParam("fileUpload") MultipartFile multiPartFile) throws IOException {
 		int currentUserId = userService.userByAuthentication(authentication).getUserId();
@@ -103,7 +109,7 @@ public class UserMessageController {
 					toUserId,
 					message
 			);
-			return redirectToUserHomePage;
+			return "";
 		}
 
 
@@ -117,9 +123,9 @@ public class UserMessageController {
 		multiPartFile.transferTo(file);
 		UserUploadedFile userUploadedFile = new UserUploadedFile(currentUserId, multiPartFile.getOriginalFilename(), fileSavedPath, -10);
 		messageService.haveIndividualConversation(currentUserId, toUserId, message, userUploadedFile);
-		return redirectToUserHomePage;
+		return "";
 	}
-*/
+
 
 
 }

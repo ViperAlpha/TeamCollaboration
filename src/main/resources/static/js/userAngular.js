@@ -5,264 +5,301 @@
 var messagingApp = angular.module('messagingApp', ['ngSanitize']);
 
 messagingApp.controller('userController', function ($scope, $http, $interval, $window, $timeout) {
-    $scope.currentUserId = null;
-    $scope.currentName = null;
-    $scope.currentInvite = null;
-    $scope.invitedUsername = null;
-    $scope.showFileUpload = false;
-    $scope.autocompleteData = null;
-    $scope.currentTeam = null;
-    $scope.modalMessageInvite = null;
-    $scope.option = null;
-    $scope.currentMessage = null;
-    $scope.currentIndMessage = null;
+        $scope.currentUserId = null;
+        $scope.currentName = null;
+        $scope.currentInvite = null;
+        $scope.invitedUsername = null;
+        $scope.showFileUpload = false;
+        $scope.autocompleteData = null;
+        $scope.currentTeam = null;
+        $scope.modalMessageInvite = null;
+        $scope.option = null;
+        $scope.currentMessage = null;
+        $scope.currentIndMessage = null;
+        $scope.message = {};
+        $scope.message.ind = null;
 
 
-    var INDIVIDUAL = 'Individual';
-    var TEAM = 'Team';
-    var SEARCH_BAR_MODAL_ID = "#searchModal";
+        var INDIVIDUAL = 'Individual';
+        var TEAM = 'Team';
+        var SEARCH_BAR_MODAL_ID = "#searchModal";
 
-    $scope.options = [
-        {id: 0, label: INDIVIDUAL},
-        {id: 1, label: TEAM}
-    ];
+        $scope.options = [
+            {id: 0, label: INDIVIDUAL},
+            {id: 1, label: TEAM}
+        ];
 
-    $scope.teamSelect = null;
-    $scope.teamSelects = null;
+        $scope.teamSelect = null;
+        $scope.teamSelects = null;
 
-    $scope.updateTeamSelect = function (option) {
-        var url = '/user/team';
-        if (option.label !== TEAM) {
-            $scope.teamSelect = null;
-            $scope.teamSelects = null;
-            return;
-        }
-        $http.get(url)
-            .then(function (response) {
-                $scope.teamSelects = response.data;
-                if ($scope.teamSelect.length > 0)
-                    $scope.teamSelect = $scope.teamSelects[0];
-            });
-    };
-
-    $scope.sendSearchInvite = function () {
-
-        $http({
-            method: "PUT",
-            url: "/user/invitation/searchBarInvite",
-            data: {
-                teamOrIndv: $scope.option.label,
-                teamName: $("#teamSelectedId option:selected").text(),
-                message: $scope.modalMessageInvite,
-                name: $scope.searchBarAtTopUsername
-            }
-        })
-            .success(function (data, status, headers, config) {
-                $(SEARCH_BAR_MODAL_ID).modal('hide');
-                alert('sent invite');
-            })
-            .error(function (data, status, header, config) {
-                $(SEARCH_BAR_MODAL_ID).modal('hide');
-                alert('error');
-            });
-    };
-
-    $scope.openInviteModal = function () {
-        $scope.searchBarAtTopUsername = $("#search-bar-at-top").val();
-
-        $http.get('/user/valid?username=' + $scope.searchBarAtTopUsername)
-            .success(function (data, status, headers, config) {
-                $(SEARCH_BAR_MODAL_ID).modal('show');
-            })
-            .error(function (data, status, header, config) {
-                alert('This username was not found.');
-            });
-    };
-
-    $scope.typemessages = [
-        {id: 1, name: INDIVIDUAL}, {id: 2, name: TEAM}
-    ];
-    $scope.typemsgselected = $scope.typemessages[0].name;
-
-    $scope.switchTypeMessage = function (t) {
-        $scope.typemsgselected = t.name;
-    };
-
-    $http.get('/user/team/invitation/mine')
-        .then(function (response) {
-            $scope.teaminvitations = response.data;
-        });
-
-    $http.get("/user/invitation/see/accepted")
-        .then(function (response) {
-            $scope.users = response.data;
-        });
-
-    $http.get("/user/team/list")
-        .then(function (response) {
-            $scope.teams = response.data;
-        });
-
-    $http.get('/user/invitation/mine')
-        .then(function (response) {
-            $scope.invitations = response.data;
-        });
-
-    $scope.updateMessageVar = function () {
-        if ($scope.currentUserId === null)
-            return;
-
-        var url = '/user/message/individual-message/listBySingleUserId?userId=' + $scope.currentUserId;
-        $http.get(url)
-            .then(function (response) {
-                $scope.messages = response.data;
-            });
-    };
-
-    $scope.getTeamMessages = function (team) {
-        $scope.currentTeam = team;
-        var url = "/user/team/message/list/all/message?teamId=" + team.teamId;
-
-        $http.get(url)
-            .then(function (response) {
-                $scope.teammessages = response.data;
-            });
-    };
-
-    $scope.getNewTeamMessages = function (team) {
-        $scope.currentTeam = team;
-        var url = "/user/team/message/list/all/message?teamId=" + team.teamId;
-
-        $http.get(url)
-            .then(function (response) {
-                $scope.newteammessages = response.data;
-            });
-
-
-    };
-
-    $scope.sendIndMessage = function () {
-        if ($scope.currentIndMessage === null)
-            return;
-        if ($scope.currentIndMessage === '')
-            return;
-
-        $http({
-            method: "POST",
-            url: "/user/message/individual-message/insert",
-            data: {
-                toUserId: $scope.currentUserId,
-                message: $scope.currentIndMessage
-            }
-        })
-            .success(function (data, status, headers, config) {
-            })
-            .error(function (data, status, header, config) {
-                alert('Error Sending Team Message');
-            });
-    };
-
-    $scope.sendTeamMessageFunc = function () {
-        var currentMessageContent = $('#tmessage').val();
-
-        if (currentMessageContent === '')
-            return;
-
-        var toTeamId = $('#ttoTeamId').val();
-
-        $http({
-            method: "POST",
-            url: "/user/team/message/insert",
-            data: {
-                toTeamId: toTeamId,
-                message: currentMessageContent
-            }
-        })
-            .success(function (data, status, headers, config) {
-            })
-            .error(function (data, status, header, config) {
-                alert('Error Sending Team Message');
-            });
-
-    };
-
-    $scope.displayMessages = function (user) {
-        $scope.currentUserId = user.userId;
-        $scope.currentName = user.firstName + ' ' + user.lastName;
-        $scope.updateMessageVar();
-    };
-
-    $scope.displayFirstMessage = function (user) {
-        if ($scope.currentUserId !== null)
-            return;
-        $scope.displayMessages(user);
-    };
-
-    $scope.sendInvitation = function () {
-        var data = $.param({
-            name: $scope.invitedUsername,
-            message: $scope.inviteMessage
-        });
-
-        $http.put('/user/invitation/invite', data, config)
-            .success(function (data, status, headers, config) {
-                alert('sent invite');
-            })
-            .error(function (data, status, header, config) {
-                alert('error');
-            });
-    };
-
-    $scope.setCurrentInvite = function (invite) {
-        $scope.currentInvite = invite;
-    };
-
-    $scope.setCurrentTeamInvite = function (invite) {
-        $scope.currentTeamInvite = invite;
-    };
-
-    $scope.nameStartsWith = function (currentName, messageFirstName) {
-        return currentName.startsWith(messageFirstName);
-    };
-
-    $scope.updateTeamMessageVar = function () {
-        if ($scope.currentTeam === null)
-            return;
-
-        $scope.getTeamMessages($scope.currentTeam);
-    };
-
-    $scope.autocompleteSearchBar = function (text) {
-        var data = $.param({
-            q: $scope.text
-        });
-
-        $http.get('/user/search', data, config)
-            .success(function (data, status, headers, config) {
-                $scope.autocompleteData = data;
-            })
-            .error(function (data, status, header, config) {
-                alert('error');
-            });
-    };
-
-    $scope.intervalFunction = function () {
-        $timeout(function () {
-            if ($scope.typemsgselected === INDIVIDUAL) {
-                $scope.updateMessageVar();
-            } else if ($scope.typemsgselected === TEAM) {
-                $scope.updateTeamMessageVar();
-            } else {
+        $scope.updateTeamSelect = function (option) {
+            var url = '/user/team';
+            if (option.label !== TEAM) {
+                $scope.teamSelect = null;
+                $scope.teamSelects = null;
                 return;
             }
-            $scope.intervalFunction();
-        }, 1000)
-    };
+            $http.get(url)
+                .then(function (response) {
+                    $scope.teamSelects = response.data;
+                    if ($scope.teamSelect.length > 0)
+                        $scope.teamSelect = $scope.teamSelects[0];
+                });
+        };
 
-    // Kick off the interval
-    $scope.intervalFunction();
+        $scope.sendSearchInvite = function () {
 
-});
+            $http({
+                method: "PUT",
+                url: "/user/invitation/searchBarInvite",
+                data: {
+                    teamOrIndv: $scope.option.label,
+                    teamName: $("#teamSelectedId option:selected").text(),
+                    message: $scope.modalMessageInvite,
+                    name: $scope.searchBarAtTopUsername
+                }
+            })
+                .success(function (data, status, headers, config) {
+                    $(SEARCH_BAR_MODAL_ID).modal('hide');
+                    alert('sent invite');
+                })
+                .error(function (data, status, header, config) {
+                    $(SEARCH_BAR_MODAL_ID).modal('hide');
+                    alert('error');
+                });
+        };
+
+        $scope.openInviteModal = function () {
+            $scope.searchBarAtTopUsername = $("#search-bar-at-top").val();
+
+            $http.get('/user/valid?username=' + $scope.searchBarAtTopUsername)
+                .success(function (data, status, headers, config) {
+                    $(SEARCH_BAR_MODAL_ID).modal('show');
+                })
+                .error(function (data, status, header, config) {
+                    alert('This username was not found.');
+                });
+        };
+
+        $scope.typemessages = [
+            {id: 1, name: INDIVIDUAL}, {id: 2, name: TEAM}
+        ];
+        $scope.typemsgselected = $scope.typemessages[0].name;
+
+        $scope.switchTypeMessage = function (t) {
+            $scope.typemsgselected = t.name;
+        };
+
+        $http.get('/user/team/invitation/mine')
+            .then(function (response) {
+                $scope.teaminvitations = response.data;
+            });
+
+        $http.get("/user/invitation/see/accepted")
+            .then(function (response) {
+                $scope.users = response.data;
+            });
+
+        $http.get("/user/team/list")
+            .then(function (response) {
+                $scope.teams = response.data;
+            });
+
+        $http.get('/user/invitation/mine')
+            .then(function (response) {
+                $scope.invitations = response.data;
+            });
+
+        $scope.updateMessageVar = function () {
+            if ($scope.currentUserId === null)
+                return;
+
+            var url = '/user/message/individual-message/listBySingleUserId?userId=' + $scope.currentUserId;
+            $http.get(url)
+                .then(function (response) {
+                    $scope.messages = response.data;
+                });
+        };
+
+        $scope.getTeamMessages = function (team) {
+            $scope.currentTeam = team;
+            var url = "/user/team/message/list/all/message?teamId=" + team.teamId;
+
+            $http.get(url)
+                .then(function (response) {
+                    $scope.teammessages = response.data;
+                });
+        };
+
+        $scope.getNewTeamMessages = function (team) {
+            $scope.currentTeam = team;
+            var url = "/user/team/message/list/all/message?teamId=" + team.teamId;
+
+            $http.get(url)
+                .then(function (response) {
+                    $scope.newteammessages = response.data;
+                });
+
+
+        };
+
+        $scope.sendIndMessage = function () {
+            var FILE_UPLOAD_ID = "#fileUpload";
+
+            console.log("Send Individual Message: " + $scope.message.ind);
+            if ($scope.message.ind === null)
+                return;
+            if ($scope.message.ind === '')
+                return;
+
+            var fileObj = $(FILE_UPLOAD_ID)[0].files[0];
+            if (fileObj === null || fileObj === undefined) {
+                $http({
+                    method: "POST",
+                    url: "/user/message/individual-message/insert",
+                    data: {
+                        toUserId: $scope.currentUserId,
+                        message: $scope.message.ind
+                    }
+                })
+                    .success(function (data, status, headers, config) {
+                        $scope.message.ind = '';
+                    })
+                    .error(function (data, status, header, config) {
+                        alert('Error Sending Team Message');
+                    });
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append("toUserId", $scope.currentUserId);
+            formData.append("message", $scope.message.ind);
+            formData.append("fileUpload", fileObj);
+
+            function resetFile(){
+                $(FILE_UPLOAD_ID).val("");
+            }
+
+            $.ajax({
+                method: "POST",
+                url: "/user/message/individual-message/insertWithFile",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    $(FILE_UPLOAD_ID)[0].files[0] = null;
+                    resetFile();
+                },
+                error: function (data) {
+                    alert('Error Sending Team Message');
+                    resetFile();
+                }
+            });
+
+        };
+
+        $scope.sendTeamMessageFunc = function () {
+            var currentMessageContent = $('#tmessage').val();
+
+            if (currentMessageContent === '')
+                return;
+
+            var toTeamId = $('#ttoTeamId').val();
+
+            $http({
+                method: "POST",
+                url: "/user/team/message/insert",
+                data: {
+                    toTeamId: toTeamId,
+                    message: currentMessageContent
+                }
+            })
+                .success(function (data, status, headers, config) {
+                })
+                .error(function (data, status, header, config) {
+                    alert('Error Sending Team Message');
+                });
+
+        };
+
+        $scope.displayMessages = function (user) {
+            $scope.currentUserId = user.userId;
+            $scope.currentName = user.firstName + ' ' + user.lastName;
+            $scope.updateMessageVar();
+        };
+
+        $scope.displayFirstMessage = function (user) {
+            if ($scope.currentUserId !== null)
+                return;
+            $scope.displayMessages(user);
+        };
+
+        $scope.sendInvitation = function () {
+            var data = $.param({
+                name: $scope.invitedUsername,
+                message: $scope.inviteMessage
+            });
+
+            $http.put('/user/invitation/invite', data, config)
+                .success(function (data, status, headers, config) {
+                    alert('sent invite');
+                })
+                .error(function (data, status, header, config) {
+                    alert('error');
+                });
+        };
+
+        $scope.setCurrentInvite = function (invite) {
+            $scope.currentInvite = invite;
+        };
+
+        $scope.setCurrentTeamInvite = function (invite) {
+            $scope.currentTeamInvite = invite;
+        };
+
+        $scope.nameStartsWith = function (currentName, messageFirstName) {
+            return currentName.startsWith(messageFirstName);
+        };
+
+        $scope.updateTeamMessageVar = function () {
+            if ($scope.currentTeam === null)
+                return;
+
+            $scope.getTeamMessages($scope.currentTeam);
+        };
+
+        $scope.autocompleteSearchBar = function (text) {
+            var data = $.param({
+                q: $scope.text
+            });
+
+            $http.get('/user/search', data, config)
+                .success(function (data, status, headers, config) {
+                    $scope.autocompleteData = data;
+                })
+                .error(function (data, status, header, config) {
+                    alert('error');
+                });
+        };
+
+        $scope.intervalFunction = function () {
+            $timeout(function () {
+                if ($scope.typemsgselected === INDIVIDUAL) {
+                    $scope.updateMessageVar();
+                } else if ($scope.typemsgselected === TEAM) {
+                    $scope.updateTeamMessageVar();
+                } else {
+                    return;
+                }
+                $scope.intervalFunction();
+            }, 1000)
+        };
+
+        // Kick off the interval
+        $scope.intervalFunction();
+
+    }
+);
 
 
 /**
