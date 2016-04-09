@@ -3,13 +3,16 @@ package com.uww.messaging.controller;
 import com.google.gson.Gson;
 import com.uww.messaging.contract.MessageService;
 import com.uww.messaging.contract.UserService;
+import com.uww.messaging.display.Response;
 import com.uww.messaging.display.TeamMessageDisplay;
+import com.uww.messaging.display.TeamMessageRequestBody;
 import com.uww.messaging.model.TeamMessage;
 import com.uww.messaging.model.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,13 +53,15 @@ public class TeamMessageController {
 		return new Gson().toJson(newMessages);
  	}
 
-	@RequestMapping(value = "/insert", method = RequestMethod.PUT)
-	public String insertTeamMessage(Authentication authentication, @RequestParam("toTeamId") int toTeamId, @RequestParam("message") String message) {
+	@RequestMapping(value = "/insert", method = RequestMethod.POST)
+	@ResponseBody
+	public Response insertTeamMessage(Authentication authentication, @RequestBody TeamMessageRequestBody param) {
 
 		int userId = userService.userByAuthentication(authentication).getUserId();
 
-		messageService.sendMessageToTeam(userId, toTeamId, message);
+		messageService.sendMessageToTeam(userId, param.getToTeamId(), param.getMessage());
 
-		return "redirect:/user";
+		return new Response(true, "message sent from user id " + userId + " to team id " + param.getToTeamId(), " ");
+
 	}
 }

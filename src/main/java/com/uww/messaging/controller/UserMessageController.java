@@ -4,23 +4,21 @@ import com.google.gson.Gson;
 import com.uww.messaging.MessagingApplication;
 import com.uww.messaging.contract.MessageService;
 import com.uww.messaging.contract.UserService;
+import com.uww.messaging.display.IndividualMessageRequestBody;
+import com.uww.messaging.display.Response;
 import com.uww.messaging.display.UserMessageDisplay;
 import com.uww.messaging.model.User;
 import com.uww.messaging.model.UserMessageChat;
-import com.uww.messaging.model.UserUploadedFile;
-import com.uww.messaging.util.UtilString;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +81,17 @@ public class UserMessageController {
 		return gson.toJson(users);
 	}
 
+
+	@RequestMapping(value = "/individual-message/insert", method = RequestMethod.POST)
+	@ResponseBody
+	public Response insertIndividualMessages(Authentication authentication, @RequestBody IndividualMessageRequestBody param) {
+		int currentUserId = userService.userByAuthentication(authentication).getUserId();
+
+		messageService.haveIndividualConversation(currentUserId, param.getToUserId(), param.getMessage());
+
+		return new Response(true, "Message sent from " + currentUserId + " to " + param.getToUserId(), " ");
+	}
+/*
 	@RequestMapping(value = "/individual-message/insert", method = RequestMethod.POST)
 	public String insertIndividualMessages(Authentication authentication, @RequestParam("toUserId") int toUserId, @RequestParam("message") String message,
 	                                       @RequestParam("fileUpload") MultipartFile multiPartFile) throws IOException {
@@ -110,6 +119,7 @@ public class UserMessageController {
 		messageService.haveIndividualConversation(currentUserId, toUserId, message, userUploadedFile);
 		return redirectToUserHomePage;
 	}
+*/
 
 
 }
