@@ -41,7 +41,7 @@ public class UserInvitationController {
     @RequestMapping(value = "/autocomplete-user/list", method = RequestMethod.GET)
     @ResponseBody
     public String autocompleteUserList(Authentication authentication, @RequestParam("usernameToAuto") String usernameToAuto) {
-        User loggedInUser = userService.userByAuthentication(authentication);
+        User loggedInUser = userService.getLoggedInUser(authentication);
         List<String> usernamesLackingInvitations = new ArrayList<>();
         // using this to not break compatibility
         userService.findUsersLackingInvitationsStartingWith(loggedInUser.getUserId(),
@@ -52,7 +52,7 @@ public class UserInvitationController {
     @RequestMapping(value = "/mine", method = RequestMethod.GET)
     @ResponseBody
     public String seeMyInvitations(Authentication authentication) {
-        int myUserId = userService.userByAuthentication(authentication).getUserId();
+        int myUserId = userService.getLoggedInUser(authentication).getUserId();
         Gson gson = new Gson();
         return gson.toJson(userService.findAllPendingInvitations(myUserId));
     }
@@ -60,7 +60,7 @@ public class UserInvitationController {
     @RequestMapping(value = "/invite", method = RequestMethod.PUT)
     @ResponseBody
     public String inviteUser(Authentication authentication, @RequestBody UserInvitationForm userInvitationForm) {
-        int userId = userService.userByAuthentication(authentication).getUserId();
+        int userId = userService.getLoggedInUser(authentication).getUserId();
         userService.sendInvitation(userId, userInvitationForm);
         Gson gson = new Gson();
         Response invitationResponse = new Response(
@@ -75,7 +75,7 @@ public class UserInvitationController {
     @ResponseBody
     public String acceptInvite(Authentication authentication,
                                @RequestBody UserInviteAccept userInviteAccept) {
-        int loggedInUserId = userService.userByAuthentication(authentication).getUserId();
+        int loggedInUserId = userService.getLoggedInUser(authentication).getUserId();
         userService.acceptInvitation(loggedInUserId, userInviteAccept.getFromUserId(), userInviteAccept.getUserInvitationId());
         Gson gson = new Gson();
         Response acceptInvitationResponse = new Response(
@@ -89,7 +89,7 @@ public class UserInvitationController {
     @RequestMapping(value = "/see/accepted")
     @ResponseBody
     public String seeAcceptedInvitations(Authentication authentication) {
-        int userId = userService.userByAuthentication(authentication).getUserId();
+        int userId = userService.getLoggedInUser(authentication).getUserId();
         List<User> acceptedInvitationUsers = userService.findAcceptedInvitationUsers(userId);
         return new Gson().toJson(acceptedInvitationUsers);
     }
@@ -97,7 +97,7 @@ public class UserInvitationController {
     @RequestMapping(value = "/searchBarInvite", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity sendInvitation(Authentication authentication, @RequestBody Invitation invitation) {
-        int loggedInUser = userService.userByAuthentication(authentication)
+        int loggedInUser = userService.getLoggedInUser(authentication)
                 .getUserId();
         if (invitation.isIndvidualInvite()) {
             userService.sendInvitation(loggedInUser, new UserInvitationForm(invitation.getName(), invitation.getMessage()));

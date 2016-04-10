@@ -29,22 +29,10 @@ public class UserContentController {
 	@Autowired
 	private TeamService teamService;
 
-	@RequestMapping(value = "")
-	public String index(Authentication authentication, Model model) {
-		User currentUser = userService.userByAuthentication(authentication);
-
-		currentUser.setLastLoggedIn(new Timestamp(Calendar.getInstance().getTimeInMillis()));
-
-		userService.save(currentUser);
-
-		model.addAttribute("user", currentUser);
-		model.addAttribute("teams", teamService.findTeamsByUserId(currentUser.getUserId()));
-		return "User/index";
-	}
 
 	@RequestMapping(value = "/wiki")
 	public String wiki(Authentication authentication, Model model){
-		User currentUser = userService.userByAuthentication(authentication);
+		User currentUser = userService.getLoggedInUser(authentication);
 
 		currentUser.setLastLoggedIn(new Timestamp(Calendar.getInstance().getTimeInMillis()));
 

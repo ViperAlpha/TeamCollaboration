@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User userByAuthentication(Authentication auth) {
+    public User getLoggedInUser(Authentication auth) {
         UserRole userRole = AuthenticationUtil.authenticationToRole(auth);
         return findUserById(userRole.getUserId());
     }

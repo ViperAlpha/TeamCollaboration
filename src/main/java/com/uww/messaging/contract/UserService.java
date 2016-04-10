@@ -27,7 +27,7 @@ public interface UserService {
 
     void deleteAll(String role);
 
-    User userByAuthentication(Authentication auth);
+    User getLoggedInUser(Authentication auth);
 
     Set<UserDisplay> findUsersLackingInvitationsStartingWith(int loggedInUserId, String username);
 

@@ -31,7 +31,7 @@ public class UserController {
 
     @RequestMapping(value = "")
     public String index(Authentication authentication, Model model) {
-        User currentUser = userService.userByAuthentication(authentication);
+        User currentUser = userService.getLoggedInUser(authentication);
 
         currentUser.setLastLoggedIn(new Timestamp(Calendar.getInstance().getTimeInMillis()));
 

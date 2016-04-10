@@ -10,9 +10,6 @@ import com.uww.messaging.display.TeamMessageRequestBody;
 import com.uww.messaging.model.team.TeamMessage;
 import com.uww.messaging.model.user.User;
 
-import com.uww.messaging.model.user.UserUploadedFile;
-import com.uww.messaging.util.UtilString;
-import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -23,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -57,7 +53,7 @@ public class TeamMessageController {
     @RequestMapping(value = "/list/new/message", method = RequestMethod.GET)
     @ResponseBody
     public String listNewTeamMessages(Authentication authentication, @RequestParam("teamId") int teamId) {
-        User user = userService.userByAuthentication(authentication);
+        User user = userService.getLoggedInUser(authentication);
         List<TeamMessage> newMessages = messageService.findNewMessagesFromTeam(user, teamId);
 
         return new Gson().toJson(newMessages);
@@ -67,7 +63,7 @@ public class TeamMessageController {
     @ResponseBody
     public Response insertTeamMessage(Authentication authentication, @RequestBody TeamMessageRequestBody param) {
 
-        int userId = userService.userByAuthentication(authentication).getUserId();
+        int userId = userService.getLoggedInUser(authentication).getUserId();
 
         messageService.sendMessageToTeam(userId, param.getToTeamId(), param.getMessage());
 
@@ -81,7 +77,7 @@ public class TeamMessageController {
                                            @RequestParam("teamId") int teamId,
                                            @RequestParam("message") String message,
                                            @RequestParam("fileUpload") MultipartFile userUploadedFile) throws IOException {
-        int currentUserId = userService.userByAuthentication(authentication).getUserId();
+        int currentUserId = userService.getLoggedInUser(authentication).getUserId();
         messageService.sendMessageToTeam(currentUserId, teamId, message, userUploadedFile, messagingApplication.teamDownloadDir);
         return "";
     }

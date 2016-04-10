@@ -36,7 +36,7 @@ public class TeamController {
     @RequestMapping(value = "")
     @ResponseBody
     public String getMyTeams(Authentication authentication) {
-        int userId = userService.userByAuthentication(authentication)
+        int userId = userService.getLoggedInUser(authentication)
                 .getUserId();
         return new Gson().toJson(teamService.findTeamsByUserId(userId));
     }
@@ -45,14 +45,14 @@ public class TeamController {
     @ResponseBody
     public String getTeamInvitations(Authentication authentication) {
 
-        int userId = userService.userByAuthentication(authentication).getUserId();
+        int userId = userService.getLoggedInUser(authentication).getUserId();
         List<TeamInvitationResponse> pendingInvitationsToUser = teamService.findPendingInvitationsToUser(userId);
         return new Gson().toJson(pendingInvitationsToUser);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.PUT)
     public String createTeam(Authentication authentication, @RequestParam("teamName") String teamName, @RequestParam("teamDescription") String teamDescription) {
-        User currentUser = userService.userByAuthentication(authentication);
+        User currentUser = userService.getLoggedInUser(authentication);
         teamService.save(currentUser.getUserId(), teamName, teamDescription);
         return redirectHome;
     }
@@ -60,7 +60,7 @@ public class TeamController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public String listTeams(Authentication authentication) {
-        User currentUser = userService.userByAuthentication(authentication);
+        User currentUser = userService.getLoggedInUser(authentication);
         Gson gson = new Gson();
         List<Team> teams = teamService.findTeamsByUserId(currentUser.getUserId());
         return gson.toJson(teams);
@@ -71,7 +71,7 @@ public class TeamController {
     @ResponseBody
     public String inviteToTeam(Authentication authentication, @RequestBody TeamInvitationForm t) {
 
-        User currentUser = userService.userByAuthentication(authentication);
+        User currentUser = userService.getLoggedInUser(authentication);
 
         int teamId = t.getTeamId();
         String invitedUsername = t.getInvitedUserName();
