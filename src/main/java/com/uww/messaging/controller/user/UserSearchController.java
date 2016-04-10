@@ -37,7 +37,7 @@ public class UserSearchController {
     @RequestMapping(value = "/search")
     @ResponseBody
     public String search(Authentication authentication, @RequestParam("q") String query) {
-        User loggedInUser = userService.userByAuthentication(authentication);
+        User loggedInUser = userService.getLoggedInUser(authentication);
         Set<UserDisplay> userNamesLackingInvites = userService.findUsersLackingInvitationsStartingWith(loggedInUser.getUserId(), query);
         Set<UserDisplay> userNamesLackingTeamInvites = teamService.findUsersLackingInvitationFromTeamOwner(
                 loggedInUser.getUserId(),

@@ -64,7 +64,7 @@ public class UserMessageController {
 	@ResponseBody
 	public String listIndividualMessages(Authentication authentication, @RequestParam("userId") int firstUserId) {
 		Gson gson = new Gson();
-		int userId = userService.userByAuthentication(authentication).getUserId();
+		int userId = userService.getLoggedInUser(authentication).getUserId();
 		List<UserMessageDisplay> userMessageDisplays = messageService.findMessagesBetweenUsers(userId, firstUserId);
 		return gson.toJson(userMessageDisplays);
 	}
@@ -73,7 +73,7 @@ public class UserMessageController {
 	@ResponseBody
 	public String listIndividualMessages(Authentication authentication) {
 		Gson gson = new Gson();
-		int userId = userService.userByAuthentication(authentication).getUserId();
+		int userId = userService.getLoggedInUser(authentication).getUserId();
 		List<User> users = new ArrayList<>();
 		List<UserMessageChat> messagesBetweenUsers = messageService.findUserMessages(userId);
 		messagesBetweenUsers.forEach(userMessageChat -> {
@@ -90,7 +90,7 @@ public class UserMessageController {
 	@RequestMapping(value = "/individual-message/insert", method = RequestMethod.POST)
 	@ResponseBody
 	public Response insertIndividualMessages(Authentication authentication, @RequestBody IndividualMessageRequestBody param) {
-		int currentUserId = userService.userByAuthentication(authentication).getUserId();
+		int currentUserId = userService.getLoggedInUser(authentication).getUserId();
 
 		messageService.haveIndividualConversation(currentUserId, param.getToUserId(), param.getMessage());
 
@@ -101,7 +101,7 @@ public class UserMessageController {
 	@ResponseBody
 	public String insertIndividualMessages(Authentication authentication, @RequestParam("toUserId") int toUserId, @RequestParam("message") String message,
 	                                       @RequestParam("fileUpload") MultipartFile multiPartFile) throws IOException {
-		int currentUserId = userService.userByAuthentication(authentication).getUserId();
+		int currentUserId = userService.getLoggedInUser(authentication).getUserId();
 		if (multiPartFile.isEmpty()) {
 			messageService.haveIndividualConversation(
 					currentUserId,

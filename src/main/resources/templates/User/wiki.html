@@ -2,12 +2,13 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" ng-app="messagingApp"
-      ng-controller="userController">
+      ng-controller="userController" ng-controller="wikiController">
+>
 
 <th:block th:replace="fragment/User/top"/>
 
 <script type="text/javascript" th:src="@{/js/wikiAngular.js}"></script>
-<div ng-app="messagingApp" ng-controller="wikiController">
+<div>
     <th:block th:replace="fragment/User/wiki/sidebar"/>
 </div>
 
@@ -15,10 +16,24 @@
     <div class="container-fluid">
 
         <th:block th:replace="fragment/User/modals"/>
-
+        <h1 class="col-md-offset-3">Wiki Page:</h1>
+        <div class="col-md-offset-3" ng-if="editIsEnabled == false" ng-bind-html="content.wikiText | unsafe">
+        </div>
+        <div class="col-md-offset-3" ng-if="editIsEnabled == false">
+            <button class="btn btn-default cold-md-offset-5" ng-click="setEditIsEnabledToTrue();">Edit Page</button>
+        </div>
+        <div class="form-group col-md-offset-3" ng-if="editIsEnabled == true">
+            <label for="comment">Edit Wiki:</label>
+            <textarea class="form-control" rows="5" id="comment"
+                      ng-model="content.wikiText">{{content.wikiText}}</textarea>
+            <button ng-click="sendChanges()" class="btn btn-default col-md-offset-5">Push
+                Changes
+            </button>
+        </div>
 
     </div>
 </div>
+
 
 <th:block th:replace="fragment/User/bottom">
 
