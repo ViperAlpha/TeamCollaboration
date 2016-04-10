@@ -24,10 +24,10 @@
                         <!-- Applies the offset class and sender-message class in case that the message is not from the current logged in user -->
                         <div class="message col-md-8"
                              ng-class="nameStartsWith(currentName, message.fromFirstName) ? 'col-md-offset-10 sender' : 'receiver'">
-                            <h4>{{message.fromFirstName}}
-                                <small>{{message.prettyTime}}</small>
+                            <h4><span ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
+                                <small><span ng-bind="message.prettyTime"></span></small>
                             </h4>
-                            {{message.message}}
+                            <span ng-bind="message.message"></span>
                             <div ng-if="message.fileName != 'null'">Attached Files: <a
                                     ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
                             </div>
@@ -42,10 +42,10 @@
                         <!-- Applies the offset class and sender-message class in case that the message is not from the current logged in user -->
                         <div class="message col-md-8"
                              ng-class="nameStartsWith(currentName, message.fromFirstName) ? 'col-md-offset-10 sender' : 'receiver'">
-                            <h4>{{message.fromFirstName}}
-                                <small>{{message.prettyTime}}</small>
+                            <h4><span ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
+                                <small><span ng-bind="message.prettyTime"></span></small>
                             </h4>
-                            {{message.message}}
+                            <span ng-bind="message.message"></span>
                             <div ng-if="message.fileName != null">Attached Files: <a
                                     ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
                             </div>
