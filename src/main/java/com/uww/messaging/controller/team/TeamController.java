@@ -50,14 +50,6 @@ public class TeamController {
         return new Gson().toJson(pendingInvitationsToUser);
     }
 
-    @RequestMapping(value = "/add/user", method = RequestMethod.PUT)
-    public String addUserToTeam(Authentication authentication, @RequestParam("") String userName, int toTeamId) {
-
-        //TODO : ADD USER TO A GROUP.
-
-        return redirectHome;
-    }
-
     @RequestMapping(value = "/create", method = RequestMethod.PUT)
     public String createTeam(Authentication authentication, @RequestParam("teamName") String teamName, @RequestParam("teamDescription") String teamDescription) {
         User currentUser = userService.userByAuthentication(authentication);
