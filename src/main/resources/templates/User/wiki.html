@@ -17,7 +17,8 @@
 
         <th:block th:replace="fragment/User/modals"/>
         <h1 class="col-md-offset-3">Wiki Page:</h1>
-        <div class="col-md-offset-3" ng-if="editIsEnabled == false" ng-bind-html="content.wikiText | unsafe">
+        <div class="col-md-offset-3" ng-if="editIsEnabled == false">
+            <pre ng-bind-html="content.wikiText | unsafe"></pre>
         </div>
         <div class="col-md-offset-3" ng-if="editIsEnabled == false">
             <button class="btn btn-default cold-md-offset-5" ng-click="setEditIsEnabledToTrue();">Edit Page</button>
