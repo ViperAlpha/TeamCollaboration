@@ -12,6 +12,7 @@ import java.util.List;
  * @author reinaldo
  */
 public interface TeamInvitationRepository extends CrudRepository<TeamInvitation, Integer> {
+	List<TeamInvitation> findByToUserIdAndToTeamId(int toUserId,int toTeamId);
 	List<TeamInvitation> findByToUserId(int toUserId);
 
 }

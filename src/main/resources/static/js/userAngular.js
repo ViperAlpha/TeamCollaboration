@@ -65,7 +65,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
                 })
                 .error(function (data, status, header, config) {
                     $(SEARCH_BAR_MODAL_ID).modal('hide');
-                    alert('error');
+                    alert(data.message);
                 });
         };
 
@@ -276,7 +276,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
                     alert('sent invite');
                 })
                 .error(function (data, status, header, config) {
-                    alert('error');
+                    alert(data.message);
                 });
         };
 
