@@ -211,3 +211,11 @@ body {
 .list-group-item-warning:hover {
     cursor: default;
 }
+
+.wiki-row {
+    padding-bottom: 30px;
+}
+
+.not-resizable {
+    resize: none;
+}

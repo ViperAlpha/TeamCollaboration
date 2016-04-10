@@ -14,24 +14,33 @@
 
 <div id="page-content-wrapper">
     <div class="container-fluid">
-
-        <th:block th:replace="fragment/User/modals"/>
-        <h1 class="col-md-offset-3">Wiki Page:</h1>
-        <div class="col-md-offset-3" ng-if="editIsEnabled == false">
-            <pre ng-bind-html="content.wikiText | unsafe"></pre>
+        <div class="row wiki-row">
+            <th:block th:replace="fragment/User/modals"/>
+            <h1 class="col-md-offset-2">Wiki Page
+                <small>
+                    <button ng-if="editIsEnabled == false" class="btn btn-success"
+                            ng-click="setEditIsEnabledToTrue();">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit Page
+                    </button>
+                    <button ng-if="editIsEnabled == true" class="btn btn-success"
+                            ng-click="sendChanges()">
+                        <span class="glyphicon glyphicon-floppy-disk"></span>
+                        Push changes
+                    </button>
+                </small>
+            </h1>
+            <div class="col-md-offset-2" ng-if="editIsEnabled == false">
+                <pre ng-bind-html="content.wikiText | unsafe"></pre>
+            </div>
+            <div ng-if="editIsEnabled == true">
+                <div class="form-group col-md-offset-2">
+                    <label for="comment">Edit Wiki:</label>
+            <textarea class="form-control not-resizable" rows="30" id="comment"
+                      ng-model="content.wikiText" ng-bind="content.wikiText">
+            </textarea>
+                </div>
+            </div>
         </div>
-        <div class="col-md-offset-3" ng-if="editIsEnabled == false">
-            <button class="btn btn-default cold-md-offset-5" ng-click="setEditIsEnabledToTrue();">Edit Page</button>
-        </div>
-        <div class="form-group col-md-offset-3" ng-if="editIsEnabled == true">
-            <label for="comment">Edit Wiki:</label>
-            <textarea class="form-control" rows="5" id="comment"
-                      ng-model="content.wikiText">{{content.wikiText}}</textarea>
-            <button ng-click="sendChanges()" class="btn btn-default col-md-offset-5">Push
-                Changes
-            </button>
-        </div>
-
     </div>
 </div>
 
