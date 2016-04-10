@@ -27,7 +27,7 @@
                             <h4><span ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
                                 <small><span ng-bind="message.prettyTime"></span></small>
                             </h4>
-                            <span ng-bind="message.message"></span>
+                            <div ng-bind="message.message"></div>
                             <div ng-if="message.fileName != 'null'">Attached Files: <a
                                     ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
                             </div>
@@ -45,7 +45,7 @@
                             <h4><span ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
                                 <small><span ng-bind="message.prettyTime"></span></small>
                             </h4>
-                            <span ng-bind="message.message"></span>
+                            <div ng-bind="message.message"></div>
                             <div ng-if="message.fileName != null">Attached Files: <a
                                     ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
                             </div>
