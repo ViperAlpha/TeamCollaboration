@@ -11,8 +11,7 @@
 <div id="page-content-wrapper">
     <div class="container-fluid">
 
-        <th:block th:replace="fragment/User/modals">
-        </th:block>
+        <th:block th:replace="fragment/User/modals"></th:block>
 
 
         <div class="row">
@@ -34,29 +33,6 @@
                             </div>
                         </div>
                     </div> <!-- end message repeat -->
-
-                    <!-- Messages exchanged between two users -->
-                    <div class="row send-message-row">
-                        <div class="col-md-8 col-md-offset-4">
-                            <form id='sendIndividualMessageForm'>
-                                <label class="control-label">Enter Message here:</label>
-                                <input style='display: none' ng-value="currentUserId" type="text" id="itoUserId"
-                                       name="toUserId">
-                                <div class="input-group">
-                                    <input ng-model="message.ind" type="text" class="form-control" id="imessage"
-                                           name="message">
-                                    <span class="input-group-btn"><button ng-click="sendIndMessage()" id='sendIndMsgButton' type="submit"
-                                                                          class="btn btn-default">Send to
-                                        {{currentName}}
-                                    </button></span>
-                                </div>
-
-                                <div class="text-center"><a ng-click="showFileUpload = !showFileUpload">Add file</a>
-                                    <input ng-show="showFileUpload" type="file" name="fileUpload" id="fileUpload">
-                                </div>
-                            </form>
-                        </div>
-                    </div>
                 </div>
                 <!-- end of div containing individual messages -->
 
@@ -88,7 +64,8 @@
                                            name="message">
 
                         <span class="input-group-btn">
-                            <button ng-click="sendTeamMessageFunc()" type="submit" id='teamMsgButton' class="btn btn-default">Send to {{currentTeam.teamName}}</button>
+                            <button ng-click="sendTeamMessageFunc()" type="submit" id='teamMsgButton'
+                                    class="btn btn-default">Send to {{currentTeam.teamName}}</button>
                         </span>
                                 </div>
 
@@ -102,7 +79,58 @@
                 <!-- end of div containing team messages -->
 
             </div> <!-- end Messages column -->
+
         </div> <!-- end row -->
+
+        <div class="row">
+            <hr>
+
+            <div class="col-md-8 col-md-offset-1">
+                <!-- Messages exchanged between two users -->
+                <div class="row send-message-row">
+                    <div class="col-md-8 col-md-offset-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Write a reply</h3>
+                            </div>
+                            <div class="panel-body">
+                                <form class="form-horizontal" id='sendIndividualMessageForm'>
+                                    <!--<label class="control-label">Enter Message here:</label>-->
+                                    <div class="form-group">
+                                        <input style='display: none' ng-value="currentUserId" type="text" id="itoUserId"
+                                               name="toUserId">
+                                        <!--<input ng-model="message.ind" type="text" class="form-control" id="imessage"-->
+                                        <!--name="message">-->
+                                        <textarea class="form-control" rows="3" ng-model="message.ind" id="imessage"
+                                                  name="message"></textarea>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-default" ng-click="showFileUpload = !showFileUpload">
+                                            <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Add
+                                            file
+                                        </button>
+                                        <input ng-show="showFileUpload" type="file" name="fileUpload" id="fileUpload">
+                                    </div>
+
+                                    <!--<div class="text-center"><a ng-click="showFileUpload = !showFileUpload">Add file</a>-->
+                                        <!--<input ng-show="showFileUpload" type="file" name="fileUpload" id="fileUpload">-->
+                                    <!--</div>-->
+                                </form>
+                            </div>
+                            <div class="panel-footer text-center">
+                                <button type="button" class="btn btn-success" ng-click="sendIndMessage()" id='sendIndMsgButton'
+                                        type="submit">
+                                    <span class="glyphicon glyphicon-send" aria-hidden="true"></span> Send
+                                </button>
+                                <!--<span class="input-group-btn"><button ng-click="sendIndMessage()" id='sendIndMsgButton'-->
+                                                                      <!--type="submit" class="btn btn-default">Send to {{currentName}} </button></span>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>
