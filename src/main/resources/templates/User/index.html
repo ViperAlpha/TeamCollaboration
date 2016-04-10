@@ -79,11 +79,10 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <button type="button" class="btn btn-primary"
-                                                ng-click="showFileUpload = !showFileUpload">
+                                        <label class="btn btn-primary" for="fileUpload">
                                             <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
-                                        </button>
-                                        <input ng-show="showFileUpload" type="file" name="fileUpload" id="fileUpload">
+                                            <input type="file" name="fileUpload" id="fileUpload" style="display: none;">
+                                        </label>
                                     </div>
 
                                     <div class="form-group">
@@ -105,7 +104,7 @@
             <hr>
 
             <div class="col-md-8 col-md-offset-1">
-                <!-- Messages exchanged between two users -->
+                <!-- Messages exchanged between team members -->
                 <div class="row send-message-row">
                     <div class="col-md-8 col-md-offset-4">
                         <div class="panel panel-primary">
@@ -122,11 +121,10 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <button type="button" class="btn btn-primary"
-                                                ng-click="showFileUpload = !showFileUpload">
+                                        <label class="btn btn-primary" for="fileUpload">
                                             <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
-                                        </button>
-                                        <input ng-show="showFileUpload" type="file" name="fileUpload" id="fileUpload">
+                                            <input type="file" name="fileUpload" id="fileUpload" style="display: none;">
+                                        </label>
                                     </div>
 
                                     <div class="form-group">
@@ -142,7 +140,7 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- end row for sending message to an individual -->
+        </div> <!-- end row for sending message to a team -->
 
     </div>
 </div>
