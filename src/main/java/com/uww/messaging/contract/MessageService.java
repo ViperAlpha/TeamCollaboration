@@ -2,11 +2,13 @@ package com.uww.messaging.contract;
 
 import com.uww.messaging.display.TeamMessageDisplay;
 import com.uww.messaging.display.UserMessageDisplay;
-import com.uww.messaging.model.TeamMessage;
-import com.uww.messaging.model.User;
-import com.uww.messaging.model.UserMessageChat;
-import com.uww.messaging.model.UserUploadedFile;
+import com.uww.messaging.model.team.TeamMessage;
+import com.uww.messaging.model.user.User;
+import com.uww.messaging.model.user.UserMessageChat;
+import com.uww.messaging.model.user.UserUploadedFile;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -26,6 +28,7 @@ public interface MessageService {
 	List<TeamMessageDisplay> findMessagesFromTeam(int teamId);
 
 	void sendMessageToTeam(int fromUserId, int toTeamId, String message);
+	void sendMessageToTeam(int fromUserId, int toTeamId, String message, MultipartFile multiPartFile, String saveBaseDirectory) throws IOException;
 
 	List<TeamMessage> findNewMessagesFromTeam(User user, int teamId);
 }

@@ -7,10 +7,10 @@ import com.uww.messaging.contract.UserService;
 import com.uww.messaging.display.IndividualMessageRequestBody;
 import com.uww.messaging.display.Response;
 import com.uww.messaging.display.UserMessageDisplay;
-import com.uww.messaging.model.User;
-import com.uww.messaging.model.UserMessageChat;
+import com.uww.messaging.model.user.User;
+import com.uww.messaging.model.user.UserMessageChat;
 
-import com.uww.messaging.model.UserUploadedFile;
+import com.uww.messaging.model.user.UserUploadedFile;
 import com.uww.messaging.util.UtilString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -64,7 +64,7 @@ public class UserMessageController {
 	@ResponseBody
 	public String listIndividualMessages(Authentication authentication, @RequestParam("userId") int firstUserId) {
 		Gson gson = new Gson();
-		int userId = userService.userByAuthentication(authentication).getUserId();
+		int userId = userService.getLoggedInUser(authentication).getUserId();
 		List<UserMessageDisplay> userMessageDisplays = messageService.findMessagesBetweenUsers(userId, firstUserId);
 		return gson.toJson(userMessageDisplays);
 	}
@@ -73,7 +73,7 @@ public class UserMessageController {
 	@ResponseBody
 	public String listIndividualMessages(Authentication authentication) {
 		Gson gson = new Gson();
-		int userId = userService.userByAuthentication(authentication).getUserId();
+		int userId = userService.getLoggedInUser(authentication).getUserId();
 		List<User> users = new ArrayList<>();
 		List<UserMessageChat> messagesBetweenUsers = messageService.findUserMessages(userId);
 		messagesBetweenUsers.forEach(userMessageChat -> {
@@ -90,7 +90,7 @@ public class UserMessageController {
 	@RequestMapping(value = "/individual-message/insert", method = RequestMethod.POST)
 	@ResponseBody
 	public Response insertIndividualMessages(Authentication authentication, @RequestBody IndividualMessageRequestBody param) {
-		int currentUserId = userService.userByAuthentication(authentication).getUserId();
+		int currentUserId = userService.getLoggedInUser(authentication).getUserId();
 
 		messageService.haveIndividualConversation(currentUserId, param.getToUserId(), param.getMessage());
 
@@ -101,8 +101,7 @@ public class UserMessageController {
 	@ResponseBody
 	public String insertIndividualMessages(Authentication authentication, @RequestParam("toUserId") int toUserId, @RequestParam("message") String message,
 	                                       @RequestParam("fileUpload") MultipartFile multiPartFile) throws IOException {
-		int currentUserId = userService.userByAuthentication(authentication).getUserId();
-		String redirectToUserHomePage = "redirect:/user";
+		int currentUserId = userService.getLoggedInUser(authentication).getUserId();
 		if (multiPartFile.isEmpty()) {
 			messageService.haveIndividualConversation(
 					currentUserId,

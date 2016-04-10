@@ -1,7 +1,14 @@
-package com.uww.messaging.model;
+package com.uww.messaging.model.team;
 
-import javax.persistence.*;
 import java.util.Date;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * Created by horvste on 2/19/16.
@@ -9,6 +16,7 @@ import java.util.Date;
 @Entity
 public class Team {
     private int teamId;
+	private int teamLeader;
     private String teamName;
     private String teamDescription;
     private Date createdTime;
@@ -79,4 +87,13 @@ public class Team {
         result = 31 * result + (createdTime != null ? createdTime.hashCode() : 0);
         return result;
     }
+
+	@Column(name = "teamLeader", nullable = false)
+	public int getTeamLeader() {
+		return teamLeader;
+	}
+
+	public void setTeamLeader(final int teamLeader) {
+		this.teamLeader = teamLeader;
+	}
 }

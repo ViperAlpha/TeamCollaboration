@@ -1,6 +1,6 @@
 package com.uww.messaging.contract;
 
-import com.uww.messaging.model.UserRole;
+import com.uww.messaging.model.user.UserRole;
 
 import java.util.List;
 

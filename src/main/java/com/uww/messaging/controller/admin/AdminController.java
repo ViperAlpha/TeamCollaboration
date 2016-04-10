@@ -2,8 +2,8 @@ package com.uww.messaging.controller.admin;
 
 import com.uww.messaging.contract.UserService;
 import com.uww.messaging.factory.UserRoleFactory;
-import com.uww.messaging.model.User;
-import com.uww.messaging.model.UserRole;
+import com.uww.messaging.model.user.User;
+import com.uww.messaging.model.user.UserRole;
 import com.uww.messaging.security.AuthenticationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

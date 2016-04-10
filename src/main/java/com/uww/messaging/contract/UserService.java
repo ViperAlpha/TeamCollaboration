@@ -3,8 +3,8 @@ package com.uww.messaging.contract;
 import com.uww.messaging.display.UserDisplay;
 import com.uww.messaging.display.UserInvitationForm;
 import com.uww.messaging.display.UserInvitationResponse;
-import com.uww.messaging.model.User;
-import com.uww.messaging.model.UserRole;
+import com.uww.messaging.model.user.User;
+import com.uww.messaging.model.user.UserRole;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public interface UserService {
 
     void deleteAll(String role);
 
-    User userByAuthentication(Authentication auth);
+    User getLoggedInUser(Authentication auth);
 
     Set<UserDisplay> findUsersLackingInvitationsStartingWith(int loggedInUserId, String username);
 

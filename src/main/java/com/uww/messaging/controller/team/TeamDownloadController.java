@@ -1,6 +1,8 @@
-package com.uww.messaging.controller.user;
+package com.uww.messaging.controller.team;
 
+import com.uww.messaging.model.team.TeamUploadedFile;
 import com.uww.messaging.model.user.UserUploadedFile;
+import com.uww.messaging.repository.team.TeamUploadedFileRepository;
 import com.uww.messaging.repository.user.UserUploadedFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -16,26 +18,27 @@ import java.io.File;
 import java.util.List;
 
 /**
- * Created by horvste on 3/19/16.
+ * Created by horvste on 4/9/16.
  */
 @Controller
-@RequestMapping(value = "/user/download")
-public class UserDownloadController {
+@RequestMapping(value = "/user/team/download")
+public class TeamDownloadController {
     @Autowired
-    private UserUploadedFileRepository userUploadedFileRepository;
+    private TeamUploadedFileRepository teamUploadedFileRepository;
 
     @RequestMapping(value = "/file", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
     public FileSystemResource returnFileToDownload(@RequestParam("fileName") String fileName, HttpServletResponse httpServletResponse) {
-        List<UserUploadedFile> userUploadedFiles = userUploadedFileRepository.findByFileName(fileName);
-        if (userUploadedFiles.size() == 0)
+        List<TeamUploadedFile> teamUploadedFiles = teamUploadedFileRepository.findByFileName(fileName);
+
+        if (teamUploadedFiles.size() == 0)
             return null;
 
-        UserUploadedFile userUploadedFile = userUploadedFiles.get(0);
+        TeamUploadedFile teamUploadedFile = teamUploadedFiles.get(0);
         FileSystemResource fileSystemResource = new FileSystemResource(
-                new File(userUploadedFile.getFilePath())
+                new File(teamUploadedFile.getFilePath())
         );
-        httpServletResponse.setHeader("Content-Disposition", "attachment; filename=" + userUploadedFile.getFileName());
+        httpServletResponse.setHeader("Content-Disposition", "attachment; filename=" + teamUploadedFile.getFileName());
         return fileSystemResource;
     }
 }

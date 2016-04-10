@@ -3,18 +3,17 @@ package com.uww.messaging.service;
 import com.google.common.base.Preconditions;
 import com.uww.messaging.contract.TeamService;
 import com.uww.messaging.display.TeamInvitationResponse;
-import com.uww.messaging.display.TeamMessageDisplay;
 import com.uww.messaging.display.UserDisplay;
-import com.uww.messaging.model.Team;
-import com.uww.messaging.model.TeamInvitation;
-import com.uww.messaging.model.TeamMember;
-import com.uww.messaging.model.TeamMessageChat;
-import com.uww.messaging.model.User;
-import com.uww.messaging.repository.TeamInvitationRepository;
-import com.uww.messaging.repository.TeamMemberRepository;
-import com.uww.messaging.repository.TeamMessageChatRepository;
-import com.uww.messaging.repository.TeamRepository;
-import com.uww.messaging.repository.UserRepository;
+import com.uww.messaging.model.team.Team;
+import com.uww.messaging.model.team.TeamInvitation;
+import com.uww.messaging.model.team.TeamMember;
+import com.uww.messaging.model.team.TeamMessageChat;
+import com.uww.messaging.model.user.User;
+import com.uww.messaging.repository.team.TeamInvitationRepository;
+import com.uww.messaging.repository.team.TeamMemberRepository;
+import com.uww.messaging.repository.team.TeamMessageChatRepository;
+import com.uww.messaging.repository.team.TeamRepository;
+import com.uww.messaging.repository.user.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -48,17 +47,19 @@ public class TeamServiceImpl implements TeamService {
         this.userRepository = userRepository;
     }
 
-    @Transactional
-    @Override
-    public void save(int creatorUserId, String teamName, String teamDescription) {
-        Preconditions.checkNotNull(teamName);
-        Preconditions.checkNotNull(teamDescription);
-        Team team = new Team();
-        team.setTeamName(teamName);
-        team.setTeamDescription(teamDescription);
-        Date currentDate = new Date();
-        team.setCreatedTime(currentDate);
-        teamRepository.save(team);
+	@Transactional
+	@Override
+	public void save(int creatorUserId, String teamName, String teamDescription) {
+		Preconditions.checkNotNull(teamName);
+		Preconditions.checkNotNull(teamDescription);
+		Team team = new Team();
+		team.setTeamName(teamName);
+		team.setTeamDescription(teamDescription);
+		team.setTeamLeader(creatorUserId);
+
+		Date currentDate = new Date();
+		team.setCreatedTime(currentDate);
+		teamRepository.save(team);
 
         TeamMessageChat teamMessageChat = new TeamMessageChat(team.getTeamId(), null);
         teamMessageChatRepository.save(teamMessageChat);
@@ -181,18 +182,25 @@ public class TeamServiceImpl implements TeamService {
 
         List<User> userList = userRepository.findByUsername(invitedUsername);
 
-        if (userList == null || userList.size() == 0) {
-            throw new UsernameNotFoundException(invitedUsername);
-        }
+		if (userList == null || userList.size() == 0) {
+			throw new UsernameNotFoundException(" User name is incorrect. Not possible to find " + invitedUsername);
+		}
 
         int invitedUserId = userList.get(0).getUserId();
 
-        List<TeamInvitation> toUserId = teamInvitationRepository.findByToUserId(invitedUserId);
+		List<TeamInvitation> toUserId = teamInvitationRepository.findByToUserIdAndToTeamId(invitedUserId, teamId);
 
-        if (toUserId.size() > 0) {
-            throw new IllegalArgumentException("User already has an invitation. Id: " + invitedUserId);
-        }
+		Team team = teamRepository.findOne(teamId);
 
+		if (invitedUserId == team.getTeamLeader()) {
+			throw new IllegalArgumentException("It is impossible to invite the leader to it`s own team.");
+		} else if (fromUserId != team.getTeamLeader()) {
+			throw new IllegalArgumentException("Sorry. It is not possible to invite if you are not the team leader.");
+		} else if (toUserId.size() > 0 && toUserId.get(0).getStatus().equalsIgnoreCase(TeamInvitation.STATUS_ACCEPTED)) {
+			throw new IllegalArgumentException("User already accepted the invitation and joined the team.");
+		} else if (toUserId.size() > 0) {
+			throw new IllegalArgumentException("User already has an invitation.");
+		}
 
         TeamInvitation teamInvitation = new TeamInvitation();
         teamInvitation.setFromUserId(fromUserId);
@@ -211,7 +219,11 @@ public class TeamServiceImpl implements TeamService {
     public void acceptTeamInvitation(final int teamInvitationId) {
         TeamInvitation teamInvitation = teamInvitationRepository.findOne(teamInvitationId);
 
-        teamInvitation.setStatus(TeamInvitation.STATUS_ACCEPTED);
+		if (teamInvitation == null) {
+			throw new IllegalArgumentException("You cannot accept something you are not invited to participate.");
+		}
+
+		teamInvitation.setStatus(TeamInvitation.STATUS_ACCEPTED);
 
         teamInvitationRepository.save(teamInvitation);
 

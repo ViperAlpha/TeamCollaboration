@@ -19,4 +19,23 @@ public class UserDisplay {
     public String getUsername() {
         return username;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserDisplay that = (UserDisplay) o;
+
+        if (userId != that.userId) return false;
+        return username != null ? username.equals(that.username) : that.username == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userId;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        return result;
+    }
 }

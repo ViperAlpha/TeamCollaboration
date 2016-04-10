@@ -1,6 +1,6 @@
 package com.uww.messaging.factory;
 
-import com.uww.messaging.model.UserRole;
+import com.uww.messaging.model.user.UserRole;
 
 /**
  * Created by horvste on 1/18/16.

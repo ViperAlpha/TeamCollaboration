@@ -3,7 +3,7 @@ package com.uww.messaging.controller;
 import com.uww.messaging.contract.UserService;
 import com.uww.messaging.factory.UserRoleFactory;
 import com.uww.messaging.mapper.UserRegistrationMapper;
-import com.uww.messaging.model.User;
+import com.uww.messaging.model.user.User;
 import com.uww.messaging.display.UserRegistration;
 import com.uww.messaging.validator.UserRegistrationValidator;
 import org.springframework.beans.factory.annotation.Autowired;

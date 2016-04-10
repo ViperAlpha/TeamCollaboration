@@ -1,4 +1,4 @@
-package com.uww.messaging.model;
+package com.uww.messaging.model.user;
 
 import java.sql.Timestamp;
 

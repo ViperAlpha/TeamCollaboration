@@ -6,11 +6,11 @@ import com.uww.messaging.contract.UserService;
 import com.uww.messaging.display.UserDisplay;
 import com.uww.messaging.display.UserInvitationForm;
 import com.uww.messaging.display.UserInvitationResponse;
-import com.uww.messaging.model.User;
-import com.uww.messaging.model.UserInvitation;
-import com.uww.messaging.model.UserRole;
-import com.uww.messaging.repository.UserInvitationRepository;
-import com.uww.messaging.repository.UserRepository;
+import com.uww.messaging.model.user.User;
+import com.uww.messaging.model.user.UserInvitation;
+import com.uww.messaging.model.user.UserRole;
+import com.uww.messaging.repository.user.UserInvitationRepository;
+import com.uww.messaging.repository.user.UserRepository;
 import com.uww.messaging.security.AuthenticationUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User userByAuthentication(Authentication auth) {
+    public User getLoggedInUser(Authentication auth) {
         UserRole userRole = AuthenticationUtil.authenticationToRole(auth);
         return findUserById(userRole.getUserId());
     }

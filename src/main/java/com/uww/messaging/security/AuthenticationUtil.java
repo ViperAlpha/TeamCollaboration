@@ -1,6 +1,6 @@
 package com.uww.messaging.security;
 
-import com.uww.messaging.model.UserRole;
+import com.uww.messaging.model.user.UserRole;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 

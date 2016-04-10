@@ -2,7 +2,7 @@ package com.uww.messaging.controller.user;
 
 import com.uww.messaging.contract.TeamService;
 import com.uww.messaging.contract.UserService;
-import com.uww.messaging.model.User;
+import com.uww.messaging.model.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class UserController {
 
     @RequestMapping(value = "")
     public String index(Authentication authentication, Model model) {
-        User currentUser = userService.userByAuthentication(authentication);
+        User currentUser = userService.getLoggedInUser(authentication);
 
         currentUser.setLastLoggedIn(new Timestamp(Calendar.getInstance().getTimeInMillis()));
 

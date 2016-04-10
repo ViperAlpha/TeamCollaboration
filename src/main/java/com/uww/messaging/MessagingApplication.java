@@ -16,6 +16,9 @@ public class MessagingApplication {
     @Value("${messaging.user.download.directory}")
     public String userDownloadDir;
 
+    @Value("${messaging.team.download.directory}")
+    public String teamDownloadDir;
+
     public static void main(String[] args) {
         SpringApplication.run(MessagingApplication.class, args);
     }

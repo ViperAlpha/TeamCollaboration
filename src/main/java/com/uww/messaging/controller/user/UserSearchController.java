@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.uww.messaging.contract.TeamService;
 import com.uww.messaging.contract.UserService;
 import com.uww.messaging.display.UserDisplay;
-import com.uww.messaging.model.User;
+import com.uww.messaging.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -37,7 +37,7 @@ public class UserSearchController {
     @RequestMapping(value = "/search")
     @ResponseBody
     public String search(Authentication authentication, @RequestParam("q") String query) {
-        User loggedInUser = userService.userByAuthentication(authentication);
+        User loggedInUser = userService.getLoggedInUser(authentication);
         Set<UserDisplay> userNamesLackingInvites = userService.findUsersLackingInvitationsStartingWith(loggedInUser.getUserId(), query);
         Set<UserDisplay> userNamesLackingTeamInvites = teamService.findUsersLackingInvitationFromTeamOwner(
                 loggedInUser.getUserId(),

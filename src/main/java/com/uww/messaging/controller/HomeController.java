@@ -1,7 +1,7 @@
 package com.uww.messaging.controller;
 
 import com.uww.messaging.mapper.RoleMapper;
-import com.uww.messaging.model.UserRole;
+import com.uww.messaging.model.user.UserRole;
 import com.uww.messaging.security.AuthenticationUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

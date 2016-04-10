@@ -65,7 +65,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
                 })
                 .error(function (data, status, header, config) {
                     $(SEARCH_BAR_MODAL_ID).modal('hide');
-                    alert('error');
+                    alert(data.message);
                 });
         };
 
@@ -176,7 +176,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
             formData.append("message", $scope.message.ind);
             formData.append("fileUpload", fileObj);
 
-            function resetFile(){
+            function resetFile() {
                 $(FILE_UPLOAD_ID).val("");
             }
 
@@ -199,26 +199,57 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
         };
 
         $scope.sendTeamMessageFunc = function () {
-            var currentMessageContent = $('#tmessage').val();
+            var TEAM_MESSAGE_ID = '#tmessage';
+            var currentMessageContent = $(TEAM_MESSAGE_ID).val();
 
             if (currentMessageContent === '')
                 return;
 
             var toTeamId = $('#ttoTeamId').val();
-
-            $http({
-                method: "POST",
-                url: "/user/team/message/insert",
-                data: {
-                    toTeamId: toTeamId,
-                    message: currentMessageContent
-                }
-            })
-                .success(function (data, status, headers, config) {
+            var TEAM_FILE_UPLOAD_ID = "#teamFileUpload";
+            var fileObj = $(TEAM_FILE_UPLOAD_ID)[0].files[0];
+            if (fileObj === null || fileObj === undefined) {
+                $http({
+                    method: "POST",
+                    url: "/user/team/message/insert",
+                    data: {
+                        toTeamId: toTeamId,
+                        message: currentMessageContent
+                    }
                 })
-                .error(function (data, status, header, config) {
+                    .success(function (data, status, headers, config) {
+                        $(TEAM_MESSAGE_ID).val('');
+                    })
+                    .error(function (data, status, header, config) {
+                        alert('Error Sending Team Message');
+                    });
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append("teamId", $scope.currentTeam.teamId);
+            formData.append("message", currentMessageContent);
+            formData.append("fileUpload", fileObj);
+
+            function resetFile() {
+                $(TEAM_FILE_UPLOAD_ID).val("");
+            }
+
+            $.ajax({
+                method: "POST",
+                url: "/user/team/message/insertWithFile",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    $(TEAM_MESSAGE_ID).val('');
+                    resetFile();
+                },
+                error: function (data) {
                     alert('Error Sending Team Message');
-                });
+                    resetFile();
+                }
+            });
 
         };
 
@@ -245,7 +276,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
                     alert('sent invite');
                 })
                 .error(function (data, status, header, config) {
-                    alert('error');
+                    alert(data.message);
                 });
         };
 

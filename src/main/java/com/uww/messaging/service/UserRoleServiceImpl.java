@@ -1,8 +1,8 @@
 package com.uww.messaging.service;
 
 import com.uww.messaging.contract.UserRoleService;
-import com.uww.messaging.model.UserRole;
-import com.uww.messaging.repository.UserRoleRepository;
+import com.uww.messaging.model.user.UserRole;
+import com.uww.messaging.repository.user.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

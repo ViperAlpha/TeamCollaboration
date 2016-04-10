@@ -1,8 +1,8 @@
-package com.uww.messaging.repository;
+package com.uww.messaging.repository.user;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import com.uww.messaging.model.User;
+import com.uww.messaging.model.user.User;
 
 import java.util.List;
 
