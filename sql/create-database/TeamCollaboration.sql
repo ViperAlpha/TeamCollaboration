@@ -25,21 +25,14 @@ DROP TABLE IF EXISTS `Team`;
 CREATE TABLE `Team` (
   `teamId` int(11) NOT NULL AUTO_INCREMENT,
   `teamName` varchar(20) NOT NULL,
-  `teamDescription` varchar(100) DEFAULT NULL,
+  `teamLeader` int(11) NOT NULL,
+  `teamDescription` varchar(200) DEFAULT NULL,
   `createdTime` datetime DEFAULT NULL,
   PRIMARY KEY (`teamId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `Team`
---
 
-LOCK TABLES `Team` WRITE;
-/*!40000 ALTER TABLE `Team` DISABLE KEYS */;
-INSERT INTO `Team` VALUES (1,'Team','Best team.','2016-03-16 00:00:00');
-/*!40000 ALTER TABLE `Team` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `TeamInvitation`

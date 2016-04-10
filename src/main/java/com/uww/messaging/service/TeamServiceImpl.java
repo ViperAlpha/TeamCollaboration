@@ -55,6 +55,8 @@ public class TeamServiceImpl implements TeamService {
         Team team = new Team();
         team.setTeamName(teamName);
         team.setTeamDescription(teamDescription);
+	    team.setTeamLeader(creatorUserId);
+
         Date currentDate = new Date();
         team.setCreatedTime(currentDate);
         teamRepository.save(team);
@@ -181,17 +183,22 @@ public class TeamServiceImpl implements TeamService {
         List<User> userList = userRepository.findByUsername(invitedUsername);
 
         if (userList == null || userList.size() == 0) {
-            throw new UsernameNotFoundException(invitedUsername);
+            throw new UsernameNotFoundException(" User name is incorrect. Not possible to find " + invitedUsername);
         }
 
         int invitedUserId = userList.get(0).getUserId();
 
-        List<TeamInvitation> toUserId = teamInvitationRepository.findByToUserId(invitedUserId);
+        List<TeamInvitation> toUserId = teamInvitationRepository.findByToUserIdAndToTeamId(invitedUserId,teamId);
 
-        if (toUserId.size() > 0) {
-            throw new IllegalArgumentException("User already has an invitation. Id: " + invitedUserId);
-        }
+	    Team team = teamRepository.findOne(teamId);
 
+	    if (toUserId.size() > 0) {
+            throw new IllegalArgumentException("User already has an invitation.");
+        } else if (invitedUserId == team.getTeamLeader()){
+		    throw new IllegalArgumentException("It is impossible to invite the leader to it`s own team.");
+	    } else if(fromUserId != team.getTeamLeader()){
+		    throw new IllegalArgumentException("Sorry. It is not possible to invite if you are not the team leader.");
+	    }
 
         TeamInvitation teamInvitation = new TeamInvitation();
         teamInvitation.setFromUserId(fromUserId);
@@ -209,6 +216,10 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public void acceptTeamInvitation(final int teamInvitationId) {
         TeamInvitation teamInvitation = teamInvitationRepository.findOne(teamInvitationId);
+
+	    if(teamInvitation == null){
+		    throw new IllegalArgumentException("You cannot accept something you are not invited to participate.");
+	    }
 
         teamInvitation.setStatus(TeamInvitation.STATUS_ACCEPTED);
 
