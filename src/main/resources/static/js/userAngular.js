@@ -514,6 +514,9 @@ $(document).ready(function () {
         $('.input-group #search_param').val(param);
     });
 
+    $('[data-toggle="offcanvas"]').click(function () {
+        $('.row-offcanvas').toggleClass('active')
+    });
 
 });
 

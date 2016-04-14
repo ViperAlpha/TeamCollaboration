@@ -6,25 +6,25 @@
 <th:block th:replace="fragment/User/top">
 </th:block>
 
-<th:block th:replace="fragment/User/sidebar"></th:block>
+<div class="container">
+    <div class="row row-offcanvas row-offcanvas-right">
+        <div class="col-xs-12 col-sm-9">
 
-<div id="page-content-wrapper">
-    <div class="container-fluid">
-
-        <th:block th:replace="fragment/User/modals"></th:block>
+            <!-- Include modals -->
+            <th:block th:replace="fragment/User/modals"></th:block>
 
 
-        <div class="row">
             <!-- Messages column -->
-            <div class="col-md-6 col-md-offset-2">
+            <div class="row">
 
                 <!-- Div containing individual messages -->
                 <div ng-if="typemsgselected == 'Individual'">
                     <div class="row message-row" ng-repeat="message in messages">
                         <!-- Applies the offset class and sender-message class in case that the message is not from the current logged in user -->
-                        <div class="message col-md-8"
-                             ng-class="nameStartsWith(currentName, message.fromFirstName) ? 'col-md-offset-10 sender' : 'receiver'">
-                            <h4><span ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
+                        <div class="message col-md-6"
+                             ng-class="nameStartsWith(currentName, message.fromFirstName) ? 'col-md-offset-6 sender' : 'receiver'">
+                            <h4><span
+                                    ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
                                 <small><span ng-bind="message.prettyTime"></span></small>
                             </h4>
                             <div ng-bind="message.message"></div>
@@ -40,9 +40,10 @@
                 <div ng-if="typemsgselected == 'Team'">
                     <div id="teamMsgs" class="row message-row" ng-repeat="message in teammessages">
                         <!-- Applies the offset class and sender-message class in case that the message is not from the current logged in user -->
-                        <div class="message col-md-8"
-                             ng-class="nameStartsWith(currentName, message.fromFirstName) ? 'col-md-offset-10 sender' : 'receiver'">
-                            <h4><span ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
+                        <div class="message col-md-6"
+                             ng-class="nameStartsWith(currentName, message.fromFirstName) ? 'col-md-offset-6 sender' : 'receiver'">
+                            <h4><span
+                                    ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
                                 <small><span ng-bind="message.prettyTime"></span></small>
                             </h4>
                             <div ng-bind="message.message"></div>
@@ -53,96 +54,97 @@
                     </div> <!-- end message repeat -->
                 </div>
                 <!-- end of div containing team messages -->
+            </div> <!-- end row -->
 
-            </div> <!-- end Messages column -->
+            <!-- row for sending messages to an individual -->
+            <div class="row" ng-if="typemsgselected == 'Individual'">
+                <hr>
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Write a reply</h3>
+                        </div>
+                        <div class="panel-body">
+                            <form class="form-inline" id='sendIndividualMessageForm'>
+                                <div class="form-group">
+                                    <input style='display: none' ng-value="currentUserId" type="text"
+                                           id="itoUserId"
+                                           name="toUserId">
+                                        <textarea class="form-control not-resizable" rows="1" cols="60"
+                                                  ng-model="message.ind"
+                                                  id="imessage"
+                                                  name="message"></textarea>
+                                </div>
 
-        </div> <!-- end row -->
+                                <div class="form-group">
+                                    <label class="btn btn-primary" for="fileUpload">
+                                        <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+                                        <input type="file" name="fileUpload" id="fileUpload"
+                                               style="display: none;">
+                                    </label>
+                                </div>
 
-        <div class="row" ng-if="typemsgselected == 'Individual'">
-            <hr>
-
-            <div class="col-md-8 col-md-offset-1">
-                <!-- Messages exchanged between two users -->
-                <div class="row send-message-row">
-                    <div class="col-md-8 col-md-offset-4">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Write a reply</h3>
-                            </div>
-                            <div class="panel-body">
-                                <form class="form-inline" id='sendIndividualMessageForm'>
-                                    <div class="form-group">
-                                        <input style='display: none' ng-value="currentUserId" type="text" id="itoUserId"
-                                               name="toUserId">
-                                        <textarea class="form-control" rows="1" ng-model="message.ind" id="imessage"
-                                                  name="message" style="width: 600px;"></textarea>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="btn btn-primary" for="fileUpload">
-                                            <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
-                                            <input type="file" name="fileUpload" id="fileUpload" style="display: none;">
-                                        </label>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <button type="button" class="btn btn-success" ng-click="sendIndMessage()"
-                                                id='sendIndMsgButton'
-                                                type="submit">
-                                            <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-success" ng-click="sendIndMessage()"
+                                            id='sendIndMsgButton'
+                                            type="submit">
+                                        <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
+                    <!--</div>-->
+                    <!--</div>-->
                 </div>
-            </div>
-        </div> <!-- end row for sending message to an individual -->
+            </div> <!-- end row for sending message to an individual -->
 
-        <div class="row" ng-if="teams.length > 0 && typemsgselected == 'Team'">
-            <hr>
+            <!-- row for sending messages to a team -->
+            <div class="row" ng-if="teams.length > 0 && typemsgselected == 'Team'">
+                <hr>
 
-            <div class="col-md-8 col-md-offset-1">
-                <!-- Messages exchanged between team members -->
-                <div class="row send-message-row">
-                    <div class="col-md-8 col-md-offset-4">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Write a reply</h3>
-                            </div>
-                            <div class="panel-body">
-                                <form class="form-inline" id='teamMessageForm'>
-                                    <div class="form-group">
-                                        <input style="display: none" id="ttoTeamId" ng-value="currentTeam.teamId" type="text"
-                                               name="toTeamId">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Write a reply</h3>
+                        </div>
+                        <div class="panel-body">
+                            <form class="form-inline" id='teamMessageForm'>
+                                <div class="form-group">
+                                    <input style="display: none" id="ttoTeamId" ng-value="currentTeam.teamId"
+                                           type="text"
+                                           name="toTeamId">
                                         <textarea class="form-control" rows="1" ng-model="currentMessage" id="tmessage"
                                                   name="message" style="width: 600px;"></textarea>
-                                    </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="btn btn-primary" for="fileUpload">
-                                            <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
-                                            <input type="file" name="fileUpload" id="fileUpload" style="display: none;">
-                                        </label>
-                                    </div>
+                                <div class="form-group">
+                                    <label class="btn btn-primary" for="fileUpload">
+                                        <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+                                        <input type="file" name="fileUpload" id="fileUpload"
+                                               style="display: none;">
+                                    </label>
+                                </div>
 
-                                    <div class="form-group">
-                                        <button type="button" class="btn btn-success" ng-click="sendTeamMessageFunc()"
-                                                id='teamMsgButton'
-                                                type="submit">
-                                            <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-success"
+                                            ng-click="sendTeamMessageFunc()"
+                                            id='teamMsgButton'
+                                            type="submit">
+                                        <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div> <!-- end row for sending message to a team -->
+            </div> <!-- end row for sending message to a team -->
+        </div> <!--/.col-xs-12.col-sm-9-->
 
-    </div>
+        <!--Sidebar-->
+        <th:block th:replace="fragment/User/sidebar"></th:block>
+
+    </div><!--/row-->
 </div>
 
 <th:block th:replace="fragment/User/bottom">
