@@ -46,7 +46,7 @@
                                 <small><span ng-bind="message.prettyTime"></span></small>
                             </h4>
                             <div ng-bind="message.message"></div>
-                            <div ng-if="message.fileName != null">Attached Files: <a
+                            <div ng-if="message.fileName != 'null'">Attached Files: <a
                                     ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                                     <div class="form-group">
                                         <label class="btn btn-primary" for="fileUpload">
                                             <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
-                                            <input type="file" name="fileUpload" id="fileUpload" style="display: none;">
+                                            <input type="file" name="teamFileUpload" id="teamFileUpload" style="display: none;">
                                         </label>
                                     </div>
 
