@@ -1,10 +1,11 @@
 <!-- Wiki Sidebar -->
 <div class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate sidebar-md-show" xmlns:th="http://www.w3.org/1999/xhtml">
     <ul class="nav navbar-stacked">
-
-        <li ng-repeat="wiki in wikiOutput" ng-click="displayWikiOutput(wiki)">
-            <a href="#">{{wiki.userDisplay.username}}</a>
-        </li>
+        <div class="list-group">
+            <a href="#" ng-repeat="wiki in wikiOutput" ng-click="displayWikiOutput(wiki)" class="list-group-item">
+                <h5>{{wiki.userDisplay.username}} <span class="label label-success" ng-bind="wiki.prettyTime"></span></h5>
+            </a>
+        </div>
     </ul>
 </div>
 <!-- end of sidebar -->

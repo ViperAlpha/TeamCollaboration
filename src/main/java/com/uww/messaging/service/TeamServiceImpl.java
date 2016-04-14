@@ -47,19 +47,19 @@ public class TeamServiceImpl implements TeamService {
         this.userRepository = userRepository;
     }
 
-    @Transactional
-    @Override
-    public void save(int creatorUserId, String teamName, String teamDescription) {
-        Preconditions.checkNotNull(teamName);
-        Preconditions.checkNotNull(teamDescription);
-        Team team = new Team();
-        team.setTeamName(teamName);
-        team.setTeamDescription(teamDescription);
-	    team.setTeamLeader(creatorUserId);
+	@Transactional
+	@Override
+	public void save(int creatorUserId, String teamName, String teamDescription) {
+		Preconditions.checkNotNull(teamName);
+		Preconditions.checkNotNull(teamDescription);
+		Team team = new Team();
+		team.setTeamName(teamName);
+		team.setTeamDescription(teamDescription);
+		team.setTeamLeader(creatorUserId);
 
-        Date currentDate = new Date();
-        team.setCreatedTime(currentDate);
-        teamRepository.save(team);
+		Date currentDate = new Date();
+		team.setCreatedTime(currentDate);
+		teamRepository.save(team);
 
         TeamMessageChat teamMessageChat = new TeamMessageChat(team.getTeamId(), null);
         teamMessageChatRepository.save(teamMessageChat);
@@ -182,23 +182,25 @@ public class TeamServiceImpl implements TeamService {
 
         List<User> userList = userRepository.findByUsername(invitedUsername);
 
-        if (userList == null || userList.size() == 0) {
-            throw new UsernameNotFoundException(" User name is incorrect. Not possible to find " + invitedUsername);
-        }
+		if (userList == null || userList.size() == 0) {
+			throw new UsernameNotFoundException(" User name is incorrect. Not possible to find " + invitedUsername);
+		}
 
         int invitedUserId = userList.get(0).getUserId();
 
-        List<TeamInvitation> toUserId = teamInvitationRepository.findByToUserIdAndToTeamId(invitedUserId,teamId);
+		List<TeamInvitation> toUserId = teamInvitationRepository.findByToUserIdAndToTeamId(invitedUserId, teamId);
 
-	    Team team = teamRepository.findOne(teamId);
+		Team team = teamRepository.findOne(teamId);
 
-	    if (toUserId.size() > 0) {
-            throw new IllegalArgumentException("User already has an invitation.");
-        } else if (invitedUserId == team.getTeamLeader()){
-		    throw new IllegalArgumentException("It is impossible to invite the leader to it`s own team.");
-	    } else if(fromUserId != team.getTeamLeader()){
-		    throw new IllegalArgumentException("Sorry. It is not possible to invite if you are not the team leader.");
-	    }
+		if (invitedUserId == team.getTeamLeader()) {
+			throw new IllegalArgumentException("It is impossible to invite the leader to it`s own team.");
+		} else if (fromUserId != team.getTeamLeader()) {
+			throw new IllegalArgumentException("Sorry. It is not possible to invite if you are not the team leader.");
+		} else if (toUserId.size() > 0 && toUserId.get(0).getStatus().equalsIgnoreCase(TeamInvitation.STATUS_ACCEPTED)) {
+			throw new IllegalArgumentException("User already accepted the invitation and joined the team.");
+		} else if (toUserId.size() > 0) {
+			throw new IllegalArgumentException("User already has an invitation.");
+		}
 
         TeamInvitation teamInvitation = new TeamInvitation();
         teamInvitation.setFromUserId(fromUserId);
@@ -217,11 +219,11 @@ public class TeamServiceImpl implements TeamService {
     public void acceptTeamInvitation(final int teamInvitationId) {
         TeamInvitation teamInvitation = teamInvitationRepository.findOne(teamInvitationId);
 
-	    if(teamInvitation == null){
-		    throw new IllegalArgumentException("You cannot accept something you are not invited to participate.");
-	    }
+		if (teamInvitation == null) {
+			throw new IllegalArgumentException("You cannot accept something you are not invited to participate.");
+		}
 
-        teamInvitation.setStatus(TeamInvitation.STATUS_ACCEPTED);
+		teamInvitation.setStatus(TeamInvitation.STATUS_ACCEPTED);
 
         teamInvitationRepository.save(teamInvitation);
 

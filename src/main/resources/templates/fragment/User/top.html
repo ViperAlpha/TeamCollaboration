@@ -14,7 +14,7 @@
                 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
                     class="icon-bar"></span><span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand">Messaging System Website</a>
+            <a class="navbar-brand" th:href="@{/user}">Messaging System Website</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -107,8 +107,15 @@
                     </ul>
                 </li>
 
-                <li>
-                    <a class="white-text" th:href="@{/logout}">Logout</a>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle white-text" data-toggle="dropdown">
+                        <th:block th:text="${user.firstName} + ' ' + ${user.lastName}"></th:block>
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a data-toggle="modal" th:href="@{/logout}">Logout</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>

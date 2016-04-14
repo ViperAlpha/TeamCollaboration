@@ -3,6 +3,7 @@ package com.uww.messaging.display;
 import com.uww.messaging.model.user.User;
 import com.uww.messaging.model.wiki.Wiki;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -11,10 +12,12 @@ import java.util.List;
 public class WikiOutput {
     private UserDisplay userDisplay;
     private Wiki wiki;
+    private String prettyTime;
 
     public WikiOutput(UserDisplay userDisplay, Wiki wiki) {
         this.userDisplay = userDisplay;
         this.wiki = wiki;
+        this.prettyTime = new SimpleDateFormat("MM/dd/yyyy hh:mm a").format(wiki.getEditTime());
     }
 
     public UserDisplay getUserDisplay() {
