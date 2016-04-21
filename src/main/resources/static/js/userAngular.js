@@ -166,7 +166,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
                         $scope.message.ind = '';
                     })
                     .error(function (data, status, header, config) {
-                        alert('Error Sending Team Message');
+                        alert('Error Sending Individual Message');
                     });
                 return;
             }
@@ -189,9 +189,11 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
                 success: function (data) {
                     $(FILE_UPLOAD_ID)[0].files[0] = null;
                     resetFile();
+                    $scope.message.ind = '';
                 },
                 error: function (data) {
-                    alert('Error Sending Team Message');
+                    alert('Error Sending Individual Message');
+                    console.log(JSON.stringify(data));
                     resetFile();
                 }
             });
