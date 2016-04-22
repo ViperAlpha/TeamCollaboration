@@ -18,7 +18,7 @@ import com.uww.messaging.repository.user.UserMessageChatRepository;
 import com.uww.messaging.repository.user.UserMessageRepository;
 import com.uww.messaging.repository.user.UserUploadedFileRepository;
 
-import org.apache.commons.lang.RandomStringUtils;
+import com.uww.messaging.util.UtilFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,12 +76,11 @@ public class MessageServiceImpl implements MessageService {
             User toUser = userService.findUserById(userMessageChat.getToUserId());
             List<UserUploadedFile> byChatId = userUploadedFileRepository.findByChatId(userMessageChat.getUserMessageId());
             userMessageDisplays.add(new UserMessageDisplay(
-                            userMessageChat.getMessage(),
-                            fromUser.getFirstName(),
-                            toUser.getFirstName(),
-                            userMessageChat.getMessageTime(),
-                            byChatId.size() == 0 ? "null" : byChatId.get(0).getFileName()
-                    )
+                    userMessageChat.getMessage(),
+                    fromUser.getFirstName(),
+                    toUser.getFirstName(),
+                    userMessageChat.getMessageTime(),
+                    byChatId.size() == 0 ? "null" : byChatId.get(0).getFileName())
             );
         });
         return userMessageDisplays;
@@ -204,19 +203,8 @@ public class MessageServiceImpl implements MessageService {
                     + saveBaseDirectory);
         }
 
-        String randomAlphaNumeric = RandomStringUtils.randomAlphabetic(8);
-        String fileSavePath = saveBaseDirectory + "/" + randomAlphaNumeric;
-        File file = new File(fileSavePath);
-        if (file.exists()) {
-            randomAlphaNumeric = RandomStringUtils.randomAlphabetic(8);
-            fileSavePath = saveBaseDirectory + "/" + randomAlphaNumeric;
-            file = new File(fileSavePath);
-            if (file.exists()) {
-                String randomlyGeneratedFileNameErrorMessage = MessageFormat.format("Attempted to generate random name: {0} for file {1} but {0} exists", randomAlphaNumeric, multiPartFile.getOriginalFilename());
-                throw new RuntimeException(randomlyGeneratedFileNameErrorMessage);
-            }
-        }
-        multiPartFile.transferTo(file);
+
+        File file = UtilFileUpload.transferFileToDirWithRandomName(saveBaseDirectory, multiPartFile);
 
 
         int teamMessageChat = sendMessageToTeamGetTeamMessageId(fromUserId, toTeamId, message);

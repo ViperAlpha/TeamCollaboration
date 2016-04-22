@@ -15,17 +15,19 @@ public class User {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-	private Timestamp lastLoggedIn;
+    private Timestamp lastLoggedIn;
+    private String avatarPicture;
 
     public User() {
     }
 
-    public User(String username, String password, String firstName, String lastName, String phoneNumber) {
+    public User(String username, String password, String firstName, String lastName, String phoneNumber, String avatarPicture) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
+        this.avatarPicture = avatarPicture;
     }
 
     @Id
@@ -89,15 +91,25 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-	@Basic
-	@Column(name = "lastLoggedIn", nullable = false)
-	public Timestamp getLastLoggedIn() {
-		return lastLoggedIn;
-	}
+    @Basic
+    @Column(name = "lastLoggedIn", nullable = false)
+    public Timestamp getLastLoggedIn() {
+        return lastLoggedIn;
+    }
 
-	public void setLastLoggedIn(final Timestamp lastLoggedIn) {
-		this.lastLoggedIn = lastLoggedIn;
-	}
+    public void setLastLoggedIn(final Timestamp lastLoggedIn) {
+        this.lastLoggedIn = lastLoggedIn;
+    }
+
+    @Basic
+    @Column(name = "avatarPicture", nullable = true)
+    public String getAvatarPicture() {
+        return this.avatarPicture;
+    }
+
+    public void setAvatarPicture(String avatarPicture) {
+        this.avatarPicture = avatarPicture;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -111,6 +123,7 @@ public class User {
         if (!password.equals(user.password)) return false;
         if (!firstName.equals(user.firstName)) return false;
         if (!lastName.equals(user.lastName)) return false;
+        if(!avatarPicture.equals(user.avatarPicture)) return false;
         return phoneNumber.equals(user.phoneNumber);
 
     }

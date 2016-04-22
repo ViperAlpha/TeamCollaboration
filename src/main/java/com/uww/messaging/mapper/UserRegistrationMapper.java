@@ -14,7 +14,8 @@ public class UserRegistrationMapper {
                 userRegistration.getPassword(),
                 userRegistration.getFirstName(),
                 userRegistration.getLastName(),
-                userRegistration.getPhoneNumber()
+                userRegistration.getPhoneNumber(),
+                null
         );
     }
 }

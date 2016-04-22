@@ -6,6 +6,7 @@ import com.uww.messaging.display.UserInvitationResponse;
 import com.uww.messaging.model.user.User;
 import com.uww.messaging.model.user.UserRole;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -19,7 +20,7 @@ public interface UserService {
 
     User findUserById(int userId);
 
-	void save(User user);
+    void save(User user);
 
     void save(User user, UserRole userRole);
 
@@ -44,5 +45,10 @@ public interface UserService {
     void delete(int userId);
 
     boolean exists(int userId);
+
     boolean exists(String username);
+
+    void setAvatar(int userId, MultipartFile avatarUpload);
+
+    int getLoggedInUserId(Authentication authentication);
 }

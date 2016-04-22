@@ -32,6 +32,11 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
         $scope.teamSelect = null;
         $scope.teamSelects = null;
 
+        $scope.showAvatarModal = function () {
+            $("#uploadAvatarModal").modal('show');
+        };
+
+
         $scope.updateTeamSelect = function (option) {
             var url = '/user/team';
             if (option.label !== TEAM) {
@@ -518,6 +523,37 @@ $(document).ready(function () {
 
     $('[data-toggle="offcanvas"]').click(function () {
         $('.row-offcanvas').toggleClass('active')
+    });
+
+    $("#saveAsAvatarPictureButton").click(function (e) {
+        var AVATAR_FILE_ID = "#file-avatar-picture";
+        var fileObj = $(AVATAR_FILE_ID)[0].files[0];
+        if (fileObj === null || fileObj === undefined) {
+            alert('No File Present');
+        }
+
+        var formData = new FormData();
+        formData.append("fileUpload", fileObj);
+
+        function resetFile() {
+            $(AVATAR_FILE_ID).val("");
+        }
+
+        $.ajax({
+            method: "POST",
+            url: "/user/settings/avatarUpload",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                $(TEAM_MESSAGE_ID).val('');
+                resetFile();
+            },
+            error: function (data) {
+                alert('Error Sending Team Message');
+                resetFile();
+            }
+        });
     });
 
 });

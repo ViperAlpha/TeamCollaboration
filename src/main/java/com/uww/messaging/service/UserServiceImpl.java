@@ -1,6 +1,7 @@
 package com.uww.messaging.service;
 
 import com.google.common.base.Preconditions;
+import com.uww.messaging.MessagingApplication;
 import com.uww.messaging.contract.UserRoleService;
 import com.uww.messaging.contract.UserService;
 import com.uww.messaging.display.UserDisplay;
@@ -13,11 +14,16 @@ import com.uww.messaging.repository.user.UserInvitationRepository;
 import com.uww.messaging.repository.user.UserRepository;
 import com.uww.messaging.security.AuthenticationUtil;
 
+import com.uww.messaging.util.UtilFileUpload;
+import com.uww.messaging.util.UtilString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,14 +35,21 @@ import java.util.Set;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserInvitationRepository userInvitationRepository;
 
-    @Autowired
     private UserRoleService userRoleService;
 
-    @Autowired
     private UserRepository userRepository;
+
+    private MessagingApplication messagingApplication;
+
+    @Autowired
+    public UserServiceImpl(UserInvitationRepository userInvitationRepository, UserRoleService userRoleService, UserRepository userRepository, MessagingApplication messagingApplication) {
+        this.userInvitationRepository = userInvitationRepository;
+        this.userRoleService = userRoleService;
+        this.userRepository = userRepository;
+        this.messagingApplication = messagingApplication;
+    }
 
     private static final String PENDING = "pending";
     private static final String ACCEPTED = "accepted";
@@ -120,6 +133,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean exists(String username) {
         return userRepository.findByUsername(username).size() != 0;
+    }
+
+    @Override
+    public void setAvatar(int userId, MultipartFile avatarUpload) {
+        User loggedInUser = findUserById(userId);
+        Preconditions.checkNotNull(loggedInUser);
+        Preconditions.checkNotNull(avatarUpload);
+
+        try {
+            File file = UtilFileUpload.transferFileToDirWithRandomName(messagingApplication.userDownloadDir, avatarUpload);
+            loggedInUser.setAvatarPicture(file.getAbsolutePath());
+            userRepository.save(loggedInUser);
+        } catch (IOException ioException) {
+            throw new RuntimeException(ioException);
+        }
+
+    }
+
+    @Override
+    public int getLoggedInUserId(Authentication authentication) {
+        return getLoggedInUser(authentication).getUserId();
     }
 
 
