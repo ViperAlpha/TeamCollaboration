@@ -188,6 +188,7 @@ CREATE TABLE `User` (
   `lastName` varchar(40) DEFAULT NULL,
   `phoneNumber` varchar(40) DEFAULT NULL,
   `lastLoggedIn` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `avatarPicture` text,
   PRIMARY KEY (`userId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
