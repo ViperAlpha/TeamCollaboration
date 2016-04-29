@@ -278,3 +278,7 @@ input[type="file"] {
 .wiki-content {
     padding-left: 0;
 }
+
+#itoUserId, #ttoTeamId {
+    display: none;
+}

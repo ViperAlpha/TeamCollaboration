@@ -23,13 +23,14 @@
                         <!-- Applies the offset class and sender-message class in case that the message is not from the current logged in user -->
                         <div class="message col-md-6"
                              ng-class="nameStartsWith(currentName, message.fromFirstName) ? 'col-md-offset-6 sender' : 'receiver'">
-                            <h4><span
-                                    ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
+                            <h4>
+                                <span ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
                                 <small><span ng-bind="message.prettyTime"></span></small>
                             </h4>
                             <div ng-bind="message.message"></div>
                             <div ng-if="message.fileName != 'null'">Attached Files: <a
-                                    ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
+                                    ng-attr-href="/user/download/file/?fileName={{message.fileName}}"
+                                    ng-bind="message.fileName"></a>
                             </div>
                         </div>
                     </div> <!-- end message repeat -->
@@ -42,13 +43,17 @@
                         <!-- Applies the offset class and sender-message class in case that the message is not from the current logged in user -->
                         <div class="message col-md-6"
                              ng-class="nameStartsWith(currentName, message.fromFirstName) ? 'col-md-offset-6 sender' : 'receiver'">
-                            <h4><span
-                                    ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
+                            <h4>
+                                <!--<span ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>-->
+
+                                <!-- THIS IS FOR TEST ONLY -->
+                                Message sender: <span ng-bind="message.fromFirstName"></span> | Currrent name: <span ng-bind="currentName"></span>
                                 <small><span ng-bind="message.prettyTime"></span></small>
                             </h4>
                             <div ng-bind="message.message"></div>
                             <div ng-if="message.fileName != 'null'">Attached Files: <a
-                                    ng-attr-href="/user/download/file/?fileName={{message.fileName}}">{{message.fileName}}</a>
+                                    ng-attr-href="/user/download/file/?fileName={{message.fileName}}"
+                                    ng-bind="message.fileName"></a>
                             </div>
                         </div>
                     </div> <!-- end message repeat -->
@@ -67,7 +72,7 @@
                         <div class="panel-body">
                             <form class="form-inline" id='sendIndividualMessageForm'>
                                 <div class="form-group">
-                                    <input style='display: none' ng-value="currentUserId" type="text"
+                                    <input ng-value="currentUserId" type="text"
                                            id="itoUserId"
                                            name="toUserId">
                                         <textarea class="form-control not-resizable" rows="1" cols="60"
@@ -108,7 +113,7 @@
                         <div class="panel-body">
                             <form class="form-inline" id='teamMessageForm'>
                                 <div class="form-group">
-                                    <input style="display: none" id="ttoTeamId" ng-value="currentTeam.teamId"
+                                    <input id="ttoTeamId" ng-value="currentTeam.teamId"
                                            type="text"
                                            name="toTeamId">
                                         <textarea class="form-control not-resizable" rows="1" cols="60"
