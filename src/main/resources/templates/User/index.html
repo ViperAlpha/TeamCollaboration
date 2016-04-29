@@ -42,13 +42,9 @@
                     <div id="teamMsgs" class="row message-row" ng-repeat="message in teammessages">
                         <!-- Applies the offset class and sender-message class in case that the message is not from the current logged in user -->
                         <div class="message col-md-6"
-                             ng-class="nameStartsWith(currentName, message.fromFirstName) ? 'col-md-offset-6 sender' : 'receiver'">
+                             ng-class="nameStartsWith(loggedInUserInfo.firstName, message.fromFirstName) ? 'receiver' : 'col-md-offset-6 sender'">
                             <h4>
-                                <!--<span ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>-->
-
-                                <!-- THIS IS FOR TEST ONLY -->
-                                Message sender: <span ng-bind="message.fromFirstName"></span> | Currrent name: <span ng-bind="currentName"></span>
-                                <small><span ng-bind="message.prettyTime"></span></small>
+                                <span ng-bind="nameStartsWith(loggedInUserInfo.firstName, message.fromFirstName) ? 'Me' : message.fromFirstName"></span>
                             </h4>
                             <div ng-bind="message.message"></div>
                             <div ng-if="message.fileName != 'null'">Attached Files: <a

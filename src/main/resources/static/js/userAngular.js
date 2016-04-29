@@ -18,6 +18,7 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
         $scope.currentIndMessage = null;
         $scope.message = {};
         $scope.message.ind = null;
+        $scope.loggedInUserInfo = null;
 
 
         var INDIVIDUAL = 'Individual';
@@ -335,6 +336,12 @@ messagingApp.controller('userController', function ($scope, $http, $interval, $w
 
         // Kick off the interval
         $scope.intervalFunction();
+
+        // Collect the information of the current logged in user
+        $http.get('/user/get/current/user')
+            .then(function (response) {
+                $scope.loggedInUserInfo = response.data;
+            });
 
     }
 );
