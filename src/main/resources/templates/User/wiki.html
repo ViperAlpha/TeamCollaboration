@@ -8,13 +8,13 @@
 <th:block th:replace="fragment/User/top"/>
 
 <script type="text/javascript" th:src="@{/js/wikiAngular.js}"></script>
-<div>
-    <th:block th:replace="fragment/User/wiki/sidebar"/>
-</div>
+<!--<div>-->
+    <!--<th:block th:replace="fragment/User/wiki/sidebar"/>-->
+<!--</div>-->
 
-<div id="page-content-wrapper">
-    <div class="container-fluid">
-        <div class="row wiki-row">
+<div class="container">
+    <div class="row row-offcanvas row-offcanvas-right">
+        <div class="col-xs-12 col-sm-9">
             <th:block th:replace="fragment/User/modals"/>
             <h1 class="col-md-offset-2">Wiki Page
                 <small>
@@ -40,9 +40,11 @@
             </textarea>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        </div> <!--/.col-xs-12.col-sm-9-->
+
+        <th:block th:replace="fragment/User/wiki/sidebar"/>
+    </div> <!--/.row row-offcanvas row-offcanvas-right-->
+</div> <!-- /.container -->
 
 
 <th:block th:replace="fragment/User/bottom">
