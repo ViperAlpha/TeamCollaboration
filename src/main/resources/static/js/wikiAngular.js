@@ -40,8 +40,8 @@ messagingApp2.controller('wikiController', function ($scope, $http, $interval, $
             });
     };
 
-    $scope.setEditIsEnabledToTrue = function () {
-        $scope.editIsEnabled = true;
+    $scope.switchEditIsEnabled = function () {
+        $scope.editIsEnabled = !$scope.editIsEnabled;
     };
 
     $scope.displayWikiOutput = function (wiki) {

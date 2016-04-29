@@ -270,3 +270,11 @@ body {
 input[type="file"] {
     display: none;
 }
+
+.wiki-page-title {
+    margin-top: 0;
+}
+
+.wiki-content {
+    padding-left: 0;
+}

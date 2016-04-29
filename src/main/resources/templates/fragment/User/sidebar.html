@@ -25,7 +25,7 @@
             <a href="#" ng-repeat="team in teams" ng-click="getTeamMessages(team)"
                ng-class="(team.teamId == currentTeam.teamId) ? 'list-group-item active' : 'list-group-item'"
                ng-init="getTeamMessages(team)">
-                <h5>{{team.teamName}}</h5>
+                <h5 ng-bind="team.teamName"></h5>
             </a>
 
             <a href="#" class="list-group-item list-group-item-warning" ng-if="teams.length == 0">No teams found!</a>
