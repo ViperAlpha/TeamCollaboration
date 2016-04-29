@@ -1,5 +1,6 @@
 package com.uww.messaging.controller.user;
 
+import com.google.gson.Gson;
 import com.uww.messaging.contract.TeamService;
 import com.uww.messaging.contract.UserService;
 import com.uww.messaging.model.user.User;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -49,4 +51,12 @@ public class UserController {
         }
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
+
+	@RequestMapping(value = "/get/current/user")
+	@ResponseBody
+	public String getCurrentUser(Authentication authentication){
+		User currentUser = userService.getLoggedInUser(authentication);
+
+		return new Gson().toJson(currentUser);
+	}
 }
