@@ -16,13 +16,14 @@
 
             <!-- Messages column -->
             <div class="row">
-
                 <!-- Div containing individual messages -->
                 <div ng-if="typemsgselected == 'Individual'">
                     <div class="row message-row" ng-repeat="message in messages">
                         <!-- Applies the offset class and sender-message class in case that the message is not from the current logged in user -->
                         <div class="message col-md-6"
                              ng-class="nameStartsWith(currentName, message.fromFirstName) ? 'col-md-offset-6 sender' : 'receiver'">
+                            <img ng-if="!nameStartsWith(currentName, message.fromFirstName)" ng-src="/user/settings/avatar" class="img-responsive img-thumbnail">
+                            <img ng-if="nameStartsWith(currentName, message.fromFirstName)" ng-src="/user/settings/avatar?userId={{currentUserId}}" class="img-responsive img-thumbnail">
                             <h4>
                                 <span ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
                                 <small><span ng-bind="message.prettyTime"></span></small>
