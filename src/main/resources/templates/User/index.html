@@ -22,14 +22,16 @@
                         <!-- Applies the offset class and sender-message class in case that the message is not from the current logged in user -->
                         <div class="message col-md-6"
                              ng-class="nameStartsWith(currentName, message.fromFirstName) ? 'col-md-offset-6 sender' : 'receiver'">
-                            <img ng-if="!nameStartsWith(currentName, message.fromFirstName)" ng-src="/user/settings/avatar" class="img-responsive img-thumbnail">
-                            <img ng-if="nameStartsWith(currentName, message.fromFirstName)" ng-src="/user/settings/avatar?userId={{currentUserId}}" class="img-responsive img-thumbnail">
-                            <h4>
-                                <span ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
-                                <small><span ng-bind="message.prettyTime"></span></small>
-                            </h4>
-                            <div ng-bind="message.message"></div>
-                            <div ng-if="message.fileName != 'null'">Attached Files: <a
+                            <div class="row">
+                                <img ng-src="/user/settings/avatar?userId={{currentUserId}}"
+                                     class="img-responsive img-circle">
+                                <h4>
+                                    <span ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
+                                    <small><span ng-bind="message.prettyTime"></span></small>
+                                </h4>
+                            </div>
+                            <div class="row" ng-bind="message.message"></div>
+                            <div class="row" ng-if="message.fileName != 'null'">Attached Files: <a
                                     ng-attr-href="/user/download/file/?fileName={{message.fileName}}"
                                     ng-bind="message.fileName"></a>
                             </div>
@@ -44,8 +46,11 @@
                         <!-- Applies the offset class and sender-message class in case that the message is not from the current logged in user -->
                         <div class="message col-md-6"
                              ng-class="nameStartsWith(loggedInUserInfo.firstName, message.fromFirstName) ? 'receiver' : 'col-md-offset-6 sender'">
+                            <img ng-src="/user/settings/avatar?userId={{message.fromUserId}}"
+                                 class="img-responsive img-circle">
                             <h4>
                                 <span ng-bind="nameStartsWith(loggedInUserInfo.firstName, message.fromFirstName) ? 'Me' : message.fromFirstName"></span>
+                                <small><span ng-bind="message.prettyTime"></span></small>
                             </h4>
                             <div ng-bind="message.message"></div>
                             <div ng-if="message.fileName != 'null'">Attached Files: <a

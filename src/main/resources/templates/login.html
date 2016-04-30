@@ -7,7 +7,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2 col-md-offset-5">
-            <form id="loginForm" class="col-md-12" th:action="@{/login}" method="POST">
+            <form id="loginForm" th:action="@{/login}" method="POST">
                 <div class="form-group">
                     <input id="username" name="username" type="text" class="form-control input-lg" placeholder="Email">
                 </div>
@@ -20,10 +20,10 @@
                 </div>
             </form>
         </div>
-        <div class="row">
-            <div id="createAccount" class="col-md-2 col-md-offset-5">
-                <a th:href="@{/register/index}">Don't have an account? Create one.</a>
-            </div>
+    </div>
+    <div class="row">
+        <div id="createAccount" class="col-md-2 col-md-offset-5">
+            <a th:href="@{/register/index}">Don't have an account? Create one.</a>
         </div>
     </div>
 </div>
