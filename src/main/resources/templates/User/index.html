@@ -23,7 +23,10 @@
                         <div class="message col-md-6"
                              ng-class="nameStartsWith(currentName, message.fromFirstName) ? 'col-md-offset-6 sender' : 'receiver'">
                             <div class="row">
-                                <img ng-src="/user/settings/avatar?userId={{currentUserId}}"
+                                <img ng-if="!nameStartsWith(currentName, message.fromFirstName)"
+                                     ng-src="/user/settings/avatar" class="img-responsive img-circle">
+                                <img ng-if="nameStartsWith(currentName, message.fromFirstName)"
+                                     ng-src="/user/settings/avatar?userId={{currentUserId}}"
                                      class="img-responsive img-circle">
                                 <h4>
                                     <span ng-bind="nameStartsWith(currentName, message.fromFirstName) ? message.fromFirstName : 'Me'"></span>
